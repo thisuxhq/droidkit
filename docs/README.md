@@ -10,6 +10,7 @@ These documents are the source of truth for the product: what it is, how it is s
 | --- | --- |
 | [Introduction](introduction.md) | Positioning, the problem, the bet |
 | [Principles](principles.md) | Ownership, runtime, APIs, taste |
+| [Decisions](decisions.md) | Settled choices: prefix, package, theme contract, schema, license |
 | [Architecture](architecture.md) | Five layers, repo layout, consumer project |
 | [Design system](design-system.md) | Tokens, theme, Material 3, styles |
 | [Catalog](catalog.md) | Primitives, components, patterns, blocks |
@@ -25,7 +26,7 @@ Implement against these examples. [Reference index](reference/README.md).
 | [Button](reference/button.md) | Kotlin, preview, test, metadata |
 | [Empty state](reference/empty-state.md) | Opinionated pattern |
 | [Settings screen](reference/settings-screen.md) | Block composing other items |
-| [Theme](reference/theme.md) | Spacing and `DroidTheme` |
+| [Theme](reference/theme.md) | Spacing and `AppTheme` |
 | [Consumer project](reference/consumer.md) | `init` / `add` and their tree |
 
 ## Distribution
@@ -34,6 +35,7 @@ Implement against these examples. [Reference index](reference/README.md).
 | --- | --- |
 | [Registry](registry.md) | Schema, recipes, dependency graph, updates |
 | [CLI](cli.md) | `init`, `add`, `search`, `diff` |
+| [Config](config.md) | `droidkit.json`, rewrite rules, drift detection |
 | [AI](ai.md) | MCP, metadata, agent-first design |
 
 ## Quality and plan

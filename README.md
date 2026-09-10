@@ -43,3 +43,7 @@ The full index lives in [docs/](docs/README.md).
 ## Status
 
 Pre-v0. The design system and registry come before the CLI. Compose-only. No XML. No proprietary runtime.
+
+## License
+
+[Apache-2.0](LICENSE). Files you copy into your app are yours.

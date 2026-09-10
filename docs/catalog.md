@@ -78,7 +78,7 @@ fun EmptyState(
         )
         if (action != null && onAction != null) {
             Spacer(Modifier.height(4.dp))
-            Button(text = action, onClick = onAction)
+            AppButton(text = action, onClick = onAction)
         }
     }
 }
@@ -132,9 +132,21 @@ ToolCall
 CodeBlock
 ```
 
+### Blocks are stateless
+
+A block is a `@Composable` screen that takes state and callbacks. It defines a plain `data class` for its state in the same file. It never depends on ViewModel, Navigation, Hilt/Koin, or a networking client — the developer wires those. This keeps blocks usable in any architecture and keeps "no runtime" true. See [Decisions #7](decisions.md).
+
+When a block needs an experimental Material API (`TopAppBar` today), the copied file carries the `@OptIn` and the item lists it in `experimentalApis`. Nothing surprises the developer at compile time.
+
 A settings block composes primitives and patterns:
 
 ```kotlin
+data class SettingsState(
+    val notifications: Boolean,
+    val theme: ThemeOption,
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     state: SettingsState,
@@ -170,7 +182,7 @@ fun SettingsScreen(
                 )
             }
             item { Spacer(Modifier.height(24.dp)) }
-            item { Button(text = "Log out", onClick = onLogout) }
+            item { AppButton(text = "Log out", onClick = onLogout) }
         }
     }
 }
@@ -215,7 +227,7 @@ Mark adaptive items in registry metadata (`"adaptive": true`) so agents and the 
 
 ## Launch set
 
-About 30 things. Not 300.
+Launch: about 30 things. Not 300. Phase 1 is the first 25 of these.
 
 ```text
 Button

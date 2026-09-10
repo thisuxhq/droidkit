@@ -10,7 +10,7 @@ The repo is a **registry and development environment**. The consumer project get
 | [Button](button.md) | Copyable component: Kotlin, preview, test, metadata |
 | [Empty state](empty-state.md) | Opinionated pattern |
 | [Settings screen](settings-screen.md) | Block that composes patterns and components |
-| [Theme](theme.md) | Spacing tokens and `DroidTheme` |
+| [Theme](theme.md) | Spacing tokens and `AppTheme` |
 | [Consumer project](consumer.md) | `init` / `add`, their tree, their imports |
 
 V0: build `registry/ + showcase/ + theme/` first. Prove 15–20 items feel great. Then `droidkit add`.

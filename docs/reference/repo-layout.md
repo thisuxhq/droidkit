@@ -20,7 +20,7 @@ droidkit/
 │   │   ├── Shape.kt
 │   │   ├── Spacing.kt
 │   │   ├── Motion.kt
-│   │   └── DroidTheme.kt
+│   │   └── AppTheme.kt
 │   │
 │   ├── foundation/
 │   │   ├── ModifierExtensions.kt
@@ -32,20 +32,21 @@ droidkit/
 ├── registry/
 │   ├── components/
 │   │   ├── button/
-│   │   │   ├── Button.kt
-│   │   │   ├── ButtonPreview.kt
-│   │   │   ├── ButtonTest.kt
+│   │   │   ├── AppButton.kt
+│   │   │   ├── AppButtonPreview.kt
+│   │   │   ├── AppButtonTest.kt
 │   │   │   └── registry.json
 │   │   │
 │   │   ├── text-field/
 │   │   ├── avatar/
 │   │   ├── badge/
+│   │   ├── otp-input/
 │   │   └── bottom-sheet/
 │   │
 │   ├── patterns/
 │   │   ├── empty-state/
 │   │   ├── error-state/
-│   │   ├── otp-input/
+│   │   ├── loading-state/
 │   │   └── permission-request/
 │   │
 │   ├── blocks/
@@ -72,7 +73,7 @@ droidkit/
 Registry code is copyable. The file the CLI installs is:
 
 ```text
-registry/components/button/Button.kt
+registry/components/button/AppButton.kt
 ```
 
 ## Gradle

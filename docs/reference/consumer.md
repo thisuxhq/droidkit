@@ -24,7 +24,7 @@ app/src/main/java/com/example/app/ui/
 1. fetch registry/button
 2. read dependencies
 3. check project
-4. copy Button.kt
+4. copy AppButton.kt
 5. install dependencies if needed
 6. format code
 ```
@@ -38,13 +38,13 @@ app/
     │   └── ...
     │
     └── components/
-        └── DroidButton.kt
+        └── AppButton.kt
 ```
 
 They import **their own file**:
 
 ```kotlin
-import com.example.app.ui.components.DroidButton
+import com.example.app.ui.components.AppButton
 ```
 
 Not:
@@ -65,12 +65,12 @@ my-app/
         ├── components/
         │   ├── AppButton.kt
         │   ├── AppTextField.kt
-        │   ├── Avatar.kt
-        │   └── Badge.kt
+        │   ├── AppAvatar.kt
+        │   ├── AppBadge.kt
+        │   └── AppOtpInput.kt
         │
         ├── patterns/
-        │   ├── EmptyState.kt
-        │   └── OtpInput.kt
+        │   └── EmptyState.kt
         │
         └── blocks/
             └── SettingsScreen.kt

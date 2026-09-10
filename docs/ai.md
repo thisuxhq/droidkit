@@ -45,7 +45,7 @@ Do not store only Kotlin. Store **when** to use the thing.
 ```json
 {
   "name": "empty-state",
-  "category": "pattern",
+  "type": "pattern",
   "description": "Use when a collection has no content.",
   "avoidWhen": "Do not use for loading or errors.",
   "aiHints": [
@@ -61,7 +61,7 @@ Do not store only Kotlin. Store **when** to use the thing.
 
 `get_design_rules()` should return a short, stable document:
 
-- Token names and how to read `DroidTheme`
+- Token names and how to read `AppTheme`
 - The four catalog categories and when to use each
 - Copy rules (empty states, destructive confirms, verb-first actions)
 - Accessibility non-negotiables
@@ -89,6 +89,17 @@ droidkit add recipe:ai-chat
 ```
 
 The relationship graph in the registry is what lets an agent pull a coherent set instead of a random handful of primitives.
+
+## Instructions at the point of use
+
+`droidkit init` writes a `## DroidKit` section into the consumer project's `AGENTS.md` (or `.agents/skills/droidkit/SKILL.md`):
+
+- The prefix and package in use (`AppButton`, `com.acme.app.ui.components`)
+- The four categories and where each lives
+- "Use installed components before writing new ones; run `droidkit search` / `droidkit view` first"
+- Pointer to `get_design_rules()` via MCP
+
+`droidkit add` appends the item to the installed list in that section. Agents working in that repo then compose from what exists instead of reinventing a button. See [Decisions #12](decisions.md).
 
 ## What not to do
 

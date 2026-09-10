@@ -2,9 +2,23 @@
 
 Blocks compose patterns and components. The developer installs a feature, not a widget.
 
+Blocks are stateless: state and callbacks in, no ViewModel, Navigation, or DI. The state class lives in the same file. Experimental Material opt-ins are carried by the file and declared in `registry.json`. See [Decisions #7–8](../decisions.md).
+
 ## SettingsScreen.kt
 
 ```kotlin
+package com.droidkit.registry.blocks
+
+data class SettingsState(
+    val notifications: Boolean,
+    val theme: ThemeOption,
+)
+
+enum class ThemeOption(val label: String) {
+    System("System"), Light("Light"), Dark("Dark")
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     state: SettingsState,
@@ -57,7 +71,7 @@ fun SettingsScreen(
             }
 
             item {
-                DroidButton(
+                AppButton(
                     text = "Log out",
                     onClick = onLogout
                 )

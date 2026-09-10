@@ -42,7 +42,7 @@ fun EmptyState(
         if (action != null && onAction != null) {
             Spacer(Modifier.height(4.dp))
 
-            DroidButton(
+            AppButton(
                 text = action,
                 onClick = onAction
             )

@@ -6,7 +6,7 @@ The CLI is how humans and agents install DroidKit. It is not the first thing to 
 
 | Command | Job |
 | --- | --- |
-| `droidkit init` | Write theme + `ui/` into the app |
+| `droidkit init` | Write `droidkit.json`, theme, `ui/`, and agent instructions |
 | `droidkit add <item>` | Resolve deps, copy files, add Gradle deps if needed |
 | `droidkit search <query>` | Find components, patterns, blocks, recipes |
 | `droidkit view <item>` | Show metadata, files, examples |
@@ -24,24 +24,29 @@ droidkit init
 Creates:
 
 ```text
-app/src/main/java/com/example/app/ui/
-├── theme/
-│   ├── Color.kt
-│   ├── Theme.kt
-│   ├── Typography.kt
-│   └── Spacing.kt
-└── components/
+app/
+├── droidkit.json
+└── src/main/java/com/example/app/ui/
+    ├── theme/
+    │   ├── Color.kt
+    │   ├── Theme.kt
+    │   ├── Typography.kt
+    │   └── Spacing.kt
+    └── components/
 ```
 
-Optional style flag, once more than one style exists:
+and appends a `## DroidKit` section to the project's `AGENTS.md` (or writes `.agents/skills/droidkit/SKILL.md`) so coding agents use the installed components instead of inventing new ones.
+
+Flags:
 
 ```bash
-droidkit init --style clean
-droidkit init --style expressive
-droidkit init --style minimal
+droidkit init --package com.acme.app.ui   # default: detected from Gradle
+droidkit init --prefix Acme               # default: App  → AcmeButton, AcmeTheme
+droidkit init --style clean               # once more than one style exists
+droidkit init --with-tests                # copy *Test.kt by default
 ```
 
-Detect the app package from the Gradle project. Do not make the developer type `com.example.app` if the project already knows it. Rewrite package names in copied files to match.
+Detect the app package from the Gradle project. Do not make the developer type `com.example.app` if the project already knows it. Everything `init` decides is written to [`droidkit.json`](config.md); every other command reads it.
 
 ## Add
 
@@ -56,13 +61,13 @@ droidkit add auth
 Flow:
 
 ```text
-1. Fetch registry item
-2. Read registryDependencies and Maven dependencies
-3. Check the project (package, existing files, Gradle)
-4. Show the file plan
-5. Copy Kotlin (rewritten to the app package)
-6. Install Gradle dependencies if needed
-7. Format
+1. Read droidkit.json
+2. Fetch registry item and resolve registryDependencies
+3. Check themeVersion against the installed theme
+4. Show the plan: files, Maven deps, experimental APIs
+5. Copy source + preview (tests with --with-tests), rewriting package and prefix
+6. Add Gradle dependencies if needed
+7. Format; record revision in droidkit.json
 ```
 
 Result:
@@ -71,12 +76,15 @@ Result:
 app/src/main/java/com/example/app/ui/
 ├── theme/
 └── components/
-    └── Button.kt
+    ├── AppButton.kt
+    └── AppButtonPreview.kt
 ```
 
 ```kotlin
-import com.example.app.ui.components.Button
+import com.example.app.ui.components.AppButton
 ```
+
+Per-call overrides: `--with-tests`, `--no-tests`, `--dry-run`.
 
 ## Search and view
 
@@ -101,14 +109,15 @@ droidkit update button
 + new upstream implementation
 ```
 
-If the local file is unchanged from the installed revision, update can apply cleanly. If it drifted, show the diff and stop.
+`droidkit.json` holds the installed revision per item. `diff` is three-way: local vs installed (your edits), installed vs latest (upstream), local vs latest (what update would do). `update` applies only when local == installed; otherwise it prints the diff and stops. See [Config](config.md).
 
 ## What the CLI must not do
 
 - Require a DroidKit Gradle plugin to compile the app
 - Rewrite the developer's theme without asking
 - Fetch from anywhere except the configured registry
-- Hide Maven dependencies. If `otp-input` needs a library, say so in the plan
+- Hide Maven dependencies or experimental opt-ins. If `otp-input` needs a library or `TopAppBar` needs `@OptIn`, say so in the plan
+- Copy tests uninvited
 - Target XML layouts
 
 ## Shape of the binary

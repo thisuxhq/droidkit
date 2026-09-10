@@ -20,7 +20,7 @@ droidkit add button
 which writes:
 
 ```text
-ui/components/Button.kt
+ui/components/AppButton.kt
 ```
 
 into the app. The developer imports their own file, edits it, and keeps it. No black box.
@@ -48,7 +48,7 @@ Trust comes from readable Kotlin, not from a framework.
 Bad:
 
 ```kotlin
-DroidKitButton(
+AppButton(
     configuration = ButtonConfiguration(
         variant = ButtonVariant.PRIMARY,
         size = ButtonSize.MEDIUM,
@@ -59,7 +59,7 @@ DroidKitButton(
 Better:
 
 ```kotlin
-Button(
+AppButton(
     text = "Continue",
     onClick = ::continueFlow,
 )
@@ -68,7 +68,7 @@ Button(
 or a content slot:
 
 ```kotlin
-Button(onClick = ::continueFlow) {
+AppButton(onClick = ::continueFlow) {
     Text("Continue")
 }
 ```
@@ -76,7 +76,7 @@ Button(onClick = ::continueFlow) {
 Do not invent a framework. Use Compose. Give good defaults and escape hatches on the same function:
 
 ```kotlin
-Button(
+AppButton(
     text = "Continue",
     onClick = ::continueFlow,
     modifier = Modifier,
@@ -104,7 +104,7 @@ Do not launch with 300 items. Launch with around 30 that feel finished.
 
 Someone looking at an app built with DroidKit should wonder what UI library that is. That reaction is the signal. A component count is not.
 
-The moat is not `Button.kt`. Everyone can recreate it. The moat is:
+The moat is not `AppButton.kt`. Everyone can recreate it. The moat is:
 
 ```text
 Taste

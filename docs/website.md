@@ -10,7 +10,7 @@ The site is a playground that happens to have docs, not a docs site that happens
 
 On one screen:
 
-- Live preview
+- Preview images, one per state, light and dark
 - Variants: primary, secondary, ghost, destructive
 - States: default, loading, disabled
 - Theme: light / dark
@@ -18,7 +18,7 @@ On one screen:
 - Snippet:
 
 ```kotlin
-Button(
+AppButton(
     text = "Continue",
     onClick = {},
 )
@@ -41,7 +41,7 @@ Those four words are the product. Do not flatten them into a single “UI kit”
 
 ## Same states as Android Studio
 
-The playground mirrors `@Preview` states. If a state exists in `ButtonPreview.kt` and not on the website, the website is behind. Generate playground cases from preview metadata where possible, rather than hand-maintaining two lists.
+Compose does not run in a browser without a wasm build, so the playground does not try. Every `@Preview` is a screenshot test upstream; CI emits one PNG per state per theme, and the site renders those. If a state exists in `AppButtonPreview.kt` it is on the website by construction. No hand-maintained list. A Compose Multiplatform wasm showcase is a later option, not a dependency. See [Decisions #11](decisions.md).
 
 ## What the site is not in v0
 

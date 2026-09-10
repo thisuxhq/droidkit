@@ -56,7 +56,7 @@ droidkit/
 │   ├── showcase/
 │   └── benchmark/
 ├── core/
-│   ├── theme/          Color, Typography, Shape, Spacing, Motion, DroidTheme
+│   ├── theme/          Color, Typography, Shape, Spacing, Motion, AppTheme
 │   ├── foundation/     modifiers, haptics, accessibility
 │   └── icons/
 ├── registry/
@@ -79,13 +79,15 @@ Each registry item is a folder of copyable files:
 
 ```text
 registry/components/button/
-├── Button.kt
-├── ButtonPreview.kt
-├── ButtonTest.kt
+├── AppButton.kt
+├── AppButtonPreview.kt
+├── AppButtonTest.kt
 └── registry.json
 ```
 
 The website, CLI, and MCP all read the same registry. They do not keep a second source of truth.
+
+Registry source declares placeholder packages (`com.droidkit.registry.components`, …) that the CLI rewrites on install. See [Registry](registry.md#package-convention).
 
 ## What the developer actually gets
 
@@ -97,13 +99,13 @@ my-app/
     └── ui/
         ├── theme/
         ├── components/
-        │   ├── Button.kt
-        │   ├── TextField.kt
-        │   ├── Avatar.kt
-        │   └── Badge.kt
+        │   ├── AppButton.kt
+        │   ├── AppTextField.kt
+        │   ├── AppAvatar.kt
+        │   ├── AppBadge.kt
+        │   └── AppOtpInput.kt
         ├── patterns/
-        │   ├── EmptyState.kt
-        │   └── OtpInput.kt
+        │   └── EmptyState.kt
         └── blocks/
             └── SettingsScreen.kt
 ```
@@ -111,10 +113,10 @@ my-app/
 They import their own package:
 
 ```kotlin
-import com.acme.app.ui.components.Button
+import com.acme.app.ui.components.AppButton
 ```
 
-not `com.droidkit.components.Button`.
+not `com.droidkit.components.Button`. Prefix defaults to `App` and is configurable; see [Decisions #2](decisions.md).
 
 That distinction is the product.
 

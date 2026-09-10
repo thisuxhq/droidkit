@@ -6,23 +6,25 @@ Source of truth:
 
 ```text
 registry/components/button/
-├── Button.kt
-├── ButtonPreview.kt
-├── ButtonTest.kt
+├── AppButton.kt
+├── AppButtonPreview.kt
+├── AppButtonTest.kt
 └── registry.json
 ```
 
-Copied into the app as `ui/components/Button.kt` (package rewritten). Previews and tests can copy with it or stay upstream — V0 copies all three.
+Source declares `package com.droidkit.registry.components`. On install the CLI rewrites it to `<package>.components` and, if the developer chose a prefix other than `App`, renames `AppButton` to match. Rules in [Config](config.md); rationale in [Decisions #2–3](decisions.md).
 
-The full source example (including the `DroidButton` name as copied into the app) is in [reference/button.md](reference/button.md).
+`droidkit add button` copies `AppButton.kt` and `AppButtonPreview.kt`. `--with-tests` adds `AppButtonTest.kt` and the test dependencies.
 
-## Button.kt
+The full source is in [reference/button.md](reference/button.md).
+
+## AppButton.kt
 
 Compose-native. Good defaults. Loading and disabled. Material underneath. No DroidKit runtime.
 
 ```kotlin
 @Composable
-fun Button(
+fun AppButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -61,22 +63,22 @@ fun Button(
 
 A later revision adds `modifier`, colors, shape, and a content slot so the text-only overload is the friendly path and the slot is the escape hatch. Do not start with a configuration object.
 
-Height 52 dp is a product decision (touch target, not Material's default). That is the point.
+Height 52 dp and radius 14 dp are product decisions (touch target, not Material's default). That is the point. Per [Decisions #4](decisions.md), such numbers live as named `private val`s at the top of the file; layout spacing uses `AppTheme.spacing`. Type and color come from `MaterialTheme`, which `AppTheme` configures.
 
-## ButtonPreview.kt
+## AppButtonPreview.kt
 
 ```kotlin
 @Preview(showBackground = true)
 @Composable
-private fun ButtonPreview() {
-    DroidTheme {
+private fun AppButtonPreview() {
+    AppTheme {
         Column(
             modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Button(text = "Continue", onClick = {})
-            Button(text = "Loading", loading = true, onClick = {})
-            Button(text = "Disabled", enabled = false, onClick = {})
+            AppButton(text = "Continue", onClick = {})
+            AppButton(text = "Loading", loading = true, onClick = {})
+            AppButton(text = "Disabled", enabled = false, onClick = {})
         }
     }
 }
@@ -84,10 +86,10 @@ private fun ButtonPreview() {
 
 Add dark, large-font, icon, and long-text previews in the same file as the component grows. See [Quality](quality.md).
 
-## ButtonTest.kt
+## AppButtonTest.kt
 
 ```kotlin
-class ButtonTest {
+class AppButtonTest {
 
     @get:Rule
     val composeRule = createComposeRule()
@@ -97,8 +99,8 @@ class ButtonTest {
         var clicked = false
 
         composeRule.setContent {
-            DroidTheme {
-                Button(text = "Continue", onClick = { clicked = true })
+            AppTheme {
+                AppButton(text = "Continue", onClick = { clicked = true })
             }
         }
 
@@ -117,13 +119,22 @@ Also test: disabled does not click, loading does not click, semantics exist for 
   "name": "button",
   "type": "component",
   "description": "Primary action button with loading and disabled states.",
-  "files": ["Button.kt"],
+  "avoidWhen": "Do not use for navigation rows or inline text links.",
+  "files": [
+    { "path": "AppButton.kt", "kind": "source" },
+    { "path": "AppButtonPreview.kt", "kind": "preview" },
+    { "path": "AppButtonTest.kt", "kind": "test" }
+  ],
   "dependencies": [],
-  "registryDependencies": ["theme"]
+  "registryDependencies": ["theme"],
+  "platform": "common",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "aiHints": ["One primary button per screen section"]
 }
 ```
 
-Expand with `avoidWhen`, `examples`, `accessibility`, and `aiHints` as the item matures. The schema is in [Registry](registry.md).
+Validated against [`registry/item.schema.json`](../registry/item.schema.json) in CI. Expand `examples`, `accessibility`, and `aiHints` as the item matures.
 
 ## Checklist before it ships
 
@@ -131,6 +142,7 @@ Expand with `avoidWhen`, `examples`, `accessibility`, and `aiHints` as the item 
 - [ ] Theme tokens, not magic numbers — except where the magic number *is* the opinion (52 dp)
 - [ ] Loading, disabled, dark, large font
 - [ ] TalkBack, touch target, RTL
-- [ ] Preview and test in the folder
-- [ ] Metadata a human and an agent can both use
+- [ ] Preview and test in the folder; preview doubles as a screenshot test
+- [ ] Metadata validates against the schema; `platform`, `themeVersion`, `experimentalApis` filled in
+- [ ] Imports only `com.droidkit.registry.*`, Compose, Material 3, AndroidX, and declared `dependencies`
 - [ ] No DroidKit runtime import

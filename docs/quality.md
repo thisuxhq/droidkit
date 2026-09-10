@@ -36,15 +36,15 @@ Non-negotiable. Every component has a preview file next to it.
 ```kotlin
 @Preview(showBackground = true)
 @Composable
-private fun ButtonPreview() {
-    DroidTheme {
+private fun AppButtonPreview() {
+    AppTheme {
         Column(
             modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Button(text = "Continue", onClick = {})
-            Button(text = "Loading", loading = true, onClick = {})
-            Button(text = "Disabled", enabled = false, onClick = {})
+            AppButton(text = "Continue", onClick = {})
+            AppButton(text = "Loading", loading = true, onClick = {})
+            AppButton(text = "Disabled", enabled = false, onClick = {})
         }
     }
 }
@@ -63,12 +63,12 @@ Dark
 Large font
 ```
 
-The website playground mirrors the same states. One component should feel fully explored, in Android Studio and in the docs.
+Every preview is also a **Compose Preview Screenshot Test** upstream. That makes the state list a CI gate rather than a convention, and it produces the images the website shows. One component should feel fully explored, in Android Studio and in the docs, from the same source.
 
 ## Tests
 
 ```kotlin
-class ButtonTest {
+class AppButtonTest {
 
     @get:Rule
     val composeRule = createComposeRule()
@@ -78,8 +78,8 @@ class ButtonTest {
         var clicked = false
 
         composeRule.setContent {
-            DroidTheme {
-                Button(text = "Continue", onClick = { clicked = true })
+            AppTheme {
+                AppButton(text = "Continue", onClick = { clicked = true })
             }
         }
 
@@ -91,7 +91,7 @@ class ButtonTest {
 
 Compose UI testing already walks the [semantics tree](https://developer.android.com/develop/ui/compose/testing/semantics). Prefer semantics-based assertions over internal state.
 
-`droidkit add otp-input` installs `OtpInput.kt`, `OtpInputTest.kt`, and `OtpInputPreview.kt`. Tested UI, not just UI.
+`droidkit add otp-input` installs `AppOtpInput.kt` and `AppOtpInputPreview.kt`. `--with-tests` adds `AppOtpInputTest.kt` plus `ui-test-junit4` and `ui-test-manifest` to `androidTest`. Tests are opt-in because copying them uninvited is friction; the guarantee that the item *is* tested comes from upstream CI, not from the copy. See [Decisions #6](decisions.md).
 
 The showcase app and `:apps:benchmark` exist so we can feel scroll, animation, and startup — not only unit-test the happy path.
 
@@ -126,6 +126,6 @@ Docs pages should show, not lecture.
 /components/button
 ```
 
-Preview, variants, states, light/dark, the install command, and the Kotlin snippet. Copy. Install. Done.
+Screenshots per state (from the screenshot tests), light/dark, the install command, and the Kotlin snippet. Copy. Install. Done.
 
 Giant prose pages are a last resort. The component, its states, and its UX rule should be enough.

@@ -19,7 +19,7 @@ Build the underlying system before building 100 components. Keep it small enough
 Do not over-engineer names. Prefer:
 
 ```kotlin
-DroidTheme.spacing.md
+AppTheme.spacing.md
 ```
 
 over:
@@ -32,28 +32,29 @@ SpacingSemanticContainerInteractiveMedium
 
 ```kotlin
 AppTheme {
-    Button(
+    AppButton(
         text = "Continue",
         onClick = {},
     )
 }
 ```
 
-Internally:
+`AppTheme` **is** `MaterialTheme` with our color scheme, typography, and shapes, plus extra CompositionLocals Material does not have:
 
 ```text
 AppTheme
- ├── AppColors
- ├── AppTypography
- ├── AppSpacing
- ├── AppShapes
- └── AppMotion
+ ├── MaterialTheme(colorScheme, typography, shapes)   ← color, type, shape
+ ├── LocalSpacing   → AppTheme.spacing
+ ├── LocalMotion    → AppTheme.motion
+ └── LocalElevation → AppTheme.elevation
 ```
+
+So Material components inside it theme correctly, and DroidKit items read color and type through `MaterialTheme.*`, spacing and motion through `AppTheme.*`. One theme, no parallel color system. Full source in [reference/theme.md](reference/theme.md).
 
 Spacing as a data class, exposed through a CompositionLocal:
 
 ```kotlin
-data class DroidSpacing(
+data class AppSpacing(
     val xs: Dp = 4.dp,
     val sm: Dp = 8.dp,
     val md: Dp = 16.dp,
@@ -61,10 +62,10 @@ data class DroidSpacing(
     val xl: Dp = 32.dp,
 )
 
-val LocalSpacing = staticCompositionLocalOf { DroidSpacing() }
+val LocalSpacing = staticCompositionLocalOf { AppSpacing() }
 
-object DroidTheme {
-    val spacing: DroidSpacing
+object AppTheme {
+    val spacing: AppSpacing
         @Composable
         @ReadOnlyComposable
         get() = LocalSpacing.current
@@ -75,11 +76,21 @@ Usage:
 
 ```kotlin
 Column(
-    verticalArrangement = Arrangement.spacedBy(DroidTheme.spacing.md),
+    verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.md),
 )
 ```
 
-Color, type, shape, and motion follow the same pattern. One object. Obvious names. No generated token soup.
+Motion and elevation follow the same pattern. One object. Obvious names. No generated token soup.
+
+## Theme contract
+
+Every item depends on `theme`, so the theme is a stable contract, not a playground.
+
+- Adding a token bumps `THEME_VERSION`; items declare the `themeVersion` they need; `droidkit add` warns on mismatch.
+- Removing or renaming a token is breaking and needs a migration note in the theme item.
+- Hardcoded dp is allowed only where the number *is* the opinion (button height 52 dp), declared as a named `private val` at the top of the file. Layout spacing uses tokens.
+
+See [Decisions #4](decisions.md#4-theme-is-materialtheme--extra-locals-versioned).
 
 ## Material 3 underneath
 

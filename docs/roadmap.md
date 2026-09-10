@@ -1,6 +1,6 @@
 # Roadmap
 
-Start with Compose-only, an open-code registry, and about 25 excellent components and patterns. Resist XML. Resist a huge runtime. Compose as Google's primary UI direction makes that bet much safer than it was a few years ago.
+Start with Compose-only, an open-code registry, and 25 excellent items in Phase 1, about 30 at launch. Resist XML. Resist a huge runtime. Compose as Google's primary UI direction makes that bet much safer than it was a few years ago.
 
 ## Phase 1 — Foundation
 
@@ -20,6 +20,16 @@ Then:
 
 Showcase app that uses all of them. Previews and tests on every item. Get the visual language right. Do not start the CLI yet.
 
+**Phase 1 is done when:**
+
+- `:apps:showcase` builds and runs every item
+- 25 items, each with source, preview, test, and `registry.json` that validates against the schema
+- Every preview state has a green screenshot test, light and dark
+- Theme contract is at `THEME_VERSION = 1` and has not changed for two weeks of building items on it
+- **One real app** (one of ours) has its UI rebuilt on the copied files. Taste is only testable in a real product
+
+Decisions that must be settled before Phase 1 starts are in [Decisions](decisions.md): prefix, placeholder package, theme contract, schema, license.
+
 ## Phase 2 — Distribution
 
 ```bash
@@ -30,9 +40,9 @@ droidkit view
 droidkit diff
 ```
 
-Then the public registry.
+Then the public registry and `droidkit.json` ([Config](config.md)).
 
-This is when the project stops being “a Compose library” and becomes a system.
+`init` also writes agent instructions into the consumer project so coding agents use the installed components. This is when the project stops being “a Compose library” and becomes a system.
 
 ## Phase 3 — Product blocks
 
@@ -164,4 +174,4 @@ Or, later:
 
 Someone looks at an Android app built with this and thinks: “What UI library is that?”
 
-Taste, plus everything around it — quality, UX knowledge, Android knowledge, registry, blocks, docs, AI metadata, community. Not `Button.kt`.
+Taste, plus everything around it — quality, UX knowledge, Android knowledge, registry, blocks, docs, AI metadata, community. Not `AppButton.kt`.
