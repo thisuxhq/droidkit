@@ -2,7 +2,7 @@
 
 The registry is the core product. Components are the contents. The registry is how they move.
 
-Shadcn showed that a [registry](https://ui.shadcn.com/docs/registry) can distribute components, hooks, pages, configs, and other files — not just a package. DroidUI applies that model to Kotlin.
+Shadcn showed that a [registry](https://ui.shadcn.com/docs/registry) can distribute components, hooks, pages, configs, and other files — not just a package. DroidKit applies that model to Kotlin.
 
 ## What an item is
 
@@ -62,7 +62,7 @@ AI, docs, and search all read this. Do not keep a second description in the webs
 ## Search is a product surface
 
 ```bash
-droidui search payment
+droidkit search payment
 ```
 
 ```text
@@ -75,7 +75,7 @@ purchase-success
 ```
 
 ```bash
-droidui add paywall
+droidkit add paywall
 ```
 
 pulls `Paywall.kt`, `PricingCard.kt`, `FeatureList.kt`, `SubscriptionPicker.kt`, plus required icons, dependencies, and tokens.
@@ -85,9 +85,9 @@ pulls `Paywall.kt`, `PricingCard.kt`, `FeatureList.kt`, `SubscriptionPicker.kt`,
 A recipe composes existing items. You maintain the graph.
 
 ```bash
-droidui add recipe:login
-droidui add recipe:saas-settings
-droidui add recipe:ai-chat
+droidkit add recipe:login
+droidkit add recipe:saas-settings
+droidkit add recipe:ai-chat
 ```
 
 ```text
@@ -102,7 +102,7 @@ Recipes are how blocks stay DRY without becoming a runtime.
 ## Dependency resolution
 
 ```bash
-droidui add ai-chat
+droidkit add ai-chat
 ```
 
 ```text
@@ -135,9 +135,9 @@ Show the plan before writing files. Never install a mystery graph.
 
 ## Ownership and updates
 
-After `droidui add button`, the developer may change `Button.kt`. Six months later, `droidui update button` must not overwrite it.
+After `droidkit add button`, the developer may change `Button.kt`. Six months later, `droidkit update button` must not overwrite it.
 
-Show a diff. Commands like `droidui diff button` exist so they can see upstream vs local. Shadcn's CLI [supports viewing and diffing component changes](https://ui.shadcn.com/docs/cli) for the same reason.
+Show a diff. Commands like `droidkit diff button` exist so they can see upstream vs local. Shadcn's CLI [supports viewing and diffing component changes](https://ui.shadcn.com/docs/cli) for the same reason.
 
 Philosophy, again: once installed, the code belongs to the developer.
 
@@ -149,7 +149,7 @@ OtpInputTest.kt
 OtpInputPreview.kt
 ```
 
-`droidui add otp-input` does not just install UI. It installs tested UI with every state previewed. See [Quality](quality.md).
+`droidkit add otp-input` does not just install UI. It installs tested UI with every state previewed. See [Quality](quality.md).
 
 ## What the registry is not
 

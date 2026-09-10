@@ -83,14 +83,14 @@ Color, type, shape, and motion follow the same pattern. One object. Obvious name
 
 ## Material 3 underneath
 
-Sit on Material 3 — including [Expressive](https://developer.android.com/develop/ui/compose/designsystems/material3) — then apply DroidUI opinion.
+Sit on Material 3 — including [Expressive](https://developer.android.com/develop/ui/compose/designsystems/material3) — then apply DroidKit opinion.
 
 ```text
 Android platform principles
            +
 Material / M3 Expressive foundation
            +
-DroidUI design opinion
+DroidKit design opinion
            +
 real product patterns
            ↓
@@ -104,9 +104,9 @@ When Material's component fights the desired UX, drop to Compose Foundation for 
 Same APIs, different visual systems, chosen at init:
 
 ```bash
-droidui init --style clean
-droidui init --style expressive
-droidui init --style minimal
+droidkit init --style clean
+droidkit init --style expressive
+droidkit init --style minimal
 ```
 
 V0 ships one style well. Extra styles are a later lever, not a launch requirement.

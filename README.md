@@ -1,10 +1,10 @@
-# DroidUI
+# DroidKit
 
 **The open UI system for building polished Android apps.**
 
 Beautiful, accessible, production-ready Jetpack Compose components. Copy them into your project and make them yours.
 
-Material gives developers primitives. DroidUI gives them product-quality UI.
+Material gives developers primitives. DroidKit gives them product-quality UI.
 
 > shadcn-style open components for Android, with stronger UX opinions.
 
@@ -14,17 +14,17 @@ That is the 5-second explanation. It is not the long-term identity.
 
 Jetpack Compose and Material 3 give you Button, Card, Dialog, TextField. Real products also need empty states, OTP inputs, settings rows, paywalls, permission flows, AI composers, and the rest of the screens developers rebuild in every app.
 
-DroidUI is the opinionated layer on top: a design system, a registry of components you own, and the product patterns that make an Android app feel designed rather than assembled.
+DroidKit is the opinionated layer on top: a design system, a registry of components you own, and the product patterns that make an Android app feel designed rather than assembled.
 
 ## How it works
 
 You do not depend on a Maven UI library.
 
 ```bash
-droidui init
-droidui add button
-droidui add empty-state
-droidui add settings
+droidkit init
+droidkit add button
+droidkit add empty-state
+droidkit add settings
 ```
 
 The files land in your app. You import your own code. You can change anything.

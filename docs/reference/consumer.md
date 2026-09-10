@@ -4,7 +4,7 @@ The source repo can be complex. Their project stays simple.
 
 **This codebase is a registry and development environment. Their codebase gets clean Kotlin files they own.**
 
-## `droidui init`
+## `droidkit init`
 
 Creates:
 
@@ -18,7 +18,7 @@ app/src/main/java/com/example/app/ui/
 └── components/
 ```
 
-## `droidui add button`
+## `droidkit add button`
 
 ```text
 1. fetch registry/button
@@ -50,7 +50,7 @@ import com.example.app.ui.components.DroidButton
 Not:
 
 ```kotlin
-import com.droidui.components.Button
+import com.droidkit.components.Button
 ```
 
 That distinction is the product.

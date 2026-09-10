@@ -26,7 +26,7 @@ The source repo is a registry and a development environment. The consumer projec
 └─────────────────────────────┘
 ```
 
-Material stays at the bottom. DroidUI is the opinionated layer on top.
+Material stays at the bottom. DroidKit is the opinionated layer on top.
 
 ## Use Material where it helps
 
@@ -51,7 +51,7 @@ That keeps platform behaviour (ripples, focus, text, accessibility) without forc
 Treat this like a real Android product, not a dump of `components/`.
 
 ```text
-droidui/
+droidkit/
 ├── apps/
 │   ├── showcase/
 │   └── benchmark/
@@ -89,7 +89,7 @@ The website, CLI, and MCP all read the same registry. They do not keep a second 
 
 ## What the developer actually gets
 
-They never need this repo structure. After `droidui init` and a few `add`s:
+They never need this repo structure. After `droidkit init` and a few `add`s:
 
 ```text
 my-app/
@@ -114,7 +114,7 @@ They import their own package:
 import com.acme.app.ui.components.Button
 ```
 
-not `com.droidui.components.Button`.
+not `com.droidkit.components.Button`.
 
 That distinction is the product.
 
@@ -157,4 +157,4 @@ The Android components themselves remain plain Kotlin files. Infrastructure must
 
 ## V0 scope
 
-Do not build the CLI first. Prove `registry/ + showcase/ + theme/` with 15–20 components that feel great, then add `droidui add`. Tooling before a design system produces a distribution machine with nothing worth distributing.
+Do not build the CLI first. Prove `registry/ + showcase/ + theme/` with 15–20 components that feel great, then add `droidkit add`. Tooling before a design system produces a distribution machine with nothing worth distributing.

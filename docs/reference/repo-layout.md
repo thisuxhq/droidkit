@@ -3,10 +3,10 @@
 Look like a real Android product, not a giant `components/` dump.
 
 ```text
-droidui/
+droidkit/
 ├── apps/
 │   ├── showcase/
-│   │   └── src/main/java/com/droidui/showcase/
+│   │   └── src/main/java/com/droidkit/showcase/
 │   │       ├── MainActivity.kt
 │   │       ├── navigation/
 │   │       └── screens/

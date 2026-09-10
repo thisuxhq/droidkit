@@ -4,9 +4,9 @@ Canonical instructions for coding agents in this repo. `CLAUDE.md` is a symlink 
 
 ## Product
 
-**DroidUI** is the open UI system for building polished Android apps.
+**DroidKit** is the open UI system for building polished Android apps.
 
-Material gives primitives. DroidUI gives product-quality UI. Developers **own the copied Kotlin** — this is not a Maven component library.
+Material gives primitives. DroidKit gives product-quality UI. Developers **own the copied Kotlin** — this is not a Maven component library.
 
 5-second explanation (not the identity): shadcn-style open components for Android, with stronger UX opinions.
 
@@ -35,8 +35,8 @@ Index: [docs/README.md](docs/README.md)
 
 If a change fights one of these, the change loses.
 
-- **Own the code.** Registry items are copyable Kotlin. Consumers import their package, not `com.droidui.*`.
-- **No DroidUI runtime** unless something is impossible without it. Compose + Material 3 + AndroidX. Extra libraries only when required (e.g. Coil).
+- **Own the code.** Registry items are copyable Kotlin. Consumers import their package, not `com.droidkit.*`.
+- **No DroidKit runtime** unless something is impossible without it. Compose + Material 3 + AndroidX. Extra libraries only when required (e.g. Coil).
 - **APIs are Compose.** No `ButtonConfiguration` objects. Defaults + escape hatches (`modifier`, colors, shape, slots) on the same function.
 - **Product decisions in the component.** `PasswordField` / `EmptyState` / `DestructiveDialog`, not restyled primitives with no behaviour.
 - **Taste over volume.** Do not add the 31st item to look busy. Finish the ones we have.
@@ -65,7 +65,7 @@ Target: ~10 primitives, ~10 components, ~5 patterns. See [docs/catalog.md](docs/
 - Prefer `DroidTheme.spacing.md` over generated token names.
 - Sit on Material 3; drop to Foundation only when Material fights the UX.
 - Each registry item is a folder: `*.kt`, `*Preview.kt`, `*Test.kt`, `registry.json`.
-- Package in the registry can be a placeholder; the (future) CLI rewrites it. Do not leak `com.droidui` into consumer-facing samples as the import they keep.
+- Package in the registry can be a placeholder; the (future) CLI rewrites it. Do not leak `com.droidkit` into consumer-facing samples as the import they keep.
 - Docs are markdown in `docs/`. Update them when you change a product decision.
 - Keep `AGENTS.md` canonical. Do not create a second instructions file with different rules.
 

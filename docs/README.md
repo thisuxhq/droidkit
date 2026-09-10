@@ -1,6 +1,6 @@
 # Docs
 
-DroidUI is the open UI system for building polished Android apps.
+DroidKit is the open UI system for building polished Android apps.
 
 These documents are the source of truth for the product: what it is, how it is structured, and how it should be built.
 

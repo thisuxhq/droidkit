@@ -13,4 +13,4 @@ The repo is a **registry and development environment**. The consumer project get
 | [Theme](theme.md) | Spacing tokens and `DroidTheme` |
 | [Consumer project](consumer.md) | `init` / `add`, their tree, their imports |
 
-V0: build `registry/ + showcase/ + theme/` first. Prove 15–20 items feel great. Then `droidui add`.
+V0: build `registry/ + showcase/ + theme/` first. Prove 15–20 items feel great. Then `droidkit add`.

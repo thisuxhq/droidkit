@@ -14,7 +14,7 @@ On one screen:
 - Variants: primary, secondary, ghost, destructive
 - States: default, loading, disabled
 - Theme: light / dark
-- Install: `droidui add button`
+- Install: `droidkit add button`
 - Snippet:
 
 ```kotlin

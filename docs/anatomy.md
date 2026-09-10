@@ -18,7 +18,7 @@ The full source example (including the `DroidButton` name as copied into the app
 
 ## Button.kt
 
-Compose-native. Good defaults. Loading and disabled. Material underneath. No DroidUI runtime.
+Compose-native. Good defaults. Loading and disabled. Material underneath. No DroidKit runtime.
 
 ```kotlin
 @Composable
@@ -133,4 +133,4 @@ Expand with `avoidWhen`, `examples`, `accessibility`, and `aiHints` as the item 
 - [ ] TalkBack, touch target, RTL
 - [ ] Preview and test in the folder
 - [ ] Metadata a human and an agent can both use
-- [ ] No DroidUI runtime import
+- [ ] No DroidKit runtime import

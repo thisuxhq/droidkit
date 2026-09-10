@@ -102,7 +102,7 @@ Login, signup, onboarding, settings, profile, search, chat, AI chat, paywall, no
 Blocks will drive adoption. Developers may not care about another button. They care about:
 
 ```bash
-droidui add auth
+droidkit add auth
 ```
 
 ```text
@@ -114,11 +114,11 @@ SocialLogin.kt
 ```
 
 ```bash
-droidui add settings
+droidkit add settings
 ```
 
 ```bash
-droidui add ai-chat
+droidkit add ai-chat
 ```
 
 ```text
@@ -199,7 +199,7 @@ ConnectivityState
 InAppReview
 ```
 
-This is how DroidUI stops being a port and becomes an Android product UI standard.
+This is how DroidKit stops being a port and becomes an Android product UI standard.
 
 ## Adaptive UI
 

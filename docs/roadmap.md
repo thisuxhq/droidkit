@@ -23,11 +23,11 @@ Showcase app that uses all of them. Previews and tests on every item. Get the vi
 ## Phase 2 — Distribution
 
 ```bash
-droidui init
-droidui add
-droidui search
-droidui view
-droidui diff
+droidkit init
+droidkit add
+droidkit search
+droidkit view
+droidkit diff
 ```
 
 Then the public registry.
@@ -71,15 +71,15 @@ Then somebody can say “make this screen look polished” and the agent underst
 Other people publish:
 
 ```bash
-droidui add @acme/maps
-droidui add @stripe/payment-sheet
-droidui add @community/chart
+droidkit add @acme/maps
+droidkit add @stripe/payment-sheet
+droidkit add @community/chart
 ```
 
 And:
 
 ```bash
-droidui create
+droidkit create
 ```
 
 ```text

@@ -1,24 +1,24 @@
 # CLI
 
-The CLI is how humans and agents install DroidUI. It is not the first thing to build. It is the thing that turns a Compose library into a system. See [Roadmap](roadmap.md).
+The CLI is how humans and agents install DroidKit. It is not the first thing to build. It is the thing that turns a Compose library into a system. See [Roadmap](roadmap.md).
 
 ## Commands
 
 | Command | Job |
 | --- | --- |
-| `droidui init` | Write theme + `ui/` into the app |
-| `droidui add <item>` | Resolve deps, copy files, add Gradle deps if needed |
-| `droidui search <query>` | Find components, patterns, blocks, recipes |
-| `droidui view <item>` | Show metadata, files, examples |
-| `droidui diff <item>` | Local vs upstream |
-| `droidui update <item>` | Offer a diff, never silent overwrite |
+| `droidkit init` | Write theme + `ui/` into the app |
+| `droidkit add <item>` | Resolve deps, copy files, add Gradle deps if needed |
+| `droidkit search <query>` | Find components, patterns, blocks, recipes |
+| `droidkit view <item>` | Show metadata, files, examples |
+| `droidkit diff <item>` | Local vs upstream |
+| `droidkit update <item>` | Offer a diff, never silent overwrite |
 
-Later: `droidui create` for templates (SaaS companion, AI app, finance, social, productivity). That is Phase 5.
+Later: `droidkit create` for templates (SaaS companion, AI app, finance, social, productivity). That is Phase 5.
 
 ## Init
 
 ```bash
-droidui init
+droidkit init
 ```
 
 Creates:
@@ -36,9 +36,9 @@ app/src/main/java/com/example/app/ui/
 Optional style flag, once more than one style exists:
 
 ```bash
-droidui init --style clean
-droidui init --style expressive
-droidui init --style minimal
+droidkit init --style clean
+droidkit init --style expressive
+droidkit init --style minimal
 ```
 
 Detect the app package from the Gradle project. Do not make the developer type `com.example.app` if the project already knows it. Rewrite package names in copied files to match.
@@ -46,11 +46,11 @@ Detect the app package from the Gradle project. Do not make the developer type `
 ## Add
 
 ```bash
-droidui add button
-droidui add otp-input
-droidui add empty-state
-droidui add search
-droidui add auth
+droidkit add button
+droidkit add otp-input
+droidkit add empty-state
+droidkit add search
+droidkit add auth
 ```
 
 Flow:
@@ -81,8 +81,8 @@ import com.example.app.ui.components.Button
 ## Search and view
 
 ```bash
-droidui search payment
-droidui view paywall
+droidkit search payment
+droidkit view paywall
 ```
 
 `view` prints description, use/avoid, files, deps, and a short example. This is the same payload MCP serves to agents. Keep them in sync.
@@ -92,8 +92,8 @@ droidui view paywall
 The developer may have edited the file. Updates are a review, not a replace.
 
 ```bash
-droidui diff button
-droidui update button
+droidkit diff button
+droidkit update button
 ```
 
 ```diff
@@ -105,7 +105,7 @@ If the local file is unchanged from the installed revision, update can apply cle
 
 ## What the CLI must not do
 
-- Require a DroidUI Gradle plugin to compile the app
+- Require a DroidKit Gradle plugin to compile the app
 - Rewrite the developer's theme without asking
 - Fetch from anywhere except the configured registry
 - Hide Maven dependencies. If `otp-input` needs a library, say so in the plan
@@ -113,6 +113,6 @@ If the local file is unchanged from the installed revision, update can apply cle
 
 ## Shape of the binary
 
-`npx droidui` is fine as a distribution channel for JS-native developers and agents. A native binary (`droidui`) should exist too. Both call the same registry. The Android project remains Gradle/Kotlin.
+`npx droidkit` is fine as a distribution channel for JS-native developers and agents. A native binary (`droidkit`) should exist too. Both call the same registry. The Android project remains Gradle/Kotlin.
 
 V0 can wait on the CLI entirely. Ship the registry and showcase first so `add` has something worth adding.

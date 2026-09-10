@@ -7,14 +7,14 @@ These decisions do not change with the phase. If a feature fights one of them, t
 The main model is not:
 
 ```kotlin
-implementation("com.droidui:ui:1.4.0")
-import com.droidui.Button
+implementation("com.droidkit:ui:1.4.0")
+import com.droidkit.Button
 ```
 
 The main model is:
 
 ```bash
-droidui add button
+droidkit add button
 ```
 
 which writes:
@@ -34,12 +34,12 @@ This is the same idea shadcn describes as [open code, composition, and distribut
 Avoid:
 
 ```kotlin
-implementation("droidui:runtime")
+implementation("droidkit:runtime")
 ```
 
 unless something is impossible without it.
 
-A component may depend on Compose, Material 3, AndroidX, and a real library (Coil, for example) when that library is actually required. Most items should have close to **zero** DroidUI-specific runtime.
+A component may depend on Compose, Material 3, AndroidX, and a real library (Coil, for example) when that library is actually required. Most items should have close to **zero** DroidKit-specific runtime.
 
 Trust comes from readable Kotlin, not from a framework.
 
@@ -48,7 +48,7 @@ Trust comes from readable Kotlin, not from a framework.
 Bad:
 
 ```kotlin
-DroidUIButton(
+DroidKitButton(
     configuration = ButtonConfiguration(
         variant = ButtonVariant.PRIMARY,
         size = ButtonSize.MEDIUM,
@@ -102,7 +102,7 @@ Rounded corners are not the value. Defaults that match real UX problems are.
 
 Do not launch with 300 items. Launch with around 30 that feel finished.
 
-Someone looking at an app built with DroidUI should wonder what UI library that is. That reaction is the signal. A component count is not.
+Someone looking at an app built with DroidKit should wonder what UI library that is. That reaction is the signal. A component count is not.
 
 The moat is not `Button.kt`. Everyone can recreate it. The moat is:
 
@@ -122,7 +122,7 @@ Especially taste.
 
 ## 6. Accessibility, adaptive UI, and performance are the quality bar
 
-TalkBack, dynamic type, RTL, keyboard, dark mode, large screens, and touch targets are not cleanup. They are what “using a DroidUI component” means. See [Quality](quality.md).
+TalkBack, dynamic type, RTL, keyboard, dark mode, large screens, and touch targets are not cleanup. They are what “using a DroidKit component” means. See [Quality](quality.md).
 
 Fancy motion that tanks a `LazyColumn` does not ship.
 

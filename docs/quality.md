@@ -1,6 +1,6 @@
 # Quality
 
-Quality is not a polish pass. It is what “using a DroidUI component” means.
+Quality is not a polish pass. It is what “using a DroidKit component” means.
 
 ## Accessibility
 
@@ -91,7 +91,7 @@ class ButtonTest {
 
 Compose UI testing already walks the [semantics tree](https://developer.android.com/develop/ui/compose/testing/semantics). Prefer semantics-based assertions over internal state.
 
-`droidui add otp-input` installs `OtpInput.kt`, `OtpInputTest.kt`, and `OtpInputPreview.kt`. Tested UI, not just UI.
+`droidkit add otp-input` installs `OtpInput.kt`, `OtpInputTest.kt`, and `OtpInputPreview.kt`. Tested UI, not just UI.
 
 The showcase app and `:apps:benchmark` exist so we can feel scroll, animation, and startup — not only unit-test the happy path.
 

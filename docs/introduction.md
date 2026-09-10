@@ -1,6 +1,6 @@
 # Introduction
 
-DroidUI is the open UI system for building polished Android apps.
+DroidKit is the open UI system for building polished Android apps.
 
 It is also: beautiful, production-ready Compose components that you own.
 
@@ -8,7 +8,7 @@ It is also: beautiful, production-ready Compose components that you own.
 
 It is not “Shadcn for Android.”
 
-That line is useful for five seconds. It is a bad long-term identity. Shadcn proved that **open code + composition + a registry** is a better distribution model than a versioned component package. DroidUI uses that model. The product is Android product UI, not a port of a web library.
+That line is useful for five seconds. It is a bad long-term identity. Shadcn proved that **open code + composition + a registry** is a better distribution model than a versioned component package. DroidKit uses that model. The product is Android product UI, not a port of a web library.
 
 It is not a Maven artifact you `implementation()` and never open.
 
@@ -50,7 +50,7 @@ Google supports [custom design systems on top of Compose](https://developer.andr
 
 That is the window:
 
-**Material gives developers primitives. DroidUI gives them product-quality UI.**
+**Material gives developers primitives. DroidKit gives them product-quality UI.**
 
 ## The short pitch
 
