@@ -78,6 +78,4 @@ Target: ~10 primitives, ~10 components, ~5 patterns. See [docs/catalog.md](docs/
 
 ## Verification
 
-Until Gradle modules exist: make sure docs still agree with the code you add, and every new registry item has preview + test + metadata.
-
-Once the Android project exists: assemble showcase, run the item's Compose tests, and check the preview states listed in [docs/quality.md](docs/quality.md).
+Assemble `:apps:showcase`, run `:registry:check` (import lint + item tests), and check the preview states listed in [docs/quality.md](docs/quality.md). CI validates every item `registry.json` against `registry/item.schema.json`.

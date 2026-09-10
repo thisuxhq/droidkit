@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "themeVersion": 1,
+  "items": [
+    { "name": "theme", "type": "theme", "path": "theme" },
+    { "name": "button", "type": "component", "path": "components/button" },
+    { "name": "text-field", "type": "component", "path": "components/text-field" },
+    { "name": "password-field", "type": "component", "path": "components/password-field" },
+    { "name": "otp-input", "type": "component", "path": "components/otp-input" },
+    { "name": "empty-state", "type": "pattern", "path": "patterns/empty-state" },
+    { "name": "settings", "type": "block", "path": "blocks/settings" }
+  ]
+}

@@ -1,0 +1,32 @@
+name: registry
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate-registry:
+    name: validate registry.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install validator
+        run: pip install check-jsonschema
+      - name: validate every item registry.json
+        run: |
+          set -euo pipefail
+          schema="registry/item.schema.json"
+          found=0
+          while IFS= read -r file; do
+            echo "validating $file"
+            check-jsonschema --schemafile "$schema" "$file"
+            found=$((found + 1))
+          done < <(find registry -mindepth 2 -name registry.json | sort)
+          if [ "$found" -eq 0 ]; then
+            echo "no registry.json files found under registry/*"
+            exit 1
+          fi
+          echo "validated $found item(s)"

@@ -16,6 +16,8 @@ Load-bearing choices, written down so they stop being re-argued. Add a row when 
 | 10 | Android first, `platform` tagged from day one | Decided |
 | 11 | Website previews are generated screenshots | Decided |
 | 12 | `init` writes agent instructions into the consumer project | Decided |
+| 13 | Color/type: `MaterialTheme.*`; spacing/motion/elevation: `AppTheme.*` | Decided |
+| 14 | Dogfood / taste-test target is `:apps:showcase` | Decided |
 
 ## 1. Name: DroidKit
 
@@ -89,3 +91,11 @@ Compose does not run in a browser without a wasm build. The playground renders P
 ## 12. `init` writes agent instructions into the consumer project
 
 `droidkit init` adds a short `droidkit` section to the project's `AGENTS.md` (or creates `.agents/skills/droidkit/SKILL.md`): what is installed, the prefix, the four categories, and the design rules endpoint. Agents working in that repo then use the installed components instead of inventing new ones.
+
+## 13. Color/type: `MaterialTheme.*`; extra tokens: `AppTheme.*`
+
+Items read color, type, and shape from `MaterialTheme.*`. They read spacing, motion, and elevation from `AppTheme.*`. No parallel color or type system.
+
+## 14. Dogfood / taste-test target is `:apps:showcase`
+
+Taste is tested in this repo's showcase app, not an external product. `:apps:showcase` builds and runs every registered item.

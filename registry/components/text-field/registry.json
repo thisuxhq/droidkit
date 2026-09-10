@@ -1,0 +1,29 @@
+{
+  "name": "text-field",
+  "type": "component",
+  "description": "Labeled text field with IME options, supporting text, and error state.",
+  "avoidWhen": "Do not use for passwords or one-time codes; use password-field or otp-input.",
+  "files": [
+    { "path": "AppTextField.kt", "kind": "source" },
+    { "path": "AppTextFieldPreview.kt", "kind": "preview" },
+    { "path": "AppTextFieldTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme"],
+  "platform": "common",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Attach error text to the field, not only a color change",
+    "Set KeyboardType and ImeAction for the job"
+  ]
+}

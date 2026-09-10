@@ -1,0 +1,29 @@
+{
+  "name": "password-field",
+  "type": "component",
+  "description": "Password field with IME, autofill, and show/hide.",
+  "avoidWhen": "Do not use for one-time codes; use otp-input.",
+  "files": [
+    { "path": "AppPasswordField.kt", "kind": "source" },
+    { "path": "AppPasswordFieldPreview.kt", "kind": "preview" },
+    { "path": "AppPasswordFieldTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme", "text-field"],
+  "platform": "common",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Keep show/hide on a 48 dp target",
+    "Set ContentType.Password so autofill works"
+  ]
+}

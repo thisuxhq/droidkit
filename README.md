@@ -44,6 +44,15 @@ The full index lives in [docs/](docs/README.md).
 
 Pre-v0. The design system and registry come before the CLI. Compose-only. No XML. No proprietary runtime.
 
+## Development
+
+Taste-test lives in `:apps:showcase`. It exercises every registered item.
+
+```bash
+./gradlew :apps:showcase:assembleDebug
+./gradlew :registry:check
+```
+
 ## License
 
 [Apache-2.0](LICENSE). Files you copy into your app are yours.

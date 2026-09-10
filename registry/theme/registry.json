@@ -1,0 +1,25 @@
+{
+  "name": "theme",
+  "type": "theme",
+  "description": "Versioned theme contract: MaterialTheme plus spacing, motion, and elevation.",
+  "avoidWhen": "Do not fork a second color or type system beside MaterialTheme.",
+  "files": [
+    { "path": "Color.kt", "kind": "source" },
+    { "path": "Typography.kt", "kind": "source" },
+    { "path": "Shape.kt", "kind": "source" },
+    { "path": "Spacing.kt", "kind": "source" },
+    { "path": "Motion.kt", "kind": "source" },
+    { "path": "Theme.kt", "kind": "source" }
+  ],
+  "dependencies": [],
+  "registryDependencies": [],
+  "platform": "common",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "aiHints": [
+    "Read color, type, and shape from MaterialTheme",
+    "Read spacing, motion, and elevation from AppTheme"
+  ]
+}

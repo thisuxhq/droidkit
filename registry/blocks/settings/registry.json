@@ -1,0 +1,29 @@
+{
+  "name": "settings",
+  "type": "block",
+  "description": "Stateless settings screen with a toggle row and logout.",
+  "avoidWhen": "Do not drop a ViewModel, NavHost, or DI graph into this file.",
+  "files": [
+    { "path": "SettingsScreen.kt", "kind": "source" },
+    { "path": "SettingsScreenPreview.kt", "kind": "preview" },
+    { "path": "SettingsScreenTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme", "button"],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": ["androidx.compose.material3.ExperimentalMaterial3Api"],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Keep the block stateless: state and callbacks in",
+    "Use LazyColumn keys; do not animate every row"
+  ]
+}

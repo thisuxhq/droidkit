@@ -1,0 +1,29 @@
+{
+  "name": "otp-input",
+  "type": "component",
+  "description": "One-time code input built on Foundation, not Material.",
+  "avoidWhen": "Do not use for passwords or free-form text.",
+  "files": [
+    { "path": "AppOtpInput.kt", "kind": "source" },
+    { "path": "AppOtpInputPreview.kt", "kind": "preview" },
+    { "path": "AppOtpInputTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme"],
+  "platform": "common",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Digits only, fixed length",
+    "Do not wrap Material TextField"
+  ]
+}

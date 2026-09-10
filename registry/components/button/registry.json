@@ -1,0 +1,26 @@
+{
+  "name": "button",
+  "type": "component",
+  "description": "Primary action button with loading and disabled states.",
+  "avoidWhen": "Do not use for navigation rows or inline text links.",
+  "files": [
+    { "path": "AppButton.kt", "kind": "source" },
+    { "path": "AppButtonPreview.kt", "kind": "preview" },
+    { "path": "AppButtonTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme"],
+  "platform": "common",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": ["One primary button per screen section"]
+}
