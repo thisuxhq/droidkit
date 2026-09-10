@@ -23,23 +23,23 @@ android {
         }
     }
     sourceSets {
-        getByName("main") {
-            kotlin.srcDirs(
-                "components",
-                "patterns",
-                "blocks",
+        named("main") {
+            kotlin.directories.add(
+                layout.buildDirectory
+                    .dir("generated/registryMain")
+                    .get()
+                    .asFile
+                    .absolutePath,
             )
-            kotlin.exclude("**/*Test.kt")
-            kotlin.exclude("**/*ScreenshotTest.kt")
         }
-        getByName("test") {
-            kotlin.srcDirs(
-                "components",
-                "patterns",
-                "blocks",
+        named("test") {
+            kotlin.directories.add(
+                layout.buildDirectory
+                    .dir("generated/registryTest")
+                    .get()
+                    .asFile
+                    .absolutePath,
             )
-            kotlin.include("**/*Test.kt")
-            kotlin.include("**/*ScreenshotTest.kt")
         }
     }
 }
@@ -48,22 +48,52 @@ kotlin {
     jvmToolchain(17)
 }
 
+val registryMainSources = layout.buildDirectory.dir("generated/registryMain")
+val registryTestSources = layout.buildDirectory.dir("generated/registryTest")
+
+val syncRegistryMain by tasks.registering(Sync::class) {
+    from("components")
+    from("patterns")
+    from("blocks")
+    include("**/*.kt")
+    exclude("**/*Test.kt")
+    exclude("**/*ScreenshotTest.kt")
+    into(registryMainSources)
+}
+
+val syncRegistryTest by tasks.registering(Sync::class) {
+    from("components")
+    from("patterns")
+    from("blocks")
+    include("**/*Test.kt")
+    include("**/*ScreenshotTest.kt")
+    into(registryTestSources)
+}
+
+tasks.named("preBuild") {
+    dependsOn(syncRegistryMain, syncRegistryTest)
+}
+
+afterEvaluate {
+    tasks.matching { it.name.startsWith("compile") && it.name.contains("Test") }.configureEach {
+        dependsOn(syncRegistryTest)
+    }
+    tasks.matching { it.name.startsWith("compile") && it.name.contains("Kotlin") }.configureEach {
+        dependsOn(syncRegistryMain)
+    }
+}
+
 val lintRegistryImports by tasks.registering {
     group = "verification"
     description = "Registry Kotlin may import only com.droidkit.registry.*, Compose, Material 3, AndroidX, and the JDK."
-    val roots = listOf(
-        layout.projectDirectory.dir("theme"),
-        layout.projectDirectory.dir("components"),
-        layout.projectDirectory.dir("patterns"),
-        layout.projectDirectory.dir("blocks"),
-    )
-    inputs.files(
-        files(roots).asFileTree.matching {
-            include("**/*.kt")
-            exclude("**/*Test.kt")
-            exclude("**/*ScreenshotTest.kt")
-        },
-    )
+    val sourceRoot = layout.projectDirectory.asFile
+    val filesToLint =
+        fileTree(sourceRoot) {
+            include("theme/**/*.kt", "components/**/*.kt", "patterns/**/*.kt", "blocks/**/*.kt")
+            exclude("**/*Test.kt", "**/*ScreenshotTest.kt", "build/**")
+        }.files
+            .toList()
+    inputs.files(filesToLint)
     doLast {
         val allowed =
             listOf(
@@ -76,13 +106,13 @@ val lintRegistryImports by tasks.registering {
                 "javax.",
             )
         val violations = mutableListOf<String>()
-        inputs.files.forEach { file ->
+        filesToLint.forEach { file ->
             file.readLines().forEachIndexed { index, line ->
                 val trimmed = line.trim()
                 if (trimmed.startsWith("import ")) {
                     val imported = trimmed.removePrefix("import ").trim()
                     if (allowed.none { imported.startsWith(it) }) {
-                        violations += "${file.relativeTo(projectDir)}:${index + 1}: $imported"
+                        violations += "${file.relativeTo(sourceRoot)}:${index + 1}: $imported"
                     }
                 }
             }
@@ -116,5 +146,6 @@ dependencies {
     testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(libs.androidx.compose.ui)
     testImplementation(libs.robolectric)
 }

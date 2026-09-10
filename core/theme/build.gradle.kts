@@ -17,10 +17,8 @@ android {
         compose = true
     }
     sourceSets {
-        getByName("main") {
-            kotlin.srcDir("${rootDir}/registry/theme")
-            kotlin.exclude("**/*Test.kt")
-            kotlin.exclude("**/*ScreenshotTest.kt")
+        named("main") {
+            kotlin.directories.add(file("${rootDir}/registry/theme").absolutePath)
         }
     }
 }

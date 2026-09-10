@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -31,7 +30,7 @@ class AppPasswordFieldTest {
         }
 
         composeRule.onNodeWithText("Password").performTextInput("secret")
-        composeRule.onNodeWithContentDescription("Show password").assertIsDisplayed()
+        composeRule.onNodeWithText("Show").assertIsDisplayed()
     }
 
     @Test
@@ -42,8 +41,8 @@ class AppPasswordFieldTest {
             }
         }
 
-        composeRule.onNodeWithContentDescription("Show password").performClick()
-        composeRule.onNodeWithContentDescription("Hide password").assertIsDisplayed()
+        composeRule.onNodeWithText("Show").performClick()
+        composeRule.onNodeWithText("Hide").assertIsDisplayed()
         composeRule.onNodeWithText("secret").assertIsDisplayed()
     }
 }

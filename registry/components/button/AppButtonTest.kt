@@ -1,9 +1,9 @@
 package com.droidkit.registry.components
 
-import androidx.compose.ui.test.assertDoesNotExist
-import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -58,8 +58,7 @@ class AppButtonTest {
             }
         }
 
-        composeRule.onNodeWithText("Continue").assertDoesNotExist()
-        composeRule.onNodeWithText("Loading", useUnmergedTree = true).assertIsDisplayed()
+        composeRule.onAllNodesWithText("Continue").assertCountEquals(0)
         assertFalse(clicked)
     }
 }

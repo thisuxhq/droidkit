@@ -2,17 +2,16 @@ package com.droidkit.registry.components
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,11 +55,15 @@ fun AppPasswordField(
             ),
         contentType = ContentType.Password,
         trailingIcon = {
-            IconButton(onClick = { visible = !visible }, enabled = enabled) {
-                Icon(
-                    imageVector = if (visible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
-                    contentDescription = if (visible) "Hide password" else "Show password",
-                )
+            TextButton(
+                onClick = { visible = !visible },
+                enabled = enabled,
+                modifier =
+                    Modifier.semantics {
+                        contentDescription = if (visible) "Hide password" else "Show password"
+                    },
+            ) {
+                Text(if (visible) "Hide" else "Show")
             }
         },
     )
