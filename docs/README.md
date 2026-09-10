@@ -15,6 +15,19 @@ These documents are the source of truth for the product: what it is, how it is s
 | [Catalog](catalog.md) | Primitives, components, patterns, blocks |
 | [Anatomy](anatomy.md) | One component, fully worked |
 
+## Reference
+
+Implement against these examples. [Reference index](reference/README.md).
+
+| Doc | What it shows |
+| --- | --- |
+| [Repo layout](reference/repo-layout.md) | Source tree, Gradle, root registry |
+| [Button](reference/button.md) | Kotlin, preview, test, metadata |
+| [Empty state](reference/empty-state.md) | Opinionated pattern |
+| [Settings screen](reference/settings-screen.md) | Block composing other items |
+| [Theme](reference/theme.md) | Spacing and `DroidTheme` |
+| [Consumer project](reference/consumer.md) | `init` / `add` and their tree |
+
 ## Distribution
 
 | Doc | What it covers |

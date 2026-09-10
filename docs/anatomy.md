@@ -14,6 +14,8 @@ registry/components/button/
 
 Copied into the app as `ui/components/Button.kt` (package rewritten). Previews and tests can copy with it or stay upstream — V0 copies all three.
 
+The full source example (including the `DroidButton` name as copied into the app) is in [reference/button.md](reference/button.md).
+
 ## Button.kt
 
 Compose-native. Good defaults. Loading and disabled. Material underneath. No DroidUI runtime.
