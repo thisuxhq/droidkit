@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -21,7 +23,7 @@ class AppPasswordFieldTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun typesPassword() {
+    fun typesPasswordThenRevealsValue() {
         composeRule.setContent {
             AppTheme {
                 var value by remember { mutableStateOf("") }
@@ -30,19 +32,51 @@ class AppPasswordFieldTest {
         }
 
         composeRule.onNodeWithText("Password").performTextInput("secret")
-        composeRule.onNodeWithText("Show").assertIsDisplayed()
+        composeRule.onNodeWithContentDescription("Show password").performClick()
+        composeRule.onNodeWithText("secret").assertIsDisplayed()
     }
 
     @Test
-    fun togglesVisibility() {
+    fun toggleFlipsContentDescription() {
         composeRule.setContent {
             AppTheme {
                 AppPasswordField(value = "secret", onValueChange = {})
             }
         }
 
-        composeRule.onNodeWithText("Show").performClick()
-        composeRule.onNodeWithText("Hide").assertIsDisplayed()
+        composeRule.onNodeWithContentDescription("Show password").performClick()
+        composeRule.onNodeWithContentDescription("Hide password").assertIsDisplayed()
         composeRule.onNodeWithText("secret").assertIsDisplayed()
+        composeRule.onNodeWithContentDescription("Hide password").performClick()
+        composeRule.onNodeWithContentDescription("Show password").assertIsDisplayed()
+    }
+
+    @Test
+    fun disabledToggleDoesNotReveal() {
+        composeRule.setContent {
+            AppTheme {
+                AppPasswordField(value = "secret", onValueChange = {}, enabled = false)
+            }
+        }
+
+        composeRule.onNodeWithContentDescription("Show password").assertIsNotEnabled()
+        composeRule.onNodeWithContentDescription("Show password").performClick()
+        composeRule.onNodeWithContentDescription("Show password").assertIsDisplayed()
+    }
+
+    @Test
+    fun errorShowsSupportingText() {
+        composeRule.setContent {
+            AppTheme {
+                AppPasswordField(
+                    value = "short",
+                    onValueChange = {},
+                    supportingText = "Use at least 8 characters",
+                    isError = true,
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("Use at least 8 characters").assertIsDisplayed()
     }
 }
