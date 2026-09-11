@@ -80,7 +80,11 @@ internal fun AppOtpInputErrorPreview() {
 internal fun AppOtpInputRtlPreview() {
     OtpInputPreviewSurface {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            AppOtpInput(value = "84", onValueChange = {})
+            AppOtpInput(
+                value = "84",
+                onValueChange = {},
+                supportingText = "Sent to your phone",
+            )
         }
     }
 }

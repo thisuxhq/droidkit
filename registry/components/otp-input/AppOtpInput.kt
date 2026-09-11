@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -145,7 +146,11 @@ fun AppOtpInput(
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     },
-                modifier = Modifier.padding(top = AppTheme.spacing.xs),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = AppTheme.spacing.xs),
+                textAlign = TextAlign.Start,
             )
         }
     }
