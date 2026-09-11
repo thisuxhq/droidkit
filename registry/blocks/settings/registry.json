@@ -1,28 +1,42 @@
 {
   "name": "settings",
   "type": "block",
-  "description": "Stateless settings screen with a toggle row and logout.",
-  "avoidWhen": "Do not drop a ViewModel, NavHost, or DI graph into this file.",
+  "description": "Settings list with 48 dp rows and list|detail on large width; state and callbacks in.",
+  "avoidWhen": "Do not use for a single preference row, and do not add a ViewModel, NavHost, or DI graph to this file.",
   "status": "review",
   "states": [
     "default",
-    "rtl",
     "dark",
     "large-font",
+    "rtl",
     "tablet"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/layouts/adaptive/list-detail",
+    "kb://android/develop/ui/compose/lists",
+    "kb://android/develop/ui/compose/side-effects"
   ],
   "files": [
     { "path": "SettingsScreen.kt", "kind": "source" },
     { "path": "SettingsScreenPreview.kt", "kind": "preview" },
     { "path": "SettingsScreenTest.kt", "kind": "test" }
   ],
-  "dependencies": [],
+  "dependencies": [
+    "androidx.compose.material3.adaptive:adaptive",
+    "androidx.compose.material3.adaptive:adaptive-layout",
+    "androidx.compose.material3.adaptive:adaptive-navigation"
+  ],
   "registryDependencies": ["theme", "button"],
   "platform": "android",
   "minSdk": 24,
   "composeBom": "2026.03.01",
   "themeVersion": 1,
-  "experimentalApis": ["androidx.compose.material3.ExperimentalMaterial3Api"],
+  "experimentalApis": [
+    "androidx.compose.material3.ExperimentalMaterial3Api",
+    "androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi"
+  ],
+  "adaptive": true,
   "accessibility": {
     "talkback": true,
     "dynamicType": true,
@@ -31,8 +45,9 @@
     "touchTarget": true
   },
   "aiHints": [
-    "Keep the block stateless: state and callbacks in",
-    "Use LazyColumn keys; do not animate every row"
-  ],
-  "sources": []
+    "Remember callbacks before passing them into LazyColumn items",
+    "Keep Switch onCheckedChange null and make the parent row toggleable",
+    "Do not fork with if (isTablet); NavigableListDetailPaneScaffold adapts from window size",
+    "Wire onThemeClick; the appearance row opens the detail pane"
+  ]
 }

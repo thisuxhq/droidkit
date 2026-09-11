@@ -31,6 +31,7 @@ internal fun SettingsScreenDefaultPreview() {
         SettingsScreen(
             state = previewState,
             onNotificationsChanged = {},
+            onThemeClick = {},
             onLogout = {},
         )
     }
@@ -44,6 +45,7 @@ internal fun SettingsScreenRtlPreview() {
             SettingsScreen(
                 state = previewState,
                 onNotificationsChanged = {},
+                onThemeClick = {},
                 onLogout = {},
             )
         }
@@ -63,6 +65,7 @@ internal fun SettingsScreenDarkPreview() {
         SettingsScreen(
             state = SettingsState(notifications = false, theme = ThemeOption.Dark),
             onNotificationsChanged = {},
+            onThemeClick = {},
             onLogout = {},
         )
     }
@@ -75,6 +78,7 @@ internal fun SettingsScreenLargeFontPreview() {
         SettingsScreen(
             state = previewState,
             onNotificationsChanged = {},
+            onThemeClick = {},
             onLogout = {},
         )
     }
@@ -87,6 +91,7 @@ internal fun SettingsScreenTabletPreview() {
         SettingsScreen(
             state = previewState,
             onNotificationsChanged = {},
+            onThemeClick = {},
             onLogout = {},
         )
     }
