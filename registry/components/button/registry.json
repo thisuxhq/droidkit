@@ -3,7 +3,7 @@
   "type": "component",
   "description": "Primary action that keeps its width and label while a spinner runs. Minimum height 52 dp. Loading is not disabled.",
   "avoidWhen": "Do not use for navigation rows or inline text links.",
-  "status": "draft",
+  "status": "review",
   "states": [
     "default",
     "loading",
