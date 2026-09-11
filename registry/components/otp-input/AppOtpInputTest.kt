@@ -4,9 +4,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasStateDescription
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.droidkit.registry.theme.AppTheme
@@ -37,8 +43,7 @@ class AppOtpInputTest {
             }
         }
 
-        composeRule.onNodeWithContentDescription("One-time code").assertIsDisplayed()
-        composeRule.onNodeWithContentDescription("One-time code").performTextInput("12ab34")
+        composeRule.onNode(hasSetTextAction()).performTextInput("12ab34")
         assertEquals("1234", value)
     }
 
@@ -60,7 +65,45 @@ class AppOtpInputTest {
             }
         }
 
-        composeRule.onNodeWithContentDescription("One-time code").performTextInput("847291")
+        composeRule.onNode(hasSetTextAction()).performTextInput("847291")
         assertEquals("8472", value)
+    }
+
+    @Test
+    fun disabledRejectsInput() {
+        var value = "847291"
+
+        composeRule.setContent {
+            AppTheme {
+                AppOtpInput(
+                    value = value,
+                    onValueChange = { value = it },
+                    enabled = false,
+                )
+            }
+        }
+
+        composeRule.onNode(hasStateDescription("Disabled")).assertIsNotEnabled()
+        composeRule.onNode(hasSetTextAction()).assertDoesNotExist()
+        assertEquals("847291", value)
+    }
+
+    @Test
+    fun errorAnnouncesSupportingText() {
+        composeRule.setContent {
+            AppTheme {
+                AppOtpInput(
+                    value = "847291",
+                    onValueChange = {},
+                    isError = true,
+                    supportingText = "Code did not match",
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("Code did not match").assertIsDisplayed()
+        composeRule.onNode(hasSetTextAction()).assert(
+            SemanticsMatcher.keyIsDefined(SemanticsProperties.Error),
+        )
     }
 }

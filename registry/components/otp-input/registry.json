@@ -1,14 +1,15 @@
 {
   "name": "otp-input",
   "type": "component",
-  "description": "One-time code input built on Foundation, not Material.",
-  "avoidWhen": "Do not use for passwords or free-form text.",
-  "status": "review",
+  "description": "Use for a fixed-length SMS or email one-time code.",
+  "avoidWhen": "Do not use for passwords or free-form text; use password-field or text-field.",
+  "status": "draft",
   "states": [
     "default",
     "partial",
     "filled",
     "disabled",
+    "error",
     "rtl",
     "dark",
     "large-font"
@@ -33,8 +34,17 @@
     "touchTarget": true
   },
   "aiHints": [
-    "Digits only, fixed length",
-    "Do not wrap Material TextField"
+    "One BasicTextField, not six TextFields",
+    "Set ContentType.SmsOtpCode on the single field so SMS autofill works",
+    "Not for passwords; use password-field",
+    "Keep digit boxes LTR even in an RTL layout",
+    "Clear isError on the first onValueChange after a rejected code"
   ],
-  "sources": []
+  "sources": [
+    "kb://android/develop/ui/compose/text/autofill",
+    "kb://android/identity/autofill/autofill-optimize",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/text/user-input"
+  ]
 }
