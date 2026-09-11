@@ -3,7 +3,7 @@
   "type": "block",
   "description": "Settings list with 48 dp rows and list|detail on large width; state and callbacks in.",
   "avoidWhen": "Do not use for a single preference row, and do not add a ViewModel, NavHost, or DI graph to this file.",
-  "status": "draft",
+  "status": "review",
   "states": [
     "default",
     "dark",
