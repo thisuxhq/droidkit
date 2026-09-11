@@ -18,6 +18,7 @@ Load-bearing choices, written down so they stop being re-argued. Add a row when 
 | 12 | `init` writes agent instructions into the consumer project | Decided |
 | 13 | Color/type: `MaterialTheme.*`; spacing/motion/elevation: `AppTheme.*` | Decided |
 | 14 | Dogfood / taste-test target is `:apps:showcase` | Decided |
+| 18 | Default theme is ink on paper | Decided |
 
 ## 1. Name: DroidKit
 
@@ -111,3 +112,11 @@ Taste is tested in this repo's showcase app, not an external product. `:apps:sho
 ## 17. The author never reviews; the gates run before anyone looks
 
 Coding agents write most of this code. An item is reviewed by a fresh-context agent that tries to refute it, then run on a device, then judged from a contact sheet by a human. The deterministic gates (imports, states, conventions, tests, screenshots) run first so the humans and reviewers only spend attention on what machines cannot check. Three skills, three commands (`/item`, `/review`, `/device`); no more unless a phase demands it. See [verification.md](verification.md).
+
+## 18. Default theme is ink on paper
+
+The default `AppTheme` colour opinion is **ink on paper**: near-black ink, white paper, muted gray text, quiet surfaces. `primary` maps to ink so Material filled actions become the dark pill. `tertiary` is a reserved signal (progress, location) — not a second brand and not a button. Destructive is red text, not a red fill. No green identity.
+
+This does not change Decisions #4 or #13: callers still read colour, type, and shape from `MaterialTheme.*` and extras from `AppTheme.*`. Token *roles* are unchanged (`THEME_VERSION` stays 1). Token *values* are the opinion.
+
+The language was distilled from quiet mobility-app UI, not cloned. No third-party branding, wordmarks, or names leak into tokens, composables, or the prefix (`App` stays). See [design-system.md](design-system.md#visual-opinion).

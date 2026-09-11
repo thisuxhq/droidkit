@@ -2,6 +2,8 @@
 
 Keep it dead simple. `AppTheme` is `MaterialTheme` plus a few extra locals. Material components inside it still theme correctly; DroidKit items get spacing and motion on top. See [Decisions #4](../decisions.md#4-theme-is-materialtheme--extra-locals-versioned).
 
+The default colour opinion is ink on paper: `primary` is ink (the dark pill), `background` / `surface` are paper, `onSurfaceVariant` is muted text, `tertiary` is a reserved signal. See [Decisions #18](../decisions.md#18-default-theme-is-ink-on-paper).
+
 ## Spacing
 
 ```kotlin
