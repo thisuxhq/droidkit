@@ -8,7 +8,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.and
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -190,7 +189,7 @@ class AppOtpInputTest {
             }
         }
 
-        composeRule.onNode(hasSetTextAction() and hasContentDescription("Code")).assertExists()
+        composeRule.onNode(hasContentDescription("Code")).assert(hasSetTextAction())
     }
 
     @Test
