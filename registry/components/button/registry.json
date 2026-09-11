@@ -3,13 +3,33 @@
   "type": "component",
   "description": "Primary action button with loading and disabled states.",
   "avoidWhen": "Do not use for navigation rows or inline text links.",
+  "status": "review",
+  "states": [
+    "default",
+    "loading",
+    "disabled",
+    "long-text",
+    "dark",
+    "large-font"
+  ],
   "files": [
-    { "path": "AppButton.kt", "kind": "source" },
-    { "path": "AppButtonPreview.kt", "kind": "preview" },
-    { "path": "AppButtonTest.kt", "kind": "test" }
+    {
+      "path": "AppButton.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppButtonPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppButtonTest.kt",
+      "kind": "test"
+    }
   ],
   "dependencies": [],
-  "registryDependencies": ["theme"],
+  "registryDependencies": [
+    "theme"
+  ],
   "platform": "common",
   "minSdk": 24,
   "composeBom": "2026.03.01",
@@ -22,5 +42,8 @@
     "keyboard": true,
     "touchTarget": true
   },
-  "aiHints": ["One primary button per screen section"]
+  "aiHints": [
+    "One primary button per screen section"
+  ],
+  "sources": []
 }

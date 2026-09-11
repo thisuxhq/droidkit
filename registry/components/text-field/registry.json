@@ -3,6 +3,17 @@
   "type": "component",
   "description": "Labeled text field with IME options, supporting text, and error state.",
   "avoidWhen": "Do not use for passwords or one-time codes; use password-field or otp-input.",
+  "status": "review",
+  "states": [
+    "default",
+    "filled",
+    "supporting-text",
+    "error",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
   "files": [
     { "path": "AppTextField.kt", "kind": "source" },
     { "path": "AppTextFieldPreview.kt", "kind": "preview" },
@@ -25,5 +36,6 @@
   "aiHints": [
     "Attach error text to the field, not only a color change",
     "Set KeyboardType and ImeAction for the job"
-  ]
+  ],
+  "sources": []
 }

@@ -99,3 +99,15 @@ Items read color, type, and shape from `MaterialTheme.*`. They read spacing, mot
 ## 14. Dogfood / taste-test target is `:apps:showcase`
 
 Taste is tested in this repo's showcase app, not an external product. `:apps:showcase` builds and runs every registered item.
+
+## 15. States are declared, previewed, and screenshotted from one source
+
+`registry.json` → `states` is the UX state matrix, decided before code. Every state must have exactly one `@Preview(name = "<item> <state>")`; the build generates one screenshot test per state from that preview and stitches the goldens into a contact sheet. No state can be declared without being shown, and no preview can exist without being a declared state. Enforced by `:registry:lintRegistryStates`. See [verification.md](verification.md).
+
+## 16. Items carry `status` and `sources`
+
+`status` is `draft` → `review` → `ready`; the website publishes only `ready`. `sources` lists the official docs (`kb://` URLs from `android docs`) the item was built against, so a reviewer can check trigger topics were grounded rather than guessed. Both are required for `ready`.
+
+## 17. The author never reviews; the gates run before anyone looks
+
+Coding agents write most of this code. An item is reviewed by a fresh-context agent that tries to refute it, then run on a device, then judged from a contact sheet by a human. The deterministic gates (imports, states, conventions, tests, screenshots) run first so the humans and reviewers only spend attention on what machines cannot check. Three skills, three commands (`/item`, `/review`, `/device`); no more unless a phase demands it. See [verification.md](verification.md).

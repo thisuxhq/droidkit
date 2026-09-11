@@ -43,6 +43,7 @@ Implement against these examples. [Reference index](reference/README.md).
 | Doc | What it covers |
 | --- | --- |
 | [Quality](quality.md) | Accessibility, previews, tests, performance, adaptive UI |
+| [Verification](verification.md) | The loop: gates, look, fresh-eyes review, device, taste; the three skills |
 | [Website](website.md) | Playground, not a prose dump |
 | [Roadmap](roadmap.md) | Phases 1–5, launch set, ecosystem |
 

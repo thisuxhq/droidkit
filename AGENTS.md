@@ -78,4 +78,9 @@ Target: ~10 primitives, ~10 components, ~5 patterns. See [docs/catalog.md](docs/
 
 ## Verification
 
-Assemble `:apps:showcase`, run `:registry:check` (import lint + item tests), and check the preview states listed in [docs/quality.md](docs/quality.md). CI validates every item `registry.json` against `registry/item.schema.json`.
+The loop is in [docs/verification.md](docs/verification.md). Short form:
+
+- `./gradlew :registry:check :apps:showcase:assembleDebug` — imports, states↔previews, conventions, tests, screenshot goldens. CI also validates every `registry.json` against `registry/item.schema.json`.
+- `registry.json` → `states` is the state matrix. Each state has one `@Preview(name = "<item> <state>")`; the build generates a screenshot test per state. Re-record goldens with `:registry:updateDebugScreenshotTest`; look at `build/contact-sheets/<item>.png`.
+- Ground Compose/Android claims with `android docs search` / `android docs fetch`; record `kb://` URLs in `sources`.
+- Three skills, three commands: `/item <name>` to build, `/review <name>` for a fresh-context refutation, `/device <name>` for the on-device pass. The author never reviews its own item. `status` moves `draft` → `review` → `ready` only after review, device, and a human look.

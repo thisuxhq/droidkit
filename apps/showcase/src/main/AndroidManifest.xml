@@ -16,6 +16,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- droidkit://item/<name> opens one registry item directly. Used by tools/device/open.sh. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="droidkit" android:host="item" />
+            </intent-filter>
         </activity>
     </application>
 

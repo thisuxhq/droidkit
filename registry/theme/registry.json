@@ -3,6 +3,8 @@
   "type": "theme",
   "description": "Versioned theme contract: MaterialTheme plus spacing, motion, and elevation.",
   "avoidWhen": "Do not fork a second color or type system beside MaterialTheme.",
+  "status": "review",
+  "states": ["default"],
   "files": [
     { "path": "Color.kt", "kind": "source" },
     { "path": "Typography.kt", "kind": "source" },
@@ -21,5 +23,6 @@
   "aiHints": [
     "Read color, type, and shape from MaterialTheme",
     "Read spacing, motion, and elevation from AppTheme"
-  ]
+  ],
+  "sources": []
 }

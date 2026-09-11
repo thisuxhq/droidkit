@@ -3,6 +3,16 @@
   "type": "component",
   "description": "One-time code input built on Foundation, not Material.",
   "avoidWhen": "Do not use for passwords or free-form text.",
+  "status": "review",
+  "states": [
+    "default",
+    "partial",
+    "filled",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
   "files": [
     { "path": "AppOtpInput.kt", "kind": "source" },
     { "path": "AppOtpInputPreview.kt", "kind": "preview" },
@@ -25,5 +35,6 @@
   "aiHints": [
     "Digits only, fixed length",
     "Do not wrap Material TextField"
-  ]
+  ],
+  "sources": []
 }

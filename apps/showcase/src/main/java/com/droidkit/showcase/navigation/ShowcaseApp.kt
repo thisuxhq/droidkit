@@ -15,8 +15,8 @@ import com.droidkit.showcase.screens.SettingsDemoScreen
 import com.droidkit.showcase.screens.TextFieldScreen
 
 @Composable
-fun ShowcaseApp() {
-    var destination by rememberSaveable { mutableStateOf(ShowcaseDestination.Home.title) }
+fun ShowcaseApp(initialDestination: String? = null) {
+    var destination by rememberSaveable { mutableStateOf(initialDestination ?: ShowcaseDestination.Home.title) }
 
     val current =
         when (destination) {

@@ -3,6 +3,16 @@
   "type": "component",
   "description": "Password field with IME, autofill, and show/hide.",
   "avoidWhen": "Do not use for one-time codes; use otp-input.",
+  "status": "review",
+  "states": [
+    "default",
+    "filled",
+    "error",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
   "files": [
     { "path": "AppPasswordField.kt", "kind": "source" },
     { "path": "AppPasswordFieldPreview.kt", "kind": "preview" },
@@ -25,5 +35,6 @@
   "aiHints": [
     "Keep show/hide on a 48 dp target",
     "Set ContentType.Password so autofill works"
-  ]
+  ],
+  "sources": []
 }

@@ -15,13 +15,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // droidkit://item/<name> — see tools/device/open.sh
+        val initialItem = intent?.data?.takeIf { it.scheme == "droidkit" && it.host == "item" }?.lastPathSegment
         setContent {
             AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    ShowcaseApp()
+                    ShowcaseApp(initialDestination = initialItem)
                 }
             }
         }

@@ -1,48 +1,81 @@
 package com.droidkit.registry.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.droidkit.registry.theme.AppTheme
 
-@Preview(showBackground = true, name = "button light")
+// One preview per declared state in registry.json. The name must be "<item> <state>";
+// :registry:lintRegistryStates enforces it and the screenshot test renders each one.
+
 @Composable
-internal fun AppButtonPreview() {
-    AppTheme {
-        Column(
-            modifier = Modifier.padding(AppTheme.spacing.lg),
-            verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.md),
-        ) {
-            AppButton(text = "Continue", onClick = {})
-            AppButton(text = "Loading", loading = true, onClick = {})
-            AppButton(text = "Disabled", enabled = false, onClick = {})
-            AppButton(text = "Continue with a much longer label", onClick = {})
+private fun ButtonPreviewSurface(
+    darkTheme: Boolean = false,
+    content: @Composable () -> Unit,
+) {
+    AppTheme(darkTheme = darkTheme) {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            Box(modifier = Modifier.padding(AppTheme.spacing.lg)) {
+                content()
+            }
         }
     }
 }
 
-@Preview(showBackground = true, name = "button dark", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true, name = "button default")
+@Composable
+internal fun AppButtonDefaultPreview() {
+    ButtonPreviewSurface {
+        AppButton(text = "Continue", onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "button loading")
+@Composable
+internal fun AppButtonLoadingPreview() {
+    ButtonPreviewSurface {
+        AppButton(text = "Continue", loading = true, onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "button disabled")
+@Composable
+internal fun AppButtonDisabledPreview() {
+    ButtonPreviewSurface {
+        AppButton(text = "Continue", enabled = false, onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "button long-text", widthDp = 240)
+@Composable
+internal fun AppButtonLongTextPreview() {
+    ButtonPreviewSurface {
+        AppButton(
+            text = "Continue with a much longer label than usual",
+            onClick = {},
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "button dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 internal fun AppButtonDarkPreview() {
-    AppTheme(darkTheme = true) {
-        Column(
-            modifier = Modifier.padding(AppTheme.spacing.lg),
-            verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.md),
-        ) {
-            AppButton(text = "Continue", onClick = {})
-            AppButton(text = "Loading", loading = true, onClick = {})
-            AppButton(text = "Disabled", enabled = false, onClick = {})
-        }
+    ButtonPreviewSurface(darkTheme = true) {
+        AppButton(text = "Continue", onClick = {})
     }
 }
 
-@Preview(showBackground = true, name = "button large font", fontScale = 1.5f)
+@Preview(showBackground = true, name = "button large-font", fontScale = 2f)
 @Composable
 internal fun AppButtonLargeFontPreview() {
-    AppTheme {
+    ButtonPreviewSurface {
         AppButton(text = "Continue", onClick = {})
     }
 }

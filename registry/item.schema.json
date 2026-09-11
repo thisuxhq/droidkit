@@ -5,7 +5,7 @@
   "description": "Metadata for one installable item. Lives as registry.json beside the Kotlin files.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["name", "type", "description", "files", "platform", "themeVersion"],
+  "required": ["name", "type", "description", "files", "platform", "themeVersion", "status", "states"],
   "properties": {
     "name": {
       "type": "string",
@@ -23,6 +23,24 @@
     "avoidWhen": {
       "type": "string",
       "description": "One sentence. When not to use it."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "review", "ready"],
+      "description": "draft: being built. review: gates green, awaiting fresh-eyes review and device pass. ready: publishable. See docs/verification.md"
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+      "description": "Declared UX states. Each needs a @Preview named '<name> <state>' in the preview file; the lint enforces it and the screenshot test renders it. Theme items may declare a single 'default'."
+    },
+    "sources": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^kb://" },
+      "default": [],
+      "description": "Official docs consulted while building (android docs search/fetch kb:// URLs). Review checks trigger topics against these."
     },
     "files": {
       "type": "array",

@@ -3,6 +3,14 @@
   "type": "block",
   "description": "Stateless settings screen with a toggle row and logout.",
   "avoidWhen": "Do not drop a ViewModel, NavHost, or DI graph into this file.",
+  "status": "review",
+  "states": [
+    "default",
+    "rtl",
+    "dark",
+    "large-font",
+    "tablet"
+  ],
   "files": [
     { "path": "SettingsScreen.kt", "kind": "source" },
     { "path": "SettingsScreenPreview.kt", "kind": "preview" },
@@ -25,5 +33,6 @@
   "aiHints": [
     "Keep the block stateless: state and callbacks in",
     "Use LazyColumn keys; do not animate every row"
-  ]
+  ],
+  "sources": []
 }
