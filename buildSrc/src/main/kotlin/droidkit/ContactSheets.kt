@@ -21,7 +21,7 @@ object ContactSheets {
         if (!referenceDir.isDirectory) return emptyList()
         outDir.mkdirs()
         val pngs = referenceDir.walkTopDown().filter { it.extension == "png" }.toList()
-        return items.filter { it.type != "theme" }.mapNotNull { item ->
+        return items.mapNotNull { item ->
             val cells =
                 item.states.mapNotNull { state ->
                     val marker = "${Registry.screenshotFunctionName(item, state)}_"

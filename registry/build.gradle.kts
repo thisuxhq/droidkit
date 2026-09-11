@@ -96,6 +96,7 @@ val syncRegistryMain by tasks.registering(Sync::class) {
 }
 
 val syncRegistryTest by tasks.registering(Sync::class) {
+    from("theme")
     from("components")
     from("patterns")
     from("blocks")

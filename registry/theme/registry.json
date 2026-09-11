@@ -3,15 +3,17 @@
   "type": "theme",
   "description": "Versioned theme contract: MaterialTheme plus spacing, motion, and elevation.",
   "avoidWhen": "Do not fork a second color or type system beside MaterialTheme.",
-  "status": "review",
-  "states": ["default"],
+  "status": "draft",
+  "states": ["default", "dark", "large-font"],
   "files": [
     { "path": "Color.kt", "kind": "source" },
     { "path": "Typography.kt", "kind": "source" },
     { "path": "Shape.kt", "kind": "source" },
     { "path": "Spacing.kt", "kind": "source" },
     { "path": "Motion.kt", "kind": "source" },
-    { "path": "Theme.kt", "kind": "source" }
+    { "path": "Theme.kt", "kind": "source" },
+    { "path": "AppThemePreview.kt", "kind": "preview" },
+    { "path": "AppThemeTest.kt", "kind": "test" }
   ],
   "dependencies": [],
   "registryDependencies": [],
@@ -21,8 +23,16 @@
   "themeVersion": 1,
   "experimentalApis": [],
   "aiHints": [
-    "Read color, type, and shape from MaterialTheme",
-    "Read spacing, motion, and elevation from AppTheme"
+    "Read color, type, and shape from MaterialTheme.colorScheme / typography / shapes",
+    "Read spacing, motion, and elevation from AppTheme",
+    "Do not import Light* or Dark* color tokens; they are not a public color API",
+    "Do not nest a second MaterialTheme inside AppTheme",
+    "Bump THEME_VERSION when adding a spacing, motion, or elevation token"
   ],
-  "sources": []
+  "sources": [
+    "kb://android/develop/ui/compose/designsystems/material3",
+    "kb://android/develop/ui/compose/designsystems/anatomy",
+    "kb://android/develop/ui/compose/designsystems/custom",
+    "kb://android/develop/ui/compose/compositionlocal"
+  ]
 }

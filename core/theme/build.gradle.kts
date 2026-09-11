@@ -18,13 +18,38 @@ android {
     }
     sourceSets {
         named("main") {
-            kotlin.directories.add(file("${rootDir}/registry/theme").absolutePath)
+            kotlin.directories.add(
+                layout.buildDirectory
+                    .dir("generated/themeMain")
+                    .get()
+                    .asFile
+                    .absolutePath,
+            )
         }
     }
 }
 
 kotlin {
     jvmToolchain(17)
+}
+
+val themeMainSources = layout.buildDirectory.dir("generated/themeMain")
+
+val syncThemeMain by tasks.registering(Sync::class) {
+    from("${rootDir}/registry/theme")
+    include("**/*.kt")
+    exclude("**/*Test.kt")
+    into(themeMainSources)
+}
+
+tasks.named("preBuild") {
+    dependsOn(syncThemeMain)
+}
+
+afterEvaluate {
+    tasks.matching { it.name.startsWith("compile") && it.name.contains("Kotlin") }.configureEach {
+        dependsOn(syncThemeMain)
+    }
 }
 
 dependencies {

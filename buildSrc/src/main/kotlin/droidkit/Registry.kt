@@ -127,7 +127,6 @@ object RegistryLint {
         items.forEach { item ->
             val rel = item.dir.relativeTo(root)
             if (item.states.isEmpty()) violations += "$rel/registry.json: states is empty"
-            if (item.type == "theme") return@forEach
             if (item.previewFiles.isEmpty()) violations += "$rel/registry.json: no file with kind \"preview\""
             val previews = item.previewFiles.filter { it.isFile }.flatMap { Registry.parsePreviews(it) }
             val expected = item.states.map { Registry.previewName(item, it) }
@@ -263,7 +262,7 @@ object RegistryScreenshots {
      * preview file stays free of test-tool imports. Returns file name → contents.
      */
     fun generate(root: File, items: List<RegistryItem>): Map<String, String> =
-        items.filter { it.type != "theme" }.associate { item ->
+        items.associate { item ->
             val previewFile = item.previewFiles.first { it.isFile }
             val text = previewFile.readText()
             val pkg =

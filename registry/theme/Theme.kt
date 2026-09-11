@@ -1,45 +1,15 @@
 package com.droidkit.registry.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 
 const val THEME_VERSION = 1
 
-private val LightColors: ColorScheme =
-    lightColorScheme(
-        primary = LightAccent,
-        onPrimary = LightOnAccent,
-        background = LightBackground,
-        onBackground = LightOnBackground,
-        surface = LightSurface,
-        onSurface = LightOnBackground,
-        surfaceVariant = LightSurface,
-        onSurfaceVariant = LightMuted,
-        error = LightDanger,
-        onError = LightOnAccent,
-        outline = LightMuted,
-    )
-
-private val DarkColors: ColorScheme =
-    darkColorScheme(
-        primary = DarkAccent,
-        onPrimary = DarkOnAccent,
-        background = DarkBackground,
-        onBackground = DarkOnBackground,
-        surface = DarkSurface,
-        onSurface = DarkOnBackground,
-        surfaceVariant = DarkSurface,
-        onSurfaceVariant = DarkMuted,
-        error = DarkDanger,
-        onError = DarkOnAccent,
-        outline = DarkMuted,
-    )
+// light ↔ dark: only the Material ColorScheme flips (`darkTheme` / system setting).
+// spacing, motion, and elevation stay the same. Do not wrap content in a second MaterialTheme.
 
 @Composable
 fun AppTheme(
