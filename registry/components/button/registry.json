@@ -1,14 +1,16 @@
 {
   "name": "button",
   "type": "component",
-  "description": "Primary action button with loading and disabled states.",
+  "description": "Primary action that keeps its width and label while a spinner runs. Minimum height 52 dp. Loading is not disabled.",
   "avoidWhen": "Do not use for navigation rows or inline text links.",
-  "status": "review",
+  "status": "draft",
   "states": [
     "default",
     "loading",
     "disabled",
+    "icon",
     "long-text",
+    "rtl",
     "dark",
     "large-font"
   ],
@@ -43,7 +45,19 @@
     "touchTarget": true
   },
   "aiHints": [
-    "One primary button per screen section"
+    "Keep enabled as the caller's enabled; ignore clicks while loading instead of setting enabled = !loading",
+    "Do not replace the label with the spinner; overlay it so the width does not jump",
+    "One primary button per screen section",
+    "Pass a localized loadingStateDescription from your strings"
   ],
-  "sources": []
+  "sources": [
+    "kb://android/develop/ui/compose/components/button",
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/animation/composables-modifiers",
+    "kb://android/develop/ui/compose/components/progress",
+    "kb://android/develop/ui/compose/testing/semantics",
+    "kb://android/jetpack/compose/compose-component-api-guidelines"
+  ]
 }
