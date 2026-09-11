@@ -3,7 +3,7 @@
   "type": "pattern",
   "description": "One title, one short description, and at most one primary action when a collection has no content.",
   "avoidWhen": "Do not use for loading or errors.",
-  "status": "draft",
+  "status": "review",
   "states": [
     "default",
     "with-icon",
