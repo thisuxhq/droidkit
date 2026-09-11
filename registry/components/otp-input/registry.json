@@ -36,15 +36,17 @@
   "aiHints": [
     "One BasicTextField, not six TextFields",
     "Set ContentType.SmsOtpCode on the single field so SMS autofill works",
-    "Not for passwords; use password-field",
     "Keep digit boxes LTR even in an RTL layout",
-    "Clear isError on the first onValueChange after a rejected code"
+    "Clear isError on the first onValueChange after a rejected code",
+    "Pass onDone — ImeAction.Done does nothing unless the caller wires it"
   ],
   "sources": [
     "kb://android/develop/ui/compose/text/autofill",
     "kb://android/identity/autofill/autofill-optimize",
     "kb://android/develop/ui/compose/accessibility/api-defaults",
     "kb://android/develop/ui/compose/accessibility/semantics",
-    "kb://android/develop/ui/compose/text/user-input"
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/text/user-input",
+    "kb://android/develop/ui/views/touch-and-input/keyboard-input/style"
   ]
 }
