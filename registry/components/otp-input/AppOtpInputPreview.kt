@@ -62,12 +62,29 @@ internal fun AppOtpInputDisabledPreview() {
     }
 }
 
+@Preview(showBackground = true, name = "otp-input error")
+@Composable
+internal fun AppOtpInputErrorPreview() {
+    OtpInputPreviewSurface {
+        AppOtpInput(
+            value = "847291",
+            onValueChange = {},
+            isError = true,
+            supportingText = "Code did not match",
+        )
+    }
+}
+
 @Preview(showBackground = true, name = "otp-input rtl")
 @Composable
 internal fun AppOtpInputRtlPreview() {
     OtpInputPreviewSurface {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            AppOtpInput(value = "84", onValueChange = {})
+            AppOtpInput(
+                value = "84",
+                onValueChange = {},
+                supportingText = "Sent to your phone",
+            )
         }
     }
 }
