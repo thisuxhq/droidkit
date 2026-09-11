@@ -1,12 +1,13 @@
 {
   "name": "password-field",
   "type": "component",
-  "description": "Password field with IME, autofill, and show/hide.",
+  "description": "Password field that owns show/hide on a 48 dp target, autofill ContentType, IME actions, and error text on the field.",
   "avoidWhen": "Do not use for one-time codes; use otp-input.",
-  "status": "review",
+  "status": "draft",
   "states": [
     "default",
     "filled",
+    "revealed",
     "error",
     "disabled",
     "rtl",
@@ -33,8 +34,17 @@
     "touchTarget": true
   },
   "aiHints": [
-    "Keep show/hide on a 48 dp target",
-    "Set ContentType.Password so autofill works"
+    "Pass ContentType.NewPassword on sign-up so the provider can suggest a strong password",
+    "When isError is true, pass supportingText; color-only errors are rejected",
+    "Update isError in the caller on each keystroke; the field does not clear it"
   ],
-  "sources": []
+  "sources": [
+    "kb://android/develop/ui/compose/quick-guides/content/show-hide-password",
+    "kb://android/develop/ui/compose/text/autofill",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/components/icon-button",
+    "kb://android/develop/ui/compose/state-saving",
+    "kb://android/develop/ui/compose/quick-guides/content/validate-input",
+    "kb://android/develop/ui/compose/quick-guides/collections/request-user-input"
+  ]
 }

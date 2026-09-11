@@ -46,6 +46,14 @@ internal fun AppPasswordFieldFilledPreview() {
     }
 }
 
+@Preview(showBackground = true, name = "password-field revealed")
+@Composable
+internal fun AppPasswordFieldRevealedPreview() {
+    PasswordFieldPreviewSurface {
+        AppPasswordField(value = "hunter2", onValueChange = {}, initialVisible = true)
+    }
+}
+
 @Preview(showBackground = true, name = "password-field error")
 @Composable
 internal fun AppPasswordFieldErrorPreview() {
