@@ -7,8 +7,11 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import com.droidkit.registry.theme.AppTheme
 
 // One preview per declared state in registry.json. The name must be "<item> <state>";
@@ -46,9 +49,9 @@ internal fun EmptyStateWithIconPreview() {
         EmptyState(
             title = "No projects yet",
             description = "Create your first project to get started.",
-            icon = Icons.Filled.Info,
             action = "Create project",
             onAction = {},
+            icon = Icons.Filled.Info,
         )
     }
 }
@@ -73,11 +76,27 @@ internal fun EmptyStateLongTextPreview() {
             description =
                 "Saved articles stay available offline and sync across your devices. " +
                     "Tap the bookmark on any article to keep it here.",
-            icon = Icons.Filled.Info,
             action = "Browse featured articles",
             onAction = {},
             modifier = Modifier.fillMaxWidth(),
+            icon = Icons.Filled.Info,
         )
+    }
+}
+
+@Preview(showBackground = true, name = "empty-state rtl")
+@Composable
+internal fun EmptyStateRtlPreview() {
+    EmptyStatePreviewSurface {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            EmptyState(
+                title = "No projects yet",
+                description = "Create your first project to get started.",
+                action = "Create project",
+                onAction = {},
+                icon = Icons.Filled.Info,
+            )
+        }
     }
 }
 
@@ -88,9 +107,9 @@ internal fun EmptyStateDarkPreview() {
         EmptyState(
             title = "No projects yet",
             description = "Create your first project to get started.",
-            icon = Icons.Filled.Info,
             action = "Create project",
             onAction = {},
+            icon = Icons.Filled.Info,
         )
     }
 }
@@ -102,10 +121,10 @@ internal fun EmptyStateLargeFontPreview() {
         EmptyState(
             title = "No projects yet",
             description = "Create your first project to get started.",
-            icon = Icons.Filled.Info,
             action = "Create project",
             onAction = {},
             modifier = Modifier.fillMaxWidth(),
+            icon = Icons.Filled.Info,
         )
     }
 }

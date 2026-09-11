@@ -1,7 +1,7 @@
 {
   "name": "empty-state",
   "type": "pattern",
-  "description": "Use when a collection has no content.",
+  "description": "One title, one short description, and at most one primary action when a collection has no content.",
   "avoidWhen": "Do not use for loading or errors.",
   "status": "review",
   "states": [
@@ -9,6 +9,7 @@
     "with-icon",
     "no-action",
     "long-text",
+    "rtl",
     "dark",
     "large-font"
   ],
@@ -30,8 +31,11 @@
     "rtl": true
   },
   "aiHints": [
-    "Prefer inside lazy list containers",
-    "Provide one primary action maximum"
+    "Pass fillMaxSize (or other extra height) when this is the only content on the screen so the stack centers",
+    "Do not add a second button or a text link next to the primary action"
   ],
-  "sources": []
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/accessibility/api-defaults"
+  ]
 }
