@@ -22,10 +22,6 @@ fun SettingsDemoScreen(onBack: () -> Unit) {
     SettingsScreen(
         state = state.copy(theme = if (loggedOut) ThemeOption.Light else state.theme),
         onNotificationsChanged = { state = state.copy(notifications = it) },
-        onLogout = {
-            loggedOut = true
-            onBack()
-        },
         onThemeClick = {
             state =
                 state.copy(
@@ -36,6 +32,10 @@ fun SettingsDemoScreen(onBack: () -> Unit) {
                             ThemeOption.Dark -> ThemeOption.System
                         },
                 )
+        },
+        onLogout = {
+            loggedOut = true
+            onBack()
         },
     )
 }

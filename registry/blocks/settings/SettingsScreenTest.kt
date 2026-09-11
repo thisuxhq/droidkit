@@ -1,15 +1,12 @@
 package com.droidkit.registry.blocks
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.droidkit.registry.theme.AppTheme
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -29,6 +26,7 @@ class SettingsScreenTest {
                 SettingsScreen(
                     state = SettingsState(notifications = true, theme = ThemeOption.System),
                     onNotificationsChanged = {},
+                    onThemeClick = {},
                     onLogout = { loggedOut = true },
                 )
             }
@@ -40,22 +38,42 @@ class SettingsScreenTest {
     }
 
     @Test
-    fun toggleUpdatesState() {
+    fun notificationsToggleCallsCallback() {
+        var checked: Boolean? = null
+
         composeRule.setContent {
             AppTheme {
-                var state by remember {
-                    mutableStateOf(SettingsState(notifications = true, theme = ThemeOption.Light))
-                }
                 SettingsScreen(
-                    state = state,
-                    onNotificationsChanged = { state = state.copy(notifications = it) },
+                    state = SettingsState(notifications = true, theme = ThemeOption.Light),
+                    onNotificationsChanged = { checked = it },
+                    onThemeClick = {},
                     onLogout = {},
                 )
             }
         }
 
-        composeRule.onNodeWithText("Notifications").assertIsDisplayed()
-        composeRule.onNodeWithText("Appearance").assertIsDisplayed()
-        composeRule.onNodeWithText("Light").assertIsDisplayed()
+        composeRule.onNodeWithText("Notifications").performClick()
+        assertEquals(false, checked)
+    }
+
+    @Test
+    fun appearanceOpensDetailAndThemeClickFires() {
+        var themeClicked = false
+
+        composeRule.setContent {
+            AppTheme {
+                SettingsScreen(
+                    state = SettingsState(notifications = true, theme = ThemeOption.Light),
+                    onNotificationsChanged = {},
+                    onThemeClick = { themeClicked = true },
+                    onLogout = {},
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("Appearance").performClick()
+        composeRule.onNodeWithText("Change theme").assertIsDisplayed()
+        composeRule.onNodeWithText("Change theme").performClick()
+        assertTrue(themeClicked)
     }
 }
