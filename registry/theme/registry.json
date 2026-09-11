@@ -3,7 +3,7 @@
   "type": "theme",
   "description": "Versioned theme contract: MaterialTheme plus spacing, motion, and elevation.",
   "avoidWhen": "Do not fork a second color or type system beside MaterialTheme.",
-  "status": "draft",
+  "status": "review",
   "states": ["default", "dark", "large-font"],
   "files": [
     { "path": "Color.kt", "kind": "source" },
