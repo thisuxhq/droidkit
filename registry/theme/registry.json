@@ -1,8 +1,8 @@
 {
   "name": "theme",
   "type": "theme",
-  "description": "Versioned theme contract: MaterialTheme plus spacing, motion, and elevation.",
-  "avoidWhen": "Do not fork a second color or type system beside MaterialTheme.",
+  "description": "Ink-on-paper theme contract: near-black ink, white paper, muted gray text. MaterialTheme plus spacing, motion, and elevation.",
+  "avoidWhen": "Do not fork a second color or type system beside MaterialTheme. Do not introduce a colorful brand or a green identity.",
   "status": "review",
   "states": ["default", "dark", "large-font"],
   "files": [
@@ -25,6 +25,8 @@
   "aiHints": [
     "Read color, type, and shape from MaterialTheme.colorScheme / typography / shapes",
     "Read spacing, motion, and elevation from AppTheme",
+    "primary is ink (the dark pill); do not remap it to a colorful accent",
+    "tertiary is the reserved signal (progress, location); do not use it for primary actions",
     "Do not import Light* or Dark* color tokens; they are not a public color API",
     "Do not nest a second MaterialTheme inside AppTheme",
     "Bump THEME_VERSION when adding a spacing, motion, or elevation token"
@@ -33,6 +35,7 @@
     "kb://android/develop/ui/compose/designsystems/material3",
     "kb://android/develop/ui/compose/designsystems/anatomy",
     "kb://android/develop/ui/compose/designsystems/custom",
-    "kb://android/develop/ui/compose/compositionlocal"
+    "kb://android/develop/ui/compose/compositionlocal",
+    "kb://android/design/ui/mobile/guides/styles/color"
   ]
 }

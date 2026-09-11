@@ -12,8 +12,8 @@ data class AppMotion(
 
 data class AppElevation(
     val flat: Dp = 0.dp,
-    val floating: Dp = 4.dp,
-    val overlay: Dp = 8.dp,
+    val floating: Dp = 1.dp,
+    val overlay: Dp = 4.dp,
 )
 
 val LocalMotion = staticCompositionLocalOf { AppMotion() }

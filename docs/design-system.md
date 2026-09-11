@@ -6,10 +6,10 @@ Build the underlying system before building 100 components. Keep it small enough
 
 | System | Example |
 | --- | --- |
-| Color | background, surface, accent, muted, danger |
+| Color | ink (primary), paper (surface), muted, signal (tertiary), danger |
 | Typography | display, title, body, label |
 | Spacing | 4, 8, 12, 16, 24, 32 |
-| Radius | 8, 12, 16, 24, full |
+| Radius | 8, 12, 16, full |
 | Motion | quick, normal, slow |
 | Elevation | flat, floating, overlay |
 | Icon | consistent icon sizing |
@@ -27,6 +27,12 @@ over:
 ```kotlin
 SpacingSemanticContainerInteractiveMedium
 ```
+
+## Visual opinion
+
+The default look is **ink on paper**. Near-black ink, white paper, muted gray body, leftover white. Primary actions are the dark pill. Secondary is a quiet gray fill or text. Surfaces stay flat — hairlines, almost no elevation. Headlines are heavy; supporting text is quiet. One reserved signal (muted blue, `tertiary`) for progress and location — never a second brand, never a green identity. Destructive is red text, not a red fill.
+
+This is a product decision ([#18](decisions.md#18-default-theme-is-ink-on-paper)), not a restyle of Material purple. Swap ink, paper, and the rare signal at the obvious edit points in `Color.kt`. Do not fork a parallel colour system.
 
 ## Theme
 

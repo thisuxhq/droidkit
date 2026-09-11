@@ -51,7 +51,7 @@ private fun ThemePreviewBoard() {
         )
         Row(horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.sm)) {
             ThemeSwatch(color = MaterialTheme.colorScheme.primary)
-            ThemeSwatch(color = MaterialTheme.colorScheme.surface)
+            ThemeSwatch(color = MaterialTheme.colorScheme.surfaceVariant)
             ThemeSwatch(color = MaterialTheme.colorScheme.error)
         }
         Button(onClick = {}) {

@@ -16,7 +16,7 @@ class AppThemeTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun lightPrimaryMatchesLightAccentToken() {
+    fun lightPrimaryIsInk() {
         var primary = Color.Unspecified
 
         composeRule.setContent {
@@ -25,11 +25,11 @@ class AppThemeTest {
             }
         }
 
-        assertEquals(Color(0xFF1C2B24), primary)
+        assertEquals(Color(0xFF0A0A0A), primary)
     }
 
     @Test
-    fun darkPrimaryMatchesDarkAccentToken() {
+    fun darkPrimaryIsInk() {
         var primary = Color.Unspecified
 
         composeRule.setContent {
@@ -38,7 +38,20 @@ class AppThemeTest {
             }
         }
 
-        assertEquals(Color(0xFFC8E6C9), primary)
+        assertEquals(Color(0xFFF2F2F2), primary)
+    }
+
+    @Test
+    fun lightBackgroundIsPaper() {
+        var background = Color.Unspecified
+
+        composeRule.setContent {
+            AppTheme(darkTheme = false) {
+                background = MaterialTheme.colorScheme.background
+            }
+        }
+
+        assertEquals(Color(0xFFFFFFFF), background)
     }
 
     @Test
