@@ -4,11 +4,17 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import com.droidkit.registry.theme.AppTheme
 
 // One preview per declared state in registry.json. The name must be "<item> <state>";
@@ -26,6 +32,14 @@ private fun ButtonPreviewSurface(
             }
         }
     }
+}
+
+@Composable
+private fun ContinueIcon() {
+    Icon(
+        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+        contentDescription = null,
+    )
 }
 
 @Preview(showBackground = true, name = "button default")
@@ -52,6 +66,14 @@ internal fun AppButtonDisabledPreview() {
     }
 }
 
+@Preview(showBackground = true, name = "button icon")
+@Composable
+internal fun AppButtonIconPreview() {
+    ButtonPreviewSurface {
+        AppButton(text = "Continue", onClick = {}, leadingIcon = { ContinueIcon() })
+    }
+}
+
 @Preview(showBackground = true, name = "button long-text", widthDp = 240)
 @Composable
 internal fun AppButtonLongTextPreview() {
@@ -61,6 +83,16 @@ internal fun AppButtonLongTextPreview() {
             onClick = {},
             modifier = Modifier.fillMaxWidth(),
         )
+    }
+}
+
+@Preview(showBackground = true, name = "button rtl")
+@Composable
+internal fun AppButtonRtlPreview() {
+    ButtonPreviewSurface {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            AppButton(text = "Continue", onClick = {}, leadingIcon = { ContinueIcon() })
+        }
     }
 }
 

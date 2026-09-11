@@ -1,9 +1,11 @@
 package com.droidkit.registry.components
 
-import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -18,6 +20,10 @@ import org.junit.runner.RunWith
 class AppButtonTest {
     @get:Rule
     val composeRule = createComposeRule()
+
+    private fun loadingButton(): SemanticsMatcher =
+        SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button) and
+            SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "Loading")
 
     @Test
     fun buttonCallsClick() {
@@ -58,7 +64,12 @@ class AppButtonTest {
             }
         }
 
-        composeRule.onAllNodesWithText("Continue").assertCountEquals(0)
+        val node = composeRule.onNode(loadingButton())
+        node.assertExists()
+        node.assertIsEnabled()
+        node.performClick()
         assertFalse(clicked)
+        node.assertExists()
+        composeRule.onNodeWithText("Continue").assertExists()
     }
 }
