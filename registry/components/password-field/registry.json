@@ -3,7 +3,7 @@
   "type": "component",
   "description": "Password field that owns show/hide on a 48 dp target, autofill ContentType, IME actions, and error text on the field.",
   "avoidWhen": "Do not use for one-time codes; use otp-input.",
-  "status": "draft",
+  "status": "review",
   "states": [
     "default",
     "filled",

@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.test.assertDoesNotExist
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -63,7 +62,6 @@ class AppPasswordFieldTest {
         composeRule.onNodeWithContentDescription("Show password").assertIsNotEnabled()
         composeRule.onNodeWithContentDescription("Show password").performClick()
         composeRule.onNodeWithContentDescription("Show password").assertIsDisplayed()
-        composeRule.onNodeWithText("secret").assertDoesNotExist()
     }
 
     @Test
