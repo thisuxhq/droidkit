@@ -1,12 +1,48 @@
 {
   "name": "text-field",
   "type": "component",
-  "description": "Labeled text field with IME options, supporting text, and error state.",
-  "avoidWhen": "Do not use for passwords or one-time codes; use password-field or otp-input.",
+  "description": "Labeled text field that owns the mistake and the recovery: shakes once on error with a reject haptic, goes quiet on the first keystroke, clears with one tap, and counts against a limit without blocking.",
+  "avoidWhen": "Do not use for passwords or one-time codes; use password-field or otp-input. Do not set isError on every keystroke; set it on submit or blur.",
   "status": "review",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "Supporting text is a hint line under the field; the same line carries the error, so nothing moves when the error arrives",
+      "why": "A form that jumps when you get something wrong feels like it is punishing you"
+    },
+    {
+      "moment": "act",
+      "behaviour": "A clear button appears whenever the field has text; tapping it empties the field and keeps focus there",
+      "why": "Retyping an email should not start with holding backspace",
+      "signature": true
+    },
+    {
+      "moment": "act",
+      "behaviour": "With maxLength, a counter reads n / max and turns the field to error past the limit without refusing input",
+      "why": "You can see how far over you are and fix it, instead of typing into a wall"
+    },
+    {
+      "moment": "mistake",
+      "behaviour": "When isError turns on, the field shakes once and fires the reject haptic; the message shows on the field in the error colour",
+      "why": "The refusal is felt before it is read",
+      "reducedMotion": "No shake; haptic and error text only"
+    },
+    {
+      "moment": "recover",
+      "behaviour": "The first keystroke after an error drops the error colour; the message stays as a quiet hint. On blur, if the caller still flags the value, the error returns",
+      "why": "You are already fixing it; the field stops shouting but does not forget"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "Whether the current error was already felt survives rotation, so the refusal is not repeated for the same mistake",
+      "why": "Turning the phone is not a second mistake"
+    }
+  ],
   "states": [
     "default",
     "filled",
+    "counter",
+    "over-limit",
     "supporting-text",
     "error",
     "disabled",
@@ -20,8 +56,8 @@
     { "path": "AppTextFieldTest.kt", "kind": "test" }
   ],
   "dependencies": [],
-  "registryDependencies": ["theme"],
-  "platform": "common",
+  "registryDependencies": ["theme", "foundation"],
+  "platform": "android",
   "minSdk": 24,
   "composeBom": "2026.03.01",
   "themeVersion": 1,
@@ -34,8 +70,19 @@
     "touchTarget": true
   },
   "aiHints": [
-    "Attach error text to the field, not only a color change",
-    "Set KeyboardType and ImeAction for the job"
+    "Set isError on submit or blur, not per keystroke; the field hides the error while the person edits and shows it again on blur if you still flag it",
+    "Pass supportingText as a hint even when there is no error; the error replaces it on the same line so the form does not jump",
+    "When you pass trailingIcon you replace the clear button; do that only when your icon is the more useful action (password-field does)",
+    "maxLength does not block input; validate length on submit like any other rule",
+    "Attach error text to the field, not only a color change"
   ],
-  "sources": []
+  "sources": [
+    "kb://android/develop/ui/compose/text/user-input",
+    "kb://android/develop/ui/compose/quick-guides/content/validate-input",
+    "kb://android/develop/ui/compose/components/text-field",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/touch-input/focus/change-focus-behavior",
+    "kb://android/develop/ui/compose/animation/composables-modifiers",
+    "kb://android/develop/ui/compose/state-saving"
+  ]
 }

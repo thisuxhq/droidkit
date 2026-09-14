@@ -19,6 +19,16 @@ data class RegistryItem(
     val states: List<String>,
     val sourceFiles: List<File>,
     val previewFiles: List<File>,
+    val ux: List<UxMoment> = emptyList(),
+)
+
+/** One row of the experience spec (`registry.json` → `ux`). See docs/verification.md. */
+data class UxMoment(
+    val moment: String,
+    val behaviour: String,
+    val why: String,
+    val signature: Boolean,
+    val reducedMotion: String?,
 )
 
 data class PreviewFunction(
@@ -34,10 +44,13 @@ data class PreviewFunction(
 object Registry {
     private val itemGroups = listOf("components", "patterns", "blocks")
 
+    /** Items compiled by a `:core:*` module rather than `:registry` (they are the contract items). */
+    val coreItems = listOf("theme", "foundation")
+
     fun readItems(root: File): List<RegistryItem> {
         val slurper = JsonSlurper()
         val itemDirs =
-            listOf(root.resolve("theme")) +
+            coreItems.map { root.resolve(it) } +
                 itemGroups
                     .map { root.resolve(it) }
                     .filter { it.isDirectory }
@@ -53,6 +66,9 @@ object Registry {
 
                 @Suppress("UNCHECKED_CAST")
                 val states = (json["states"] as? List<String>) ?: emptyList()
+
+                @Suppress("UNCHECKED_CAST")
+                val ux = (json["ux"] as? List<Map<String, Any?>>) ?: emptyList()
                 RegistryItem(
                     name = json["name"] as String,
                     type = json["type"] as String,
@@ -61,6 +77,16 @@ object Registry {
                     states = states,
                     sourceFiles = files.filter { it["kind"] == "source" }.map { dir.resolve(it.getValue("path")) },
                     previewFiles = files.filter { it["kind"] == "preview" }.map { dir.resolve(it.getValue("path")) },
+                    ux =
+                        ux.map { row ->
+                            UxMoment(
+                                moment = (row["moment"] as? String).orEmpty(),
+                                behaviour = (row["behaviour"] as? String).orEmpty(),
+                                why = (row["why"] as? String).orEmpty(),
+                                signature = (row["signature"] as? Boolean) ?: false,
+                                reducedMotion = row["reducedMotion"] as? String,
+                            )
+                        },
                 )
             }
             .sortedBy { it.name }
@@ -205,6 +231,37 @@ object RegistryLint {
                     if (oops.containsMatchIn(line)) {
                         violations += "$rel:${idx + 1}: 'Oops' copy; name the problem and the next step (docs/catalog.md)"
                     }
+                }
+            }
+        }
+        return violations
+    }
+
+    private val motionWords =
+        Regex("""\b(shak\w*|scal\w*|crossfad\w*|animat\w*|puls\w*|slid\w*|morph\w*|pop\w*|shimmer\w*|bounc\w*|spring\w*)\b""", RegexOption.IGNORE_CASE)
+
+    /**
+     * Gate 4: the experience spec exists and is well formed. Whether the code honours it is
+     * the reviewer's job (docs/verification.md → "The experience spec"); this only makes sure
+     * there is something to review. Theme and foundation are contracts, not moments.
+     */
+    fun ux(root: File, items: List<RegistryItem>): List<String> {
+        val violations = mutableListOf<String>()
+        items.filter { it.type !in Registry.coreItems }.forEach { item ->
+            val rel = "${item.dir.relativeTo(root)}/registry.json"
+            if (item.ux.isEmpty()) {
+                violations += "$rel: no ux entries; write the moments before the states (decisions #19)"
+                return@forEach
+            }
+            val signatures = item.ux.count { it.signature }
+            if (signatures == 0) violations += "$rel: no ux entry has signature: true; name the detail a user would remember"
+            if (signatures > 1) violations += "$rel: $signatures ux entries claim signature; pick one"
+            item.ux.forEachIndexed { index, row ->
+                if (motionWords.containsMatchIn(row.behaviour) && row.reducedMotion.isNullOrBlank()) {
+                    violations += "$rel: ux[$index] (${row.moment}) animates but has no reducedMotion"
+                }
+                if (row.why.isBlank() || row.behaviour.isBlank()) {
+                    violations += "$rel: ux[$index] (${row.moment}) needs both behaviour and why"
                 }
             }
         }

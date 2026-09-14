@@ -4,6 +4,24 @@
   "description": "One title, one short description, and at most one primary action when a collection has no content.",
   "avoidWhen": "Do not use for loading or errors.",
   "status": "review",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "One title, one line, at most one action, centred in whatever height it is given; TalkBack reads the title and line as one item",
+      "why": "An empty screen should say what is missing and the one thing to do about it, then stop talking",
+      "signature": true
+    },
+    {
+      "moment": "act",
+      "behaviour": "The action is a full AppButton: it presses under your finger and refuses a double tap",
+      "why": "The first thing you make from an empty screen should feel like every other action in the app"
+    },
+    {
+      "moment": "see",
+      "behaviour": "Never used for loading or errors; those have their own patterns",
+      "why": "Empty is a fact, not a failure"
+    }
+  ],
   "states": [
     "default",
     "with-icon",

@@ -1,0 +1,37 @@
+{
+  "name": "foundation",
+  "type": "foundation",
+  "description": "The shared feel: four haptics (click, tick, confirm, reject), press scale, one shake, spinner timing that never flashes, and reduced-motion detection. Items build their moments from these instead of reinventing them.",
+  "avoidWhen": "Do not add a helper here for one item; add it when the second item needs it. Do not fire a haptic without a semantics counterpart in the item.",
+  "status": "review",
+  "states": ["default", "dark"],
+  "files": [
+    { "path": "Haptics.kt", "kind": "source" },
+    { "path": "Motion.kt", "kind": "source" },
+    { "path": "AppFoundationPreview.kt", "kind": "preview" },
+    { "path": "AppFoundationTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme"],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "aiHints": [
+    "Pass the same MutableInteractionSource to pressScale and to the Material component so ripple and scale agree",
+    "shake fires on a false-to-true edge; to shake again on a repeated error, flip the trigger",
+    "Use rememberLoadingVisibility for what the spinner shows, and the raw loading flag for what clicks are ignored",
+    "rememberReducedMotion is read once per composition; do not use it to gate logic, only motion",
+    "Previews always animate and always show loading; the helpers short-circuit under LocalInspectionMode"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/animation/value-based",
+    "kb://android/develop/ui/compose/animation/customize",
+    "kb://android/develop/ui/compose/graphics/draw/modifiers",
+    "kb://android/develop/ui/compose/side-effects",
+    "kb://android/develop/ui/compose/touch-input/user-interactions/handling-interactions",
+    "kb://android/develop/ui/views/haptics/haptic-feedback",
+    "kb://android/develop/ui/views/haptics/haptics-principles"
+  ]
+}

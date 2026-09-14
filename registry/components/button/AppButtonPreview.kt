@@ -58,6 +58,38 @@ internal fun AppButtonLoadingPreview() {
     }
 }
 
+@Preview(showBackground = true, name = "button success")
+@Composable
+internal fun AppButtonSuccessPreview() {
+    ButtonPreviewSurface {
+        AppButton(text = "Pay now", success = true, onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "button secondary")
+@Composable
+internal fun AppButtonSecondaryPreview() {
+    ButtonPreviewSurface {
+        AppSecondaryButton(text = "Not now", onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "button text")
+@Composable
+internal fun AppButtonTextPreview() {
+    ButtonPreviewSurface {
+        AppTextButton(text = "Skip", onClick = {})
+    }
+}
+
+@Preview(showBackground = true, name = "button destructive")
+@Composable
+internal fun AppButtonDestructivePreview() {
+    ButtonPreviewSurface {
+        AppDestructiveButton(text = "Delete account", onClick = {})
+    }
+}
+
 @Preview(showBackground = true, name = "button disabled")
 @Composable
 internal fun AppButtonDisabledPreview() {

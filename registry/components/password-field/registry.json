@@ -1,13 +1,61 @@
 {
   "name": "password-field",
   "type": "component",
-  "description": "Password field that owns show/hide on a 48 dp target, autofill ContentType, IME actions, and error text on the field.",
-  "avoidWhen": "Do not use for one-time codes; use otp-input.",
+  "description": "Password field for sign-in and sign-up. Sign-in: show/hide that hides itself again, autofill, IME chain, felt errors. Sign-up: rules tick live under the field with a strength word, so nobody learns the rules from an error.",
+  "avoidWhen": "Do not use for one-time codes; use otp-input. Do not set isError per keystroke; on sign-up pass rules instead and validate on submit.",
   "status": "review",
+  "ux": [
+    {
+      "moment": "act",
+      "behaviour": "On sign-up, each rule under the field flips to a filled check the moment it is met, with a tick haptic; all met fires confirm and the strength word reads Strong",
+      "why": "You watch the password become acceptable instead of guessing and being told no",
+      "signature": true,
+      "reducedMotion": "Marks flip without the crossfade; haptics unchanged"
+    },
+    {
+      "moment": "see",
+      "behaviour": "Strength is a word (Weak, Good, Strong) with ink segments, never colour alone; it appears once there is something to judge",
+      "why": "A bar with no words is a guess; a red bar on an empty field is a scold"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The eye crossfades between show and hide; a revealed password hides again when focus leaves the field and after 10 seconds without typing",
+      "why": "You peek to check a character, not to leave it on screen for the next person",
+      "reducedMotion": "Icon swaps without the crossfade; the timers are unchanged"
+    },
+    {
+      "moment": "act",
+      "behaviour": "A paste or autofill is trimmed of surrounding whitespace; typed spaces are kept",
+      "why": "Password managers add a stray newline; the field should not make you find it"
+    },
+    {
+      "moment": "mistake",
+      "behaviour": "On the error edge the field shakes once, fires reject, and the message shows on the field (inherited from text-field)",
+      "why": "The refusal is felt before it is read",
+      "reducedMotion": "No shake; haptic and text only"
+    },
+    {
+      "moment": "recover",
+      "behaviour": "The first keystroke after an error drops the error colour and keeps the message quiet until blur (inherited from text-field)",
+      "why": "You are already fixing it"
+    },
+    {
+      "moment": "act",
+      "behaviour": "With a hardware keyboard, the hint line says Caps lock is on while the field is focused",
+      "why": "Most wrong passwords on a keyboard are the right password in the wrong case"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "IME Done clears focus (hiding any reveal); Next moves to the next field; a reveal survives rotation but the idle timer restarts",
+      "why": "Leaving the field is the moment to put the password away"
+    }
+  ],
   "states": [
     "default",
     "filled",
     "revealed",
+    "rules",
+    "rules-met",
     "error",
     "disabled",
     "rtl",
@@ -20,8 +68,8 @@
     { "path": "AppPasswordFieldTest.kt", "kind": "test" }
   ],
   "dependencies": [],
-  "registryDependencies": ["theme", "text-field"],
-  "platform": "common",
+  "registryDependencies": ["theme", "foundation", "text-field"],
+  "platform": "android",
   "minSdk": 24,
   "composeBom": "2026.03.01",
   "themeVersion": 1,
@@ -34,17 +82,22 @@
     "touchTarget": true
   },
   "aiHints": [
-    "Pass ContentType.NewPassword on sign-up so the provider can suggest a strong password",
+    "Sign-up: pass rules (PasswordRule.minLength, number, upperCase, ...) and ContentType.NewPassword; do not also flag isError while typing",
+    "Sign-in: no rules; set isError with supportingText on a rejected submit, and flip it off before setting it again for a second rejection",
     "When isError is true, pass supportingText; color-only errors are rejected",
-    "Update isError in the caller on each keystroke; the field does not clear it"
+    "The reveal hides on its own; do not add a timer or a blur handler in the caller",
+    "Rule labels are plain strings so they can come from resources; keep them short, they wrap at 2x font"
   ],
   "sources": [
     "kb://android/develop/ui/compose/quick-guides/content/show-hide-password",
     "kb://android/develop/ui/compose/text/autofill",
     "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/semantics",
     "kb://android/develop/ui/compose/components/icon-button",
     "kb://android/develop/ui/compose/state-saving",
     "kb://android/develop/ui/compose/quick-guides/content/validate-input",
-    "kb://android/develop/ui/compose/quick-guides/collections/request-user-input"
+    "kb://android/develop/ui/compose/quick-guides/collections/request-user-input",
+    "kb://android/develop/ui/compose/animation/composables-modifiers",
+    "kb://android/develop/ui/compose/touch-input/keyboard-input/commands"
   ]
 }

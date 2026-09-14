@@ -1,9 +1,45 @@
 {
   "name": "otp-input",
   "type": "component",
-  "description": "Use for a fixed-length SMS or email one-time code.",
-  "avoidWhen": "Do not use for passwords or free-form text; use password-field or text-field.",
+  "description": "Fixed-length SMS or email one-time code that submits itself when the last digit lands, shows where you are with a caret, and refuses a wrong code with a shake while letting the next digit start over.",
+  "avoidWhen": "Do not use for passwords or free-form text; use password-field or text-field. Do not pair onComplete with a separate Verify button for the same code.",
   "status": "review",
+  "ux": [
+    {
+      "moment": "succeed",
+      "behaviour": "When the last digit lands, onComplete fires 150 ms later with a confirm haptic; no button to find",
+      "why": "You see the whole code for a beat and then it just goes",
+      "signature": true
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The active cell has a thicker ink border and a blinking caret; cells stay left-to-right in RTL layouts",
+      "why": "You always know which digit is next",
+      "reducedMotion": "Caret is steady, not blinking"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Each digit pops into its cell (0.8 to 1) with a tick haptic; paste keeps digits only and caps at length",
+      "why": "Every keystroke is acknowledged, so a missed one is obvious",
+      "reducedMotion": "Digits appear without the pop; ticks unchanged"
+    },
+    {
+      "moment": "mistake",
+      "behaviour": "When isError turns on, the row shakes once, fires reject, keeps the wrong digits visible in red with the message under them, and takes focus back",
+      "why": "You can see what you typed against what it said, and the keyboard is already up",
+      "reducedMotion": "No shake; haptic, red border, and text only"
+    },
+    {
+      "moment": "recover",
+      "behaviour": "The next digit typed after a wrong code replaces the whole code, wherever the cursor was",
+      "why": "Nobody wants to backspace six times before trying again"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "A wrong code's felt state and pending replacement survive rotation, so the refusal is not repeated",
+      "why": "Turning the phone is not a second mistake"
+    }
+  ],
   "states": [
     "default",
     "partial",
@@ -20,8 +56,8 @@
     { "path": "AppOtpInputTest.kt", "kind": "test" }
   ],
   "dependencies": [],
-  "registryDependencies": ["theme"],
-  "platform": "common",
+  "registryDependencies": ["theme", "foundation"],
+  "platform": "android",
   "minSdk": 24,
   "composeBom": "2026.03.01",
   "themeVersion": 1,
@@ -37,8 +73,9 @@
     "One BasicTextField, not six TextFields",
     "Set ContentType.SmsOtpCode on the single field so SMS autofill works",
     "Keep digit boxes LTR even in an RTL layout",
-    "Clear isError on the first onValueChange after a rejected code",
-    "Pass onDone — ImeAction.Done does nothing unless the caller wires it"
+    "Wire onComplete to the verify call; set isError when it fails and clear isError on the next onValueChange",
+    "Do not clear the value yourself on error; the field keeps it visible and replaces it on the next digit",
+    "Pass onDone only when the code is not auto-submitted"
   ],
   "sources": [
     "kb://android/develop/ui/compose/text/autofill",
@@ -47,6 +84,9 @@
     "kb://android/develop/ui/compose/accessibility/semantics",
     "kb://android/develop/ui/compose/accessibility/merging-clearing",
     "kb://android/develop/ui/compose/text/user-input",
+    "kb://android/develop/ui/compose/animation/composables-modifiers",
+    "kb://android/develop/ui/compose/animation/value-based",
+    "kb://android/develop/ui/compose/touch-input/focus/change-focus-behavior",
     "kb://android/develop/ui/views/touch-and-input/keyboard-input/style"
   ]
 }

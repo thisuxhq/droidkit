@@ -14,7 +14,7 @@
     },
     "type": {
       "type": "string",
-      "enum": ["theme", "component", "pattern", "block", "recipe"]
+      "enum": ["theme", "foundation", "component", "pattern", "block", "recipe"]
     },
     "description": {
       "type": "string",
@@ -126,6 +126,40 @@
       "items": { "type": "string" },
       "default": [],
       "description": "Short rules an agent should follow when composing this item"
+    },
+    "ux": {
+      "type": "array",
+      "default": [],
+      "description": "The experience spec, written before the state matrix. One entry per user moment (see, reach, act, mistake, recover, succeed, leave). Review checks every entry against the code and the goldens; exactly one entry is the signature detail. See docs/verification.md",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["moment", "behaviour", "why"],
+        "properties": {
+          "moment": {
+            "type": "string",
+            "enum": ["see", "reach", "act", "mistake", "recover", "succeed", "leave"],
+            "description": "Which moment of the user's journey this row decides"
+          },
+          "behaviour": {
+            "type": "string",
+            "description": "What the item does, in one sentence a tester can check"
+          },
+          "why": {
+            "type": "string",
+            "description": "The user-facing reason. If it reads like a spec, it is not a why"
+          },
+          "signature": {
+            "type": "boolean",
+            "default": false,
+            "description": "The one detail a user would notice and remember. At most one per item"
+          },
+          "reducedMotion": {
+            "type": "string",
+            "description": "Required when behaviour animates: what happens at animator scale 0 / reduced motion"
+          }
+        }
+      }
     },
     "items": {
       "type": "array",

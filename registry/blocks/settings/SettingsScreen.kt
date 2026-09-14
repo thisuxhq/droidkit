@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.droidkit.registry.components.AppButton
+import com.droidkit.registry.foundation.rememberAppHaptics
 import com.droidkit.registry.theme.AppTheme
 import kotlinx.coroutines.launch
 
@@ -241,6 +242,7 @@ private fun SettingsToggleRow(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val haptics = rememberAppHaptics()
     ListItem(
         headlineContent = {
             Text(text = title, style = MaterialTheme.typography.titleMedium)
@@ -262,7 +264,10 @@ private fun SettingsToggleRow(
                 .toggleable(
                     value = checked,
                     role = Role.Switch,
-                    onValueChange = onCheckedChange,
+                    onValueChange = {
+                        haptics.tick()
+                        onCheckedChange(it)
+                    },
                 ),
     )
 }

@@ -1,6 +1,6 @@
 ---
 name: droidkit-item
-description: Design and build a DroidKit registry item (component, pattern, block) or a core theme/foundation change. Use when creating, revising, or extending anything under registry/ or core/. Covers the product decision, the state matrix, grounding in official Android docs via the android CLI, API shape, Compose/Android gotchas, folder anatomy, registry.json, and the gates that must be green before hand-off.
+description: Design and build a DroidKit registry item (component, pattern, block) or a core theme/foundation change. Use when creating, revising, or extending anything under registry/ or core/. Covers the experience spec (walk the moments, real-app references, the signature detail), the product decision, the state matrix, grounding in official Android docs via the android CLI, API shape, Compose/Android gotchas, the foundation vocabulary (haptics, press, shake, spinner timing, reduced motion), folder anatomy, registry.json, and the gates that must be green before hand-off.
 ---
 
 # Build a DroidKit item
@@ -9,12 +9,59 @@ Read first, follow, do not paraphrase back: `AGENTS.md`, `docs/principles.md`, `
 
 You are the **author**. You never review your own item. When the gates are green and you have looked at every PNG, hand off to `/review <name>`.
 
-## Step 0 — Name the product decision
+## Step 0 — Walk the moments
 
-One sentence: what does this item decide that Material's primitive leaves open?
+Correct is the floor. 48 dp, `ContentType`, an IME chain — a reviewer can check those and the user never notices them. This step is where *designed* comes from, and it happens before the state matrix and before any code. Skipping it produces an item that passes every gate and feels like nothing.
+
+### 0a. Look at real apps first
+
+Search Mobbin for the job this item does, not the widget name. Three to five screens or flows; read the images, not the metadata.
 
 ```text
-✓ password-field: show/hide on a 48 dp target, ContentType.Password, IME chain, error clears on typing
+search_screens("create password screen with live strength meter and requirement checklist")
+search_flows("sign in with wrong password and recover")
+```
+
+Write down, in one line each, what the good ones do that Material's primitive does not. Keep the URLs; they go in the hand-off. If every reference does the same thing, that thing is the floor, not the signature.
+
+### 0b. The moments table → `registry.json` → `ux`
+
+Walk one person through the item. For each moment they actually hit, one row: what they notice, what we do, why it matters *to them*.
+
+```text
+moment    the user is…                 decide
+see       glancing at it               what reads at a glance · reserved space so nothing jumps later
+reach     focusing / pressing          press scale · haptic · caret · where focus lands
+act       typing / tapping / dragging  live feedback · clear button · auto-advance · paste
+mistake   doing it wrong               shake · error text on the field · reject haptic · never colour-only
+recover   fixing it                    error hides on first keystroke · select-all on refocus · focus back
+succeed   done                         check morph · confirm haptic · auto-submit · what announces "done"
+leave     moving on                    IME action · what persists · what resets
+```
+
+Rules:
+
+- **One `signature: true`.** The detail a person would remember and mention. If you cannot name it, you have a wrapper, not an item. Stop and rethink the product decision.
+- **Every row is observable.** A golden shows it, a behaviour test asserts it, or a `journey.xml` step drives it. A row nothing can observe gets deleted, not kept as intent.
+- **Motion states `reducedMotion`.** Anything that shakes, scales, slides, crossfades, pulses, or pops says what happens at animator scale 0. `lintRegistryUx` rejects the row otherwise. The end state must be reached without the animation.
+- **Haptics have a semantics twin.** `reject()` pairs with `error(...)`; `confirm()` with a `stateDescription`; `tick()` with a visible change. The moment must exist for someone with haptics off.
+- **Build from `foundation`.** `pressScale`, `shake`, `rememberLoadingVisibility`, `rememberReducedMotion`, `rememberAppHaptics` are the vocabulary. Do not re-implement them in the item; if one is missing and a second item will need it, add it to `registry/foundation/` first.
+- `why` is user-facing. "So the pill feels pressed" is a why. "Per Material spec" is not.
+
+Example, password-field on sign-up:
+
+```json
+{ "moment": "act", "behaviour": "Rules under the field tick live as the user types, each with a tick haptic", "why": "Nobody learns the rules from an error after submit", "signature": true, "reducedMotion": "Checks appear without the morph" }
+{ "moment": "mistake", "behaviour": "On the error edge the field shakes once, fires reject, and the supporting line shows the message", "why": "The refusal is felt before it is read", "reducedMotion": "No shake; haptic and text only" }
+{ "moment": "recover", "behaviour": "Error text hides on the first keystroke and space stays reserved", "why": "The person is already fixing it; stop shouting and do not jump the form" }
+```
+
+### 0c. The product decision, one sentence
+
+Now the sentence: what does this item decide that Material's primitive leaves open? It should be the summary of the table, not a separate thought.
+
+```text
+✓ password-field: rules tick live on sign-up, refusal is felt (shake + reject), error hides the moment you start fixing it
 ✓ empty-state: one title, one line, at most one action; never used for loading or errors
 ✗ card: Material Card with 16 dp radius        ← not an item. Stop.
 ```
@@ -112,6 +159,11 @@ Google ships agent skills in the same index; use them instead of improvising: `a
 [ ] motion respects animator scale 0 / reduced motion
 [ ] insets in blocks: imePadding, navigationBarsPadding, edge-to-edge
 [ ] copy: sentence case, verb-first actions, no "Oops", no "!" — the lint rejects both
+[ ] press: pressScale + click() on anything that is a primary tap target; same interactionSource as the ripple
+[ ] spinner: rememberLoadingVisibility for what shows; the raw flag for what is ignored — never flash, never blink
+[ ] refusal: shake fires on the error edge, once; reject() beside it; the message is on the field
+[ ] error text: the supporting line is reserved (or animateContentSize) so the form does not jump
+[ ] reduced motion: every animated ux row has its reducedMotion path and still reaches the end state
 ```
 
 ## Step 5 — Folder
@@ -121,9 +173,11 @@ registry/<type>s/<name>/
 ├── App<Name>.kt              source   package com.droidkit.registry.<type>s
 ├── App<Name>Preview.kt       preview  one internal fun per state, @Preview(name = "<name> <state>")
 ├── App<Name>Test.kt          test     behaviour through semantics, not existence
-├── registry.json             type · status · states · sources · avoidWhen · aiHints
+├── registry.json             type · status · ux · states · sources · avoidWhen · aiHints
 └── journey.xml               optional; on-device script for /device (see droidkit-device)
 ```
+
+Items that use `foundation` (haptics, motion) declare it in `registryDependencies`.
 
 Preview file rules: a tiny `private fun XPreviewSurface(darkTheme, content)` helper, then one `internal fun` per state. `uiMode`, `fontScale`, `widthDp` go on the `@Preview` annotation — the screenshot generator copies it verbatim. RTL is `CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl)` inside the preview. No logic in previews. Copy `registry/components/button/AppButtonPreview.kt`.
 
@@ -134,11 +188,13 @@ Metadata rules: `description` says when to use it; `avoidWhen` names the real co
 ## Step 6 — Gates, then look
 
 ```bash
-./gradlew :registry:check :apps:showcase:assembleDebug        # imports · states · conventions · tests · screenshots
+./gradlew :registry:check :apps:showcase:assembleDebug        # imports · states · conventions · ux · tests · screenshots
 ./gradlew :registry:updateDebugScreenshotTest :registry:contactSheets   # (re)record goldens after intentional visual change
 ```
 
 Then **read** `registry/build/contact-sheets/<name>.png` and every PNG under `registry/src/screenshotTestDebug/reference/` for the item. Go through the state matrix row by row: does the image show the state it claims? A "loading" image with no visible spinner is a lie; fix it before hand-off.
+
+Then go through the `ux` table row by row: where is each row observable — which golden, which test, which journey step? Write it down. A row you cannot point at is a row you did not build.
 
 Set `status` to `review` and hand off with:
 
@@ -146,7 +202,7 @@ Set `status` to `review` and hand off with:
 /review <name>
 ```
 
-Include in the hand-off: the product decision sentence, the transition rules, `sources`, and an `unverified` list.
+Include in the hand-off: the product decision sentence, the `ux` table with where each row is observable, the Mobbin references, the transition rules, `sources`, and an `unverified` list.
 
 ## Slop list — reject on sight, in your own code first
 
@@ -155,6 +211,8 @@ config objects · 10+ params · wrapper with no decision · modifier missing or 
 "Oops!" · previews that show only default · tests asserting a count of text · a helper file "for reuse"
 spring animations on list rows · if (isTablet) forks · a second colour system beside MaterialTheme
 aiHints that restate description · avoidWhen copy-pasted from another item · generated-looking KDoc
+ux rows that restate states ("error: shows error colour") · a signature that is a colour or a radius
+motion with no reducedMotion · a haptic with no semantics twin · a shake that loops · a spinner that flashes
 ```
 
 Less code with the right intention beats more code with coverage. If you can delete a parameter, delete it; a block will ask for it back when it is real.
