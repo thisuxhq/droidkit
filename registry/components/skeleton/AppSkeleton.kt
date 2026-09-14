@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -79,6 +79,6 @@ fun AppSkeleton(
                 .clip(RoundedCornerShape(SkeletonCorner))
                 .graphicsLayer { this.alpha = alpha }
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .semantics { invisibleToUser() },
+                .semantics { hideFromAccessibility() },
     )
 }

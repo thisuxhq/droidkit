@@ -20,10 +20,10 @@ private const val BadgeCap = 99
  */
 @Composable
 fun AppBadge(
-    content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     count: Int? = null,
     showZero: Boolean = false,
+    content: @Composable () -> Unit,
 ) {
     val visible = when (count) {
         null -> true
@@ -52,7 +52,12 @@ fun AppBadge(
                     contentColor = MaterialTheme.colorScheme.onError,
                 ) {
                     if (label != null) {
-                        Text(text = label, style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.labelSmall,
+                            maxLines = 1,
+                            softWrap = false,
+                        )
                     }
                 }
             }

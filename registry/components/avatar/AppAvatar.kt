@@ -1,6 +1,7 @@
 package com.droidkit.registry.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 private val AvatarSize = 40.dp
+private val AvatarHairline = 1.dp
 
 /**
  * A person, never an empty circle.
@@ -38,6 +40,7 @@ fun AppAvatar(
                 .size(size)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
+                .border(AvatarHairline, MaterialTheme.colorScheme.outline, CircleShape)
                 .semantics { contentDescription = name },
         contentAlignment = Alignment.Center,
     ) {

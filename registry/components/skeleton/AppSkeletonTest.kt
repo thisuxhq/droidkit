@@ -20,9 +20,10 @@ class AppSkeletonTest {
         composeRule.setContent {
             AppTheme { AppSkeleton() }
         }
-        val invisible = composeRule.onRoot().fetchSemanticsNode().children.any { child ->
-            SemanticsProperties.InvisibleToUser in child.config
-        }
-        assertTrue(invisible)
+        val hidden =
+            composeRule.onRoot().fetchSemanticsNode().children.any { child ->
+                SemanticsProperties.HideFromAccessibility in child.config
+            }
+        assertTrue(hidden)
     }
 }

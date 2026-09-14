@@ -1,5 +1,6 @@
 package com.droidkit.registry.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import com.droidkit.registry.foundation.rememberAppHaptics
 import com.droidkit.registry.theme.AppTheme
 
 private val CardMinHeight = 48.dp
+private val CardHairline = 1.dp
 
 /**
  * A titled surface that is one thing, not a box with elevation.
@@ -91,8 +93,9 @@ private fun AppCardContent(
     val interactionSource = remember { MutableInteractionSource() }
     val haptics = rememberAppHaptics()
     val colors =
-        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     val elevation = CardDefaults.cardElevation(defaultElevation = AppTheme.elevation.flat)
+    val border = BorderStroke(CardHairline, MaterialTheme.colorScheme.outline)
     val body: @Composable () -> Unit = {
         Column(
             modifier = Modifier.padding(AppTheme.spacing.md),
@@ -129,6 +132,7 @@ private fun AppCardContent(
             interactionSource = interactionSource,
             colors = colors,
             elevation = elevation,
+            border = border,
             content = { body() },
         )
     } else {
@@ -139,6 +143,7 @@ private fun AppCardContent(
                     .heightIn(min = CardMinHeight),
             colors = colors,
             elevation = elevation,
+            border = border,
             content = { body() },
         )
     }

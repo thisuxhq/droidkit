@@ -1,13 +1,16 @@
 package com.droidkit.registry.components
 
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 
 private const val DefaultMinLines = 3
 private const val DefaultMaxLines = 6
+private val TextAreaMinHeight = 120.dp
 
 /**
  * Multiline field that reserves height so the form does not jump on the first character.
@@ -34,7 +37,7 @@ fun AppTextArea(
     AppTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.heightIn(min = TextAreaMinHeight),
         label = label,
         placeholder = placeholder,
         supportingText = supportingText,
