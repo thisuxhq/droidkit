@@ -8,6 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -51,6 +52,41 @@ internal fun AppPasswordFieldFilledPreview() {
 internal fun AppPasswordFieldRevealedPreview() {
     PasswordFieldPreviewSurface {
         AppPasswordField(value = "hunter2", onValueChange = {}, initialVisible = true)
+    }
+}
+
+private val SignUpRules =
+    listOf(
+        PasswordRule.minLength(8),
+        PasswordRule.number(),
+        PasswordRule.upperCase(),
+    )
+
+@Preview(showBackground = true, name = "password-field rules")
+@Composable
+internal fun AppPasswordFieldRulesPreview() {
+    PasswordFieldPreviewSurface {
+        AppPasswordField(
+            value = "hunter2",
+            onValueChange = {},
+            label = "Create password",
+            rules = SignUpRules,
+            contentType = ContentType.NewPassword,
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "password-field rules-met")
+@Composable
+internal fun AppPasswordFieldRulesMetPreview() {
+    PasswordFieldPreviewSurface {
+        AppPasswordField(
+            value = "Hunter2024",
+            onValueChange = {},
+            label = "Create password",
+            rules = SignUpRules,
+            contentType = ContentType.NewPassword,
+        )
     }
 }
 
@@ -105,7 +141,8 @@ internal fun AppPasswordFieldLargeFontPreview() {
         AppPasswordField(
             value = "hunter2",
             onValueChange = {},
-            supportingText = "Use at least 8 characters",
+            label = "Create password",
+            rules = SignUpRules,
         )
     }
 }

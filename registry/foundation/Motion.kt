@@ -3,31 +3,38 @@ package com.droidkit.registry.foundation
 import android.animation.ValueAnimator
 import android.os.Build
 import android.provider.Settings
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
+import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.droidkit.registry.theme.AppTheme
 import kotlinx.coroutines.delay
+import kotlin.math.PI
+import kotlin.math.roundToInt
+import kotlin.math.sin
 
 private const val PressedScale = 0.97f
 private val ShakeAmplitude = 8.dp
 private const val ShakeDurationMillis = 300
+private const val ShakeCycles = 3
 private const val LoadingShowAfterMillis = 150L
 private const val LoadingMinVisibleMillis = 500L
 
@@ -87,26 +94,27 @@ fun Modifier.pressScale(
 @Composable
 fun Modifier.shake(trigger: Boolean): Modifier {
     val reducedMotion = rememberReducedMotion()
-    val offset = remember { Animatable(0f) }
+    // 0 = at rest, 1 = finished. A decaying sine: three swings that get smaller and land on 0.
+    var progress by remember { mutableFloatStateOf(0f) }
     LaunchedEffect(trigger) {
         if (!trigger || reducedMotion) return@LaunchedEffect
-        offset.snapTo(0f)
-        offset.animateTo(
-            targetValue = 0f,
-            animationSpec =
-                keyframes {
-                    durationMillis = ShakeDurationMillis
-                    -1f at ShakeDurationMillis / 6
-                    1f at ShakeDurationMillis / 3
-                    -0.75f at ShakeDurationMillis / 2
-                    0.75f at ShakeDurationMillis * 2 / 3
-                    -0.4f at ShakeDurationMillis * 5 / 6
-                    0f at ShakeDurationMillis
-                },
-        )
+        animate(
+            initialValue = 0f,
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = ShakeDurationMillis, easing = LinearEasing),
+        ) { value, _ -> progress = value }
+        progress = 0f
     }
-    return graphicsLayer {
-        translationX = offset.value * ShakeAmplitude.toPx()
+    // Placement-only offset: no re-measure of the content, and the movement is real layout
+    // position (visible to semantics bounds and tests), unlike a graphicsLayer translation.
+    return offset {
+        val x =
+            if (progress <= 0f || progress >= 1f) {
+                0f
+            } else {
+                sin(progress * ShakeCycles * 2f * PI.toFloat()) * (1f - progress) * ShakeAmplitude.toPx()
+            }
+        IntOffset(x.roundToInt(), 0)
     }
 }
 

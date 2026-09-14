@@ -63,6 +63,34 @@ internal fun AppTextFieldFilledPreview() {
     }
 }
 
+@Preview(showBackground = true, name = "text-field counter")
+@Composable
+internal fun AppTextFieldCounterPreview() {
+    TextFieldPreviewSurface {
+        AppTextField(
+            value = "ada_lovelace",
+            onValueChange = {},
+            label = "Handle",
+            supportingText = "Letters, numbers, and underscores",
+            maxLength = 20,
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "text-field over-limit")
+@Composable
+internal fun AppTextFieldOverLimitPreview() {
+    TextFieldPreviewSurface {
+        AppTextField(
+            value = "ada_lovelace_of_london",
+            onValueChange = {},
+            label = "Handle",
+            supportingText = "Letters, numbers, and underscores",
+            maxLength = 20,
+        )
+    }
+}
+
 @Preview(showBackground = true, name = "text-field supporting-text")
 @Composable
 internal fun AppTextFieldSupportingTextPreview() {

@@ -245,5 +245,6 @@ dependencies {
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.androidx.compose.ui)
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
 }
