@@ -11,6 +11,7 @@
     { "name": "search-field", "type": "component", "path": "components/search-field" },
     { "name": "text-area", "type": "component", "path": "components/text-area" },
     { "name": "otp-input", "type": "component", "path": "components/otp-input" },
+    { "name": "bead", "type": "component", "path": "components/bead" },
     { "name": "switch", "type": "component", "path": "components/switch" },
     { "name": "checkbox", "type": "component", "path": "components/checkbox" },
     { "name": "radio", "type": "component", "path": "components/radio" },

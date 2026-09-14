@@ -8,6 +8,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.droidkit.showcase.screens.AvatarScreen
 import com.droidkit.showcase.screens.BadgeScreen
+import com.droidkit.showcase.screens.BeadScreen
 import com.droidkit.showcase.screens.BottomSheetScreen
 import com.droidkit.showcase.screens.ButtonScreen
 import com.droidkit.showcase.screens.CardScreen
@@ -40,13 +41,13 @@ fun ShowcaseApp(initialDestination: String? = null) {
 
     val current =
         when (destination) {
-
             ShowcaseDestination.Button.title -> ShowcaseDestination.Button
             ShowcaseDestination.TextField.title -> ShowcaseDestination.TextField
             ShowcaseDestination.PasswordField.title -> ShowcaseDestination.PasswordField
             ShowcaseDestination.EmptyState.title -> ShowcaseDestination.EmptyState
             ShowcaseDestination.Settings.title -> ShowcaseDestination.Settings
             ShowcaseDestination.OtpInput.title -> ShowcaseDestination.OtpInput
+            ShowcaseDestination.Bead.title -> ShowcaseDestination.Bead
             ShowcaseDestination.IconButton.title -> ShowcaseDestination.IconButton
             ShowcaseDestination.SearchField.title -> ShowcaseDestination.SearchField
             ShowcaseDestination.TextArea.title -> ShowcaseDestination.TextArea
@@ -75,7 +76,6 @@ fun ShowcaseApp(initialDestination: String? = null) {
     }
 
     when (current) {
-
         ShowcaseDestination.Home ->
             HomeScreen(onOpen = { destination = it.title })
         ShowcaseDestination.Button ->
@@ -90,6 +90,8 @@ fun ShowcaseApp(initialDestination: String? = null) {
             SettingsDemoScreen(onBack = { destination = ShowcaseDestination.Home.title })
         ShowcaseDestination.OtpInput ->
             OtpInputScreen(onBack = { destination = ShowcaseDestination.Home.title })
+        ShowcaseDestination.Bead ->
+            BeadScreen(onBack = { destination = ShowcaseDestination.Home.title })
         ShowcaseDestination.IconButton ->
             IconButtonScreen(onBack = { destination = ShowcaseDestination.Home.title })
         ShowcaseDestination.SearchField ->
