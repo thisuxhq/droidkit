@@ -1,6 +1,6 @@
 ---
 name: droidkit-device
-description: On-device verification of a DroidKit item through the showcase app and the `android` CLI (invoked by /device). Use after the Gradle gates are green, for anything with text input, IME, focus, motion, dialogs/sheets, or scrolling. Covers emulator setup, environment toggles (dark, font scale, RTL, animator scale, TalkBack), layout dumps, the 48 dp touch-target check, screenshots you must read, journeys, and the report shape.
+description: On-device verification of a DroidKit item through the showcase app and the `android` CLI (invoked by /device). Use after the Gradle gates are green, for anything with text input, IME, focus, motion, dialogs/sheets, or scrolling. Covers emulator setup, environment toggles (dark, font scale, RTL, animator scale, TalkBack), layout dumps, the 48 dp touch-target check, screenshots you must read, the feel pass (every ux moment at real speed and at animator scale 0, the signature recorded), journeys, and the report shape.
 ---
 
 # Verify on device
@@ -75,6 +75,28 @@ everything    TalkBack on: swipe right through the item once — order sane? not
               anim 0: the item still reaches its end state (no animation-gated logic)
 ```
 
+## The feel pass — every `ux` row, at real speed
+
+Screenshots prove states. This proves moments. Take `registry.json` → `ux` and drive each row on the device with `tools/device/env.sh anim 1` (real speed), then again with `anim 0`.
+
+```text
+reach         press and hold the primary target: does it scale (anim 1) and stay put (anim 0)?
+              does the haptic fire? (adb shell dumpsys vibrator_manager | tail, or feel it on hardware)
+act           the signature row: record it. android screen record -o out/<item>-signature.mp4 (3–5 s),
+              then read the recording before writing about it
+mistake       trigger the error: one shake, not two; it stops; the message is on the field; reject fires
+              anim 0: no shake, message still appears, haptic still fires
+recover       type one character after the error: does the text hide the way the row says? does the form jump?
+              refocus after error: where is the caret / selection?
+succeed       auto-submit / success morph: does it happen at the declared delay? does "done" announce with TalkBack on?
+loading       a fast toggle (< 150 ms) shows nothing; a 200 ms toggle stays ≥ 500 ms — use the showcase's
+              "simulate 100 ms / 2 s" controls where the screen has them
+```
+
+Each row gets a line in `findings` or `feel`, even when it passes. "Did not check" is a finding, not silence.
+
+`env.sh anim 0` is the reduced-motion check; the "Remove animations" accessibility toggle sets the same scale. If the emulator has no motor, haptic rows go in `unverified` — do not mark them passed.
+
 ## When something surprises you
 
 Search the docs before touching code, and put the URL in the finding:
@@ -96,6 +118,9 @@ android docs fetch kb://android/develop/ui/compose/text/autofill
   "screenshots": ["out/<item>-light.png", "..."],
   "layout_failures": ["touch target 40x40 dp < 48: Button 'Show'"],
   "journey": { "name": "...", "passed": true, "failed_step": null },
+  "feel": [
+    { "moment": "mistake", "anim1": "one shake, stopped, message on field", "anim0": "no shake, message shown", "haptic": "unverified: no motor", "recording": "out/<item>-signature.mp4 | null" }
+  ],
   "findings": [
     { "severity": "blocker | should | taste", "env": "font 2.0", "what": "...", "repro": "...", "source": "kb://... | null" }
   ],
