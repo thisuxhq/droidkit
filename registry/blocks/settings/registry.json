@@ -4,6 +4,24 @@
   "description": "Settings list with 48 dp rows and list|detail on large width; state and callbacks in.",
   "avoidWhen": "Do not use for a single preference row, and do not add a ViewModel, NavHost, or DI graph to this file.",
   "status": "review",
+  "ux": [
+    {
+      "moment": "act",
+      "behaviour": "The whole 48 dp row toggles the switch, with a tick haptic; the Switch itself is display-only so TalkBack reads one control",
+      "why": "You aim at the row you can read, not the thumb you cannot",
+      "signature": true
+    },
+    {
+      "moment": "reach",
+      "behaviour": "Tapping Appearance opens the detail pane: the phone replaces the list, a tablet keeps list and detail side by side",
+      "why": "The same file works on both without a fork the caller has to maintain"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "Which pane is open survives rotation; setting values are the caller's and travel with their state",
+      "why": "Turning the phone should not lose your place"
+    }
+  ],
   "states": [
     "default",
     "dark",
@@ -27,7 +45,7 @@
     "androidx.compose.material3.adaptive:adaptive-layout",
     "androidx.compose.material3.adaptive:adaptive-navigation"
   ],
-  "registryDependencies": ["theme", "button"],
+  "registryDependencies": ["theme", "foundation", "button"],
   "platform": "android",
   "minSdk": 24,
   "composeBom": "2026.03.01",

@@ -1,12 +1,52 @@
 {
   "name": "button",
   "type": "component",
-  "description": "Primary action that keeps its width and label while a spinner runs. Minimum height 52 dp. Loading is not disabled.",
-  "avoidWhen": "Do not use for navigation rows or inline text links.",
+  "description": "The primary action: an ink pill that presses under your finger, refuses a double tap, never flashes a spinner, and can turn into a check when the thing is done. Secondary, text, and destructive variants ship in the same file.",
+  "avoidWhen": "Do not use for navigation rows or inline text links. Do not use AppDestructiveButton without a cancel beside it.",
   "status": "review",
+  "ux": [
+    {
+      "moment": "reach",
+      "behaviour": "The pill scales to 0.97 while pressed and springs back on release, with a click haptic when the tap lands; ripple and scale share one interactionSource",
+      "why": "You feel the button take the tap; the pill is the brand",
+      "signature": true,
+      "reducedMotion": "No scale; ripple and haptic only"
+    },
+    {
+      "moment": "act",
+      "behaviour": "A second tap within 400 ms of the first is ignored, and taps are ignored while loading or success",
+      "why": "Nobody pays twice because the network was slow"
+    },
+    {
+      "moment": "act",
+      "behaviour": "The spinner appears only after 150 ms and stays at least 500 ms; the label stays in the tree at alpha 0 so the width holds",
+      "why": "A fast call is just fast; a slow one shows one steady spinner, not a blink",
+      "reducedMotion": "Label alpha jumps instead of fading; timing unchanged"
+    },
+    {
+      "moment": "see",
+      "behaviour": "Loading keeps primary colours and TalkBack reads Loading; it is not disabled",
+      "why": "Gray means you cannot; a spinner means wait"
+    },
+    {
+      "moment": "succeed",
+      "behaviour": "success swaps the label for a check with a confirm haptic and reads Done; the caller holds it about 800 ms and then navigates",
+      "why": "The thing you did gets acknowledged where you did it",
+      "reducedMotion": "Check appears without the fade"
+    },
+    {
+      "moment": "see",
+      "behaviour": "Secondary is a quiet gray fill, text is bare, destructive is red text and never a red fill",
+      "why": "One dark pill per section says what matters; red text says careful without shouting"
+    }
+  ],
   "states": [
     "default",
     "loading",
+    "success",
+    "secondary",
+    "text",
+    "destructive",
     "disabled",
     "icon",
     "long-text",
@@ -15,24 +55,13 @@
     "large-font"
   ],
   "files": [
-    {
-      "path": "AppButton.kt",
-      "kind": "source"
-    },
-    {
-      "path": "AppButtonPreview.kt",
-      "kind": "preview"
-    },
-    {
-      "path": "AppButtonTest.kt",
-      "kind": "test"
-    }
+    { "path": "AppButton.kt", "kind": "source" },
+    { "path": "AppButtonPreview.kt", "kind": "preview" },
+    { "path": "AppButtonTest.kt", "kind": "test" }
   ],
   "dependencies": [],
-  "registryDependencies": [
-    "theme"
-  ],
-  "platform": "common",
+  "registryDependencies": ["theme", "foundation"],
+  "platform": "android",
   "minSdk": 24,
   "composeBom": "2026.03.01",
   "themeVersion": 1,
@@ -46,9 +75,12 @@
   },
   "aiHints": [
     "Keep enabled as the caller's enabled; ignore clicks while loading instead of setting enabled = !loading",
+    "Set loading the moment the request starts; the button decides whether a spinner is worth showing",
+    "For success, set success = true when the response lands, delay about 800 ms, then navigate; do not leave it true",
     "Do not replace the label with the spinner; overlay it so the width does not jump",
-    "One primary button per screen section",
-    "Pass a localized loadingStateDescription from your strings"
+    "One AppButton per screen section; the rest are AppSecondaryButton or AppTextButton",
+    "AppDestructiveButton goes beside a cancel; the destructive-confirmation pattern owns the dialog",
+    "Pass localized loadingStateDescription and successStateDescription from your strings"
   ],
   "sources": [
     "kb://android/develop/ui/compose/components/button",
@@ -56,6 +88,8 @@
     "kb://android/develop/ui/compose/accessibility/api-defaults",
     "kb://android/develop/ui/compose/accessibility/merging-clearing",
     "kb://android/develop/ui/compose/animation/composables-modifiers",
+    "kb://android/develop/ui/compose/animation/value-based",
+    "kb://android/develop/ui/compose/touch-input/user-interactions/handling-interactions",
     "kb://android/develop/ui/compose/components/progress",
     "kb://android/develop/ui/compose/testing/semantics",
     "kb://android/jetpack/compose/compose-component-api-guidelines"
