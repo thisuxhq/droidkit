@@ -3,6 +3,7 @@
   "themeVersion": 1,
   "items": [
     { "name": "theme", "type": "theme", "path": "theme" },
+    { "name": "foundation", "type": "foundation", "path": "foundation" },
     { "name": "button", "type": "component", "path": "components/button" },
     { "name": "text-field", "type": "component", "path": "components/text-field" },
     { "name": "password-field", "type": "component", "path": "components/password-field" },
