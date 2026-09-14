@@ -1,0 +1,75 @@
+{
+  "name": "radio",
+  "type": "component",
+  "description": "Exclusive labeled choices. Picking one unpicks the others.",
+  "avoidWhen": "Do not use for independent on/off rows; use checkbox or switch. Do not use for peer panes; use tabs.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The filled radio is the current value",
+      "why": "You can see the choice without opening anything"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Picking a row unpicks the others and fires a tick haptic",
+      "why": "A choice should feel exclusive",
+      "signature": true
+    },
+    {
+      "moment": "reach",
+      "behaviour": "Each row is 48 dp and scales while pressed",
+      "why": "You tap the words, not a 20 dp circle",
+      "reducedMotion": "No scale; haptic only"
+    }
+  ],
+  "states": [
+    "default",
+    "selected-end",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppRadioGroup.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppRadioGroupPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppRadioGroupTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Pass a stable id per option; do not use the label as the id if the label can change",
+    "Do not wrap each option in its own AppRadioGroup"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/radio-button"
+  ]
+}

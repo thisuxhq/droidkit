@@ -1,0 +1,70 @@
+{
+  "name": "bottom-sheet",
+  "type": "component",
+  "description": "A titled sheet. Drag, back, or scrim dismisses \u2014 there is no close X.",
+  "avoidWhen": "Do not use for a yes/no decision; use confirm-dialog. Do not add a close icon in the title.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "A handle and a title sit above the content",
+      "why": "You know it is a sheet and what it is for"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "Drag, back, or scrim calls onDismiss; there is no close X",
+      "why": "Leaving a sheet should be the same gesture every time",
+      "signature": true
+    }
+  ],
+  "states": [
+    "default",
+    "long-title",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppBottomSheet.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppBottomSheetPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppBottomSheetTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [
+    "androidx.compose.material3.ExperimentalMaterial3Api"
+  ],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Do not add a close IconButton; onDismiss is the way out",
+    "Previews render AppBottomSheetChrome; call AppBottomSheet at runtime"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/bottom-sheet"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "name": "error-state",
+  "type": "pattern",
+  "description": "A failure with one retry. Title names the failure; the line says what to do.",
+  "avoidWhen": "Do not use for an empty collection; use empty-state. Do not use for loading.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "One title naming the failure, one line, one retry; TalkBack announces the copy",
+      "why": "Empty is a fact; this is a failure with a next step",
+      "signature": true
+    },
+    {
+      "moment": "act",
+      "behaviour": "The action is a full AppButton",
+      "why": "Retry should feel like every other action"
+    }
+  ],
+  "states": [
+    "default",
+    "with-icon",
+    "long-text",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "ErrorState.kt",
+      "kind": "source"
+    },
+    {
+      "path": "ErrorStatePreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "ErrorStateTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "button"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Always pass a retry action; an error without a next step is a dead end",
+    "Do not add a second button"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing"
+  ]
+}

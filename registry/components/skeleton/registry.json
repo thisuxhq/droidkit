@@ -1,0 +1,69 @@
+{
+  "name": "skeleton",
+  "type": "component",
+  "description": "A placeholder that breathes only while it is on screen. Reduced motion is a static bar. TalkBack skips it.",
+  "avoidWhen": "Do not use as a spinner on a button. Do not leave it on screen after content arrives.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "A quiet bar fills the space content will occupy; TalkBack skips it",
+      "why": "A placeholder should not be a conversation"
+    },
+    {
+      "moment": "act",
+      "behaviour": "The pulse stops when the item leaves the composition",
+      "why": "Off-screen motion is waste and jank",
+      "signature": true,
+      "reducedMotion": "A static bar; no pulse"
+    }
+  ],
+  "states": [
+    "default",
+    "tall",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppSkeleton.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppSkeletonPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppSkeletonTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Replace the skeleton with content; do not stack both",
+    "Pass height when the slot is not a text line"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/animation/value-based"
+  ]
+}

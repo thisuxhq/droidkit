@@ -1,0 +1,69 @@
+{
+  "name": "preference-picker",
+  "type": "component",
+  "description": "A titled exclusive list. The current value is the checked row. Drop it in a sheet or a screen.",
+  "avoidWhen": "Do not use for independent toggles; use setting-row. Do not embed a dropdown.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The title names the preference; the checked row is the current value",
+      "why": "You should see what is on before you change it"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Picking a row ticks and calls onSelect; the caller dismisses the host",
+      "why": "The picker chooses; the sheet leaves",
+      "signature": true
+    }
+  ],
+  "states": [
+    "default",
+    "selected-end",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppPreferencePicker.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppPreferencePickerPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppPreferencePickerTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation",
+    "radio"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Host this in a bottom sheet or a detail pane; it does not present itself",
+    "Do not dismiss inside onSelect unless you own the host"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing"
+  ]
+}

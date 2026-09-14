@@ -1,0 +1,84 @@
+{
+  "name": "text-area",
+  "type": "component",
+  "description": "Multiline field that reserves three lines so the form does not jump on the first character, then grows to six.",
+  "avoidWhen": "Do not use for a single-line value; use text-field. Do not use ImeAction.Done \u2014 this is a paragraph.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The field is three lines tall before anyone types",
+      "why": "A one-line box that jumps on the first character feels unfinished",
+      "signature": true
+    },
+    {
+      "moment": "act",
+      "behaviour": "It grows to six lines then scrolls; maxLength counts without blocking",
+      "why": "You can see a long thought without the form exploding"
+    },
+    {
+      "moment": "mistake",
+      "behaviour": "Error shakes once, fires reject, and shows the message on the field",
+      "why": "The refusal is felt before it is read",
+      "reducedMotion": "No shake; haptic and text only"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "ImeAction.Default \u2014 the keyboard does not submit the screen",
+      "why": "A newline is a newline"
+    }
+  ],
+  "states": [
+    "default",
+    "filled",
+    "counter",
+    "error",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppTextArea.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppTextAreaPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppTextAreaTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation",
+    "text-field"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Set isError on submit or blur, same as text-field",
+    "Do not force ImeAction.Done; people need a newline"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/text/user-input",
+    "kb://android/develop/ui/compose/components/text-field"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "setting-row",
+  "type": "component",
+  "description": "A settings line. The whole row is the control: title, current value, chevron \u2014 or a toggle.",
+  "avoidWhen": "Do not use for a primary action; use button. Do not put a naked Switch beside a Text.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "Title on the start, current value on the end, chevron after; TalkBack reads one Button",
+      "why": "A setting is one line, not three nodes"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The whole row is 48 dp, scales while pressed, and fires a click haptic",
+      "why": "You tap the words, not a chevron",
+      "signature": true,
+      "reducedMotion": "No scale; haptic only"
+    },
+    {
+      "moment": "act",
+      "behaviour": "AppSettingToggle is the on/off cousin; the words are still the control",
+      "why": "A tiny switch is a miss"
+    }
+  ],
+  "states": [
+    "default",
+    "with-description",
+    "toggle",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppSettingRow.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppSettingRowPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppSettingRowTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation",
+    "switch"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Use AppSettingRow to navigate and AppSettingToggle to flip",
+    "Put the current value in value, not in the title"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing"
+  ]
+}

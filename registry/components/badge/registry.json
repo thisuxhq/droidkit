@@ -1,0 +1,70 @@
+{
+  "name": "badge",
+  "type": "component",
+  "description": "A count on something else. Zero is absence. A hundred is 99+.",
+  "avoidWhen": "Do not use for status text; use a chip. Do not show 0 unless you pass showZero.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "1\u201399 shows the number; 100 and up shows 99+; 0 hides; null count is a dot",
+      "why": "A three-digit badge is noise; zero is not news",
+      "signature": true
+    },
+    {
+      "moment": "see",
+      "behaviour": "TalkBack reads the count as notifications, or New for a dot",
+      "why": "A red circle without words is a rumor"
+    }
+  ],
+  "states": [
+    "default",
+    "capped",
+    "dot",
+    "hidden",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppBadge.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppBadgePreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppBadgeTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Pass count = null for a dot, 0 to hide, and let 100 become 99+",
+    "Wrap the control the badge belongs to; do not place a Badge as a sibling"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/badge"
+  ]
+}

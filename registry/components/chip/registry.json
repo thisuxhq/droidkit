@@ -1,0 +1,75 @@
+{
+  "name": "chip",
+  "type": "component",
+  "description": "A filter you turn on and off. Selected is a filled chip, not a different widget.",
+  "avoidWhen": "Do not use for actions; use button. Do not use for exclusive peer panes; use segmented-control or tabs.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "Selected is a filled chip; unselected is an outline",
+      "why": "You can scan which filters are on"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Tapping toggles and fires a tick haptic",
+      "why": "A filter should feel flipped, not pressed like a button",
+      "signature": true
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The chip is 48 dp tall and scales while pressed",
+      "why": "Small chips miss taps",
+      "reducedMotion": "No scale; haptic only"
+    }
+  ],
+  "states": [
+    "default",
+    "selected",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppChip.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppChipPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppChipTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Own selected in the caller; this is a toggle, not a radio unless you make it one",
+    "Do not put an onClick that navigates; chips filter the current screen"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/chip"
+  ]
+}

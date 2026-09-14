@@ -1,0 +1,74 @@
+{
+  "name": "checkbox",
+  "type": "component",
+  "description": "Labeled checkbox row. The words are the control.",
+  "avoidWhen": "Do not use for exclusive choices; use radio. Do not use for an immediate on/off setting; use switch.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "Title, optional description, and a leading checkbox read as one Checkbox",
+      "why": "The label is the control"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The whole row is 48 dp and scales while pressed",
+      "why": "You tap the words, not a 20 dp box",
+      "signature": true,
+      "reducedMotion": "No scale; haptic only"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Checking fires a tick haptic",
+      "why": "A check should feel landed"
+    }
+  ],
+  "states": [
+    "default",
+    "unchecked",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppCheckbox.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppCheckboxPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppCheckboxTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Pass the title as text; do not put a Checkbox beside a Text yourself"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/checkbox"
+  ]
+}

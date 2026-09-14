@@ -65,6 +65,8 @@ fun AppTextField(
     isError: Boolean = false,
     enabled: Boolean = true,
     singleLine: Boolean = true,
+    minLines: Int = 1,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     maxLength: Int? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -167,6 +169,8 @@ fun AppTextField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,
+        minLines = if (singleLine) 1 else minLines,
+        maxLines = if (singleLine) 1 else maxLines,
         interactionSource = interactionSource,
         leadingIcon = leadingIcon,
         trailingIcon =

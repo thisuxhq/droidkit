@@ -1,0 +1,75 @@
+{
+  "name": "switch",
+  "type": "component",
+  "description": "Labeled on/off row. The words are the control; the switch is the picture.",
+  "avoidWhen": "Do not place a naked Material Switch next to a Text; use this row. Do not use for exclusive choices; use radio.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "Title, optional description, and a trailing switch read as one Switch",
+      "why": "Six spoken pieces for one setting is noise"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The whole row is 48 dp, scales while pressed, and fires a click",
+      "why": "You tap the words, not a 20 dp thumb",
+      "signature": true,
+      "reducedMotion": "No scale; haptic only"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Toggling fires a tick haptic",
+      "why": "On and off should feel different from a miss"
+    }
+  ],
+  "states": [
+    "default",
+    "off",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppSwitch.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppSwitchPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppSwitchTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Pass the title as text; do not put a Switch beside a Text yourself",
+    "The Switch onCheckedChange is null; the row owns the tap"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/switch"
+  ]
+}

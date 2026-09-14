@@ -1,0 +1,82 @@
+{
+  "name": "icon-button",
+  "type": "component",
+  "description": "Icon-only action that must say its name. Presses, refuses a double tap, and overlays a spinner without shrinking.",
+  "avoidWhen": "Do not use when the action has a visible label; use button.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "contentDescription is required; TalkBack always has a name",
+      "why": "A silent icon is a dead control"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The target is 48 dp, scales to 0.97 while pressed, and fires a click haptic",
+      "why": "You feel the tap land on a small target",
+      "signature": true,
+      "reducedMotion": "No scale; ripple and haptic only"
+    },
+    {
+      "moment": "act",
+      "behaviour": "A second tap within 400 ms is ignored; taps are ignored while loading",
+      "why": "Nobody fires twice because the network was slow"
+    },
+    {
+      "moment": "act",
+      "behaviour": "The spinner appears after 150 ms and stays at least 500 ms; the icon stays at alpha 0 so the hit target never shrinks",
+      "why": "A fast call is just fast; a slow one shows one steady spinner",
+      "reducedMotion": "Icon alpha jumps; timing unchanged"
+    }
+  ],
+  "states": [
+    "default",
+    "loading",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppIconButton.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppIconButtonPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppIconButtonTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Always pass a localized contentDescription; there is no default",
+    "Keep enabled as the caller's enabled; ignore clicks while loading instead of setting enabled = false"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/icon-button",
+    "kb://android/develop/ui/compose/components/progress"
+  ]
+}

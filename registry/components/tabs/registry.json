@@ -1,0 +1,68 @@
+{
+  "name": "tabs",
+  "type": "component",
+  "description": "Peer panes. The selected tab is a heading TalkBack can jump to.",
+  "avoidWhen": "Do not use for filters on one list; use chip or segmented-control. Do not swipe pages inside this item.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The selected tab is marked as a heading",
+      "why": "TalkBack can jump to the pane you are in",
+      "signature": true
+    },
+    {
+      "moment": "act",
+      "behaviour": "Changing tabs fires a tick haptic",
+      "why": "A new pane should feel landed"
+    }
+  ],
+  "states": [
+    "default",
+    "selected-end",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppTabs.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppTabsPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppTabsTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Own selectedIndex; render the pane yourself below the tabs",
+    "Do not put actions in the tab row"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/tab"
+  ]
+}
