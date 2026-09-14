@@ -37,10 +37,10 @@ fun AppCard(
     AppCardContent(
         title = title,
         supporting = supporting,
-        modifier = modifier,
         onClick = null,
         action = null,
         onAction = null,
+        modifier = modifier,
     )
 }
 
@@ -54,10 +54,10 @@ fun AppCard(
     AppCardContent(
         title = title,
         supporting = supporting,
-        modifier = modifier,
         onClick = onClick,
         action = null,
         onAction = null,
+        modifier = modifier,
     )
 }
 
@@ -72,10 +72,10 @@ fun AppCard(
     AppCardContent(
         title = title,
         supporting = supporting,
-        modifier = modifier,
         onClick = null,
         action = action,
         onAction = onAction,
+        modifier = modifier,
     )
 }
 
@@ -83,10 +83,10 @@ fun AppCard(
 private fun AppCardContent(
     title: String,
     supporting: String,
-    modifier: Modifier,
     onClick: (() -> Unit)?,
     action: String?,
     onAction: (() -> Unit)?,
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val haptics = rememberAppHaptics()
