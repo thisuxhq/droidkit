@@ -76,16 +76,17 @@ val registryTestSources = layout.buildDirectory.dir("generated/registryTest")
 val registryScreenshotSources = layout.buildDirectory.dir("generated/registryScreenshotTest")
 val registryInputs =
     fileTree(registryRoot) {
-        include("theme/**", "components/**", "patterns/**", "blocks/**")
+        include("theme/**", "foundation/**", "components/**", "patterns/**", "blocks/**")
         exclude("build/**")
     }
 val registryKotlinNoTests =
     fileTree(registryRoot) {
-        include("theme/**/*.kt", "components/**/*.kt", "patterns/**/*.kt", "blocks/**/*.kt")
+        include("theme/**/*.kt", "foundation/**/*.kt", "components/**/*.kt", "patterns/**/*.kt", "blocks/**/*.kt")
         exclude("**/*Test.kt", "build/**")
     }
 
-// theme/ is compiled by :core:theme (it is the theme contract); do not sync it here.
+// theme/ and foundation/ are compiled by :core:theme and :core:foundation (they are the
+// contract items); do not sync them here.
 val syncRegistryMain by tasks.registering(Sync::class) {
     from("components")
     from("patterns")
@@ -97,6 +98,7 @@ val syncRegistryMain by tasks.registering(Sync::class) {
 
 val syncRegistryTest by tasks.registering(Sync::class) {
     from("theme")
+    from("foundation")
     from("components")
     from("patterns")
     from("blocks")
@@ -135,6 +137,17 @@ val lintRegistryConventions by tasks.registering {
     doLast {
         val violations = RegistryLint.conventions(root, Registry.readItems(root))
         check(violations.isEmpty()) { "registry conventions lint failed:\n${violations.joinToString("\n")}" }
+    }
+}
+
+val lintRegistryUx by tasks.registering {
+    group = "verification"
+    description = "Every component/pattern/block declares ux moments with one signature detail; animated rows state reducedMotion (decisions #19)."
+    val root = registryRoot
+    inputs.files(registryInputs)
+    doLast {
+        val violations = RegistryLint.ux(root, Registry.readItems(root))
+        check(violations.isEmpty()) { "registry ux lint failed:\n${violations.joinToString("\n")}" }
     }
 }
 
@@ -201,7 +214,7 @@ afterEvaluate {
 }
 
 tasks.named("check") {
-    dependsOn(lintRegistryImports, lintRegistryStates, lintRegistryConventions)
+    dependsOn(lintRegistryImports, lintRegistryStates, lintRegistryConventions, lintRegistryUx)
     dependsOn("validateDebugScreenshotTest")
 }
 

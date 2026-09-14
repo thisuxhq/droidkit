@@ -130,14 +130,24 @@ Also test: disabled does not click, loading does not click, semantics exist for 
   "platform": "common",
   "themeVersion": 1,
   "experimentalApis": [],
-  "aiHints": ["One primary button per screen section"]
+  "aiHints": ["One primary button per screen section"],
+  "ux": [
+    { "moment": "reach", "behaviour": "Scales to 0.97 on press with a click haptic", "why": "The pill feels pressed, not repainted", "signature": true, "reducedMotion": "No scale; haptic and ripple only" },
+    { "moment": "act", "behaviour": "Ignores a second tap for 400 ms after the first fires", "why": "Nobody submits twice because the network was slow" },
+    { "moment": "succeed", "behaviour": "Spinner appears after 150 ms and stays at least 500 ms", "why": "Fast requests do not flash a spinner" , "reducedMotion": "Same timing, no crossfade" }
+  ]
 }
 ```
 
 Validated against [`registry/item.schema.json`](../registry/item.schema.json) in CI. Expand `examples`, `accessibility`, and `aiHints` as the item matures.
 
+## Moments
+
+`ux` is the experience spec, and it is written **before** the state matrix. The state list says what the button looks like; `ux` says what it does when a person presses it, presses it twice, waits, and succeeds. One entry is `signature: true` — the detail someone would remember. Every entry has to be observable in a golden, a test, or the on-device journey; review checks each one. Rules and the moment vocabulary are in [Verification](verification.md#the-experience-spec).
+
 ## Checklist before it ships
 
+- [ ] `ux` written before the code: one signature detail, every row observable, reduced motion stated
 - [ ] Reads like Compose, not like a wrapper framework
 - [ ] Theme tokens, not magic numbers — except where the magic number *is* the opinion (52 dp)
 - [ ] Loading, disabled, dark, large font

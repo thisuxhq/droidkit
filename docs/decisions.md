@@ -19,6 +19,8 @@ Load-bearing choices, written down so they stop being re-argued. Add a row when 
 | 13 | Color/type: `MaterialTheme.*`; spacing/motion/elevation: `AppTheme.*` | Decided |
 | 14 | Dogfood / taste-test target is `:apps:showcase` | Decided |
 | 18 | Default theme is ink on paper | Decided |
+| 19 | Every item carries an experience spec (`ux` moments) written before the state matrix | Decided |
+| 20 | `foundation` (haptics, motion helpers) is a copyable registry item, like `theme` | Decided |
 
 ## 1. Name: DroidKit
 
@@ -120,3 +122,15 @@ The default `AppTheme` colour opinion is **ink on paper**: near-black ink, white
 This does not change Decisions #4 or #13: callers still read colour, type, and shape from `MaterialTheme.*` and extras from `AppTheme.*`. Token *roles* are unchanged (`THEME_VERSION` stays 1). Token *values* are the opinion.
 
 The language was distilled from quiet mobility-app UI, not cloned. No third-party branding, wordmarks, or names leak into tokens, composables, or the prefix (`App` stays). See [design-system.md](design-system.md#visual-opinion).
+
+## 19. Every item carries an experience spec (`ux` moments) written before the state matrix
+
+The first items built through the loop came out correct and inert: 48 dp targets, `ContentType`, IME chains, and nothing a user would notice. The cause was structural. The state matrix describes what an item *looks like*; delight lives in what it *does* at each moment (press, first keystroke, mistake, recovery, success), and nothing in the process asked for that.
+
+So `registry.json` → `ux` is the experience spec. One entry per moment the item decides (`see`, `reach`, `act`, `mistake`, `recover`, `succeed`, `leave`), each with a `behaviour` a tester can check and a user-facing `why`. Exactly one entry is the `signature` detail — the thing a user would remember. Anything animated says what happens under `reducedMotion`; anything haptic has a semantics counterpart in the code.
+
+The spec is written before the state matrix, after looking at three to five real apps. Review treats an unimplemented `ux` entry as a blocker and a missing signature as a should. The device pass checks the transitions at real speed. Metadata for agents (`aiHints`) says how to compose the item; `ux` says how it behaves; they are not the same list. See [verification.md](verification.md#the-experience-spec).
+
+## 20. `foundation` is a copyable registry item
+
+Items may import only `com.droidkit.registry.*`, Compose, AndroidX, and declared dependencies. Shared behaviour — haptics, press scale, shake, spinner timing, reduced-motion detection — therefore has to be copyable, or every item reimplements it and most skip it. `registry/foundation/` is that item; `:core:foundation` compiles from it the way `:core:theme` compiles from `registry/theme/`. Items that use it declare `foundation` in `registryDependencies`. It stays small: a helper exists only when two or more items use it.

@@ -2,8 +2,9 @@
 
 Most DroidKit code is written by coding agents. An agent that cannot see its output will ship a spinner that is invisible and call the task done. This document is the loop that stops that. It is a product decision, not tooling trivia: the loop is why "a DroidKit item" means something.
 
-Three ideas:
+Four ideas:
 
+0. **Moments before states.** Before the state matrix, the author writes what the user notices at each moment and what the item does about it (`registry.json` → `ux`). Correct is the floor; this is where designed comes from.
 1. **Declared = previewed = screenshotted.** `registry.json` → `states` is the state matrix. Every state must have a `@Preview`; every preview becomes a golden PNG; the PNGs become the contact sheet and the website. One source of truth, enforced by Gradle.
 2. **The author never reviews.** A fresh-context agent tries to refute the item. Blockers go back; nothing is approved by the agent that wrote it.
 3. **Cheap gates first, taste last.** Deterministic checks run on every edit. A human looks at one image per item at the end. That look is the only gate that cannot be automated, so everything before it exists to make it ten seconds long.
@@ -25,6 +26,7 @@ L4  Taste            contact sheet, a human           10 s       before status: 
 | `lintRegistryImports` | copied Kotlin imports anything outside `com.droidkit.registry.*`, Compose, AndroidX, JDK |
 | `lintRegistryStates` | a declared state has no `@Preview(name = "<item> <state>")`, a preview is not a declared state, or a preview is `private` |
 | `lintRegistryConventions` | missing `App` prefix on theme/component composables · `modifier` not the first optional param or not defaulting to `Modifier` · inline `.dp` literal in a source file · `!` or "Oops" in UI copy |
+| `lintRegistryUx` | a non-theme item with no `ux` entries · no `signature` or more than one · an `ux` entry that animates (`shake`, `scale`, `crossfade`, `animate`, `pulse`, `slide`, `morph`, `pop`) without `reducedMotion` |
 | `testDebugUnitTest` | behaviour tests fail |
 | `validateDebugScreenshotTest` | a golden PNG differs from the rendered preview |
 | CI: `check-jsonschema` | any `registry.json` violates `registry/item.schema.json` |
@@ -53,6 +55,29 @@ The showcase app is the harness. `droidkit://item/<name>` opens one item; `tools
 ### L4 — Taste
 
 Open `build/contact-sheets/<item>.png`. Does it look like an app you would want to have built? That reaction is the gate. Nothing here replaces it.
+
+## The experience spec
+
+`registry.json` → `ux` is written first, after looking at three to five real apps (Mobbin) that do this job well. One entry per moment the item decides:
+
+| Moment | The user is... | Typical decision |
+| --- | --- | --- |
+| `see` | glancing at it | what reads at a glance; reserved space so nothing jumps later |
+| `reach` | focusing, pressing, hovering | press scale, haptic, caret, focus landing |
+| `act` | typing, tapping, dragging | live feedback, clear button, auto-advance, paste handling |
+| `mistake` | doing something wrong | shake, error text on the field, error haptic, no colour-only meaning |
+| `recover` | fixing it | error hides on first keystroke, select-all on refocus, focus back where it belongs |
+| `succeed` | done | check morph, confirm haptic, auto-submit, what announces "done" |
+| `leave` | moving on | IME action, what persists, what resets |
+
+Rules:
+
+- Exactly one entry is `signature: true` — the detail a user would remember. No signature, no item.
+- Every entry is observable: a golden, a behaviour test, or a `journey.xml` step shows it. An entry nothing can observe is deleted.
+- Anything animated states `reducedMotion`. Anything haptic has a semantics counterpart (a `stateDescription`, an announcement) so the moment exists without a motor.
+- `ux` is how the item behaves; `aiHints` is how an agent composes it. Do not copy one into the other.
+
+Review reads `ux` row by row against the code and the PNGs (an unimplemented row is a blocker). The device pass runs the transitions at real speed and at animator scale 0.
 
 ## Grounding in official docs
 
