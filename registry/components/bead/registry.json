@@ -1,0 +1,68 @@
+{
+  "name": "bead",
+  "type": "component",
+  "description": "Vertical exclusive picker for a short ordered list. A bead slides on a shared track; the selected label comes forward and the others recede.",
+  "avoidWhen": "Do not use for unordered categories, long lists, or binary on/off — use a list, radios, or a switch.",
+  "status": "review",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The bead sits on the current option; that label is bright and the others recede",
+      "why": "You can read the choice without hunting for a filled circle"
+    },
+    {
+      "moment": "act",
+      "behaviour": "The bead slides along the track to the option you tap",
+      "why": "The choice should feel like moving along a scale, not flipping a radio",
+      "signature": true,
+      "reducedMotion": "The bead jumps; labels still update"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The whole row is the hit target",
+      "why": "You tap the words, not a 20 dp bead"
+    }
+  ],
+  "states": [
+    "default",
+    "first",
+    "disabled",
+    "long-text",
+    "dark",
+    "large-font",
+    "rtl"
+  ],
+  "files": [
+    { "path": "AppBead.kt", "kind": "source" },
+    { "path": "AppBeadPreview.kt", "kind": "preview" },
+    { "path": "AppBeadTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme"],
+  "platform": "common",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Options must be ordered (never → sometimes → always), not a bag of categories",
+    "Keep 2–5 options; more than five is a list",
+    "The whole row is the hit target, not the bead",
+    "Caller owns selectedIndex; do not store it inside"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/components/radio-button",
+    "kb://android/develop/ui/compose/components/segmented-button",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/animation/value-based"
+  ]
+}
