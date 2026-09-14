@@ -53,6 +53,8 @@ Taste-test lives in `:apps:showcase`. It exercises every registered item.
 ./gradlew :registry:check
 ```
 
+Merges to `main` publish a showcase APK as a [GitHub Release](https://github.com/thisuxhq/droidkit/releases). The latest file is always [droidkit-showcase.apk](https://github.com/thisuxhq/droidkit/releases/latest/download/droidkit-showcase.apk).
+
 ## License
 
 [Apache-2.0](LICENSE). Files you copy into your app are yours.

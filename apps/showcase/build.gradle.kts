@@ -19,6 +19,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // No stored upload keystore yet. Debug-signed so CI can publish an installable APK.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

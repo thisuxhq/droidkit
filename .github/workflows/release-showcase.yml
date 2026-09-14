@@ -1,0 +1,77 @@
+name: release-showcase
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: release-showcase
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  release:
+    name: build and publish showcase APK
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: assemble
+        run: ./gradlew :apps:showcase:assembleRelease --console=plain
+      - name: stage APK
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          apks=(apps/showcase/build/outputs/apk/release/*.apk)
+          if [ "${#apks[@]}" -eq 0 ]; then
+            echo "no release APK found under apps/showcase/build/outputs/apk/release"
+            find apps/showcase/build/outputs -type f -name '*.apk*' || true
+            exit 1
+          fi
+          apk="${apks[0]}"
+          mkdir -p dist
+          cp "$apk" dist/droidkit-showcase.apk
+          echo "staged $apk -> dist/droidkit-showcase.apk"
+          ls -lh dist/droidkit-showcase.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: droidkit-showcase
+          path: dist/droidkit-showcase.apk
+          if-no-files-found: error
+      - name: publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: showcase-${{ github.run_number }}
+        run: |
+          set -euo pipefail
+          short_sha="${GITHUB_SHA:0:7}"
+          {
+            echo "Showcase APK from [\`${short_sha}\`](https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}) on \`main\`."
+            echo
+            echo "Sideload to taste-test every registered item. Signed with the debug keystore so it installs without a stored release key."
+            echo
+            echo "Always-latest download: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/droidkit-showcase.apk"
+          } > /tmp/release-notes.md
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/droidkit-showcase.apk --clobber
+          else
+            gh release create "$TAG" \
+              dist/droidkit-showcase.apk \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$GITHUB_SHA" \
+              --title "Showcase ${{ github.run_number }}" \
+              --notes "$(cat /tmp/release-notes.md)" \
+              --generate-notes \
+              --latest
+          fi
