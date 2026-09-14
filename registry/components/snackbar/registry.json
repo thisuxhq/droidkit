@@ -1,0 +1,73 @@
+{
+  "name": "snackbar",
+  "type": "component",
+  "description": "A short message with at most one action. No close X \u2014 timeout or swipe leaves.",
+  "avoidWhen": "Do not use for a decision that needs a title; use confirm-dialog. Do not stack two actions.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The message is the whole point; an action is optional and one word",
+      "why": "A snackbar is a whisper, not a form"
+    },
+    {
+      "moment": "act",
+      "behaviour": "The action fires a click haptic and onAction",
+      "why": "Undo should feel like a tap, not a hunt",
+      "signature": true
+    },
+    {
+      "moment": "leave",
+      "behaviour": "There is no close X; the host owns duration",
+      "why": "Dismissing a whisper should not be a chore"
+    }
+  ],
+  "states": [
+    "default",
+    "with-action",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppSnackbar.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppSnackbarPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppSnackbarTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "One action, usually Undo; do not add a close icon",
+    "Host this in a SnackbarHost; this is the surface"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/snackbar"
+  ]
+}

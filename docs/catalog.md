@@ -266,3 +266,43 @@ AIChat
 That is enough to build something meaningful and to take screenshots that primitives cannot.
 
 Phase 1 is smaller still: theme + 10 primitives + 10 components + 5 patterns. Get the visual language right before filling the catalog. See [Roadmap](roadmap.md).
+
+## Phase 1 status
+
+The first 25 of the launch set, plus theme, foundation, and the settings block already in the registry.
+
+| Launch-set name | Registry id | Kind | In registry |
+| --- | --- | --- | --- |
+| Button | `button` | component | yes |
+| IconButton | `icon-button` | component | yes |
+| Input | `text-field` | component | yes |
+| PasswordInput | `password-field` | component | yes |
+| SearchInput | `search-field` | component | yes |
+| OTPInput | `otp-input` | component | yes |
+| Textarea | `text-area` | component | yes |
+| Card | `card` | component | yes |
+| Avatar | `avatar` | component | yes |
+| Badge | `badge` | component | yes |
+| Chip | `chip` | component | yes |
+| Switch | `switch` | component | yes |
+| Checkbox | `checkbox` | component | yes |
+| Radio | `radio` | component | yes |
+| SegmentedControl | `segmented-control` | component | yes |
+| Tabs | `tabs` | component | yes |
+| Progress | `progress` | component | yes |
+| Skeleton | `skeleton` | component | yes |
+| Snackbar | `snackbar` | component | yes |
+| Dialog | `confirm-dialog` | pattern | yes |
+| BottomSheet | `bottom-sheet` | component | yes |
+| EmptyState | `empty-state` | pattern | yes |
+| ErrorState | `error-state` | pattern | yes |
+| SettingRow | `setting-row` | component | yes |
+| PreferencePicker | `preference-picker` | component | yes |
+| ExpandableCard | — | — | later |
+| SwipeAction | — | — | later |
+| SearchScreen | — | block | later |
+| SettingsScreen | `settings` | block | yes |
+| LoginScreen | — | block | later |
+| AIChat | — | block | later |
+
+Theme and foundation are contracts, not catalog items. They ship with every install.

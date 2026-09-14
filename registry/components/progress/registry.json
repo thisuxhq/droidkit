@@ -1,0 +1,69 @@
+{
+  "name": "progress",
+  "type": "component",
+  "description": "Labeled progress. Never a bar with no name. Determinate announces a percent; indeterminate reads Loading.",
+  "avoidWhen": "Do not use for a button wait; use the button loading state. Do not omit the label.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "A label sits above the bar; determinate progress announces a percent",
+      "why": "A nameless bar is a rumor",
+      "signature": true
+    },
+    {
+      "moment": "see",
+      "behaviour": "Null progress is indeterminate and reads Loading",
+      "why": "Waiting still has a name"
+    }
+  ],
+  "states": [
+    "default",
+    "indeterminate",
+    "complete",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppProgress.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppProgressPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppProgressTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Always pass a label; do not wrap a LinearProgressIndicator yourself",
+    "Use tertiary for the bar \u2014 it is a signal, not a button"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/progress"
+  ]
+}

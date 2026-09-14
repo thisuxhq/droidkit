@@ -1,0 +1,74 @@
+{
+  "name": "confirm-dialog",
+  "type": "pattern",
+  "description": "A decision with an easy out. Cancel is quiet; confirm is the decision. Back and scrim are cancel.",
+  "avoidWhen": "Do not use for a short status; use snackbar. Do not put a third button.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The title names the action; the body names the consequence",
+      "why": "You should know what happens before you tap"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Confirm is text, or red text when destructive \u2014 never a red fill. Cancel is the quiet text button",
+      "why": "The easy out should look easy; the hard choice should not shout",
+      "signature": true
+    },
+    {
+      "moment": "leave",
+      "behaviour": "Back and scrim call onDismiss, the same as cancel",
+      "why": "Leaving is not confirming"
+    }
+  ],
+  "states": [
+    "default",
+    "destructive",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "ConfirmationDialog.kt",
+      "kind": "source"
+    },
+    {
+      "path": "ConfirmationDialogPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "ConfirmationDialogTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation",
+    "button"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Pass destructive = true for delete; the confirm stays red text",
+    "onDismiss is cancel; do not treat scrim as confirm"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/dialog"
+  ]
+}

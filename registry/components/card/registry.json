@@ -1,0 +1,77 @@
+{
+  "name": "card",
+  "type": "component",
+  "description": "A titled surface that is one thing: title, one supporting line, and either a whole-card tap or one action \u2014 never both.",
+  "avoidWhen": "Do not use as a generic Box with elevation. Do not make it clickable and give it a button.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "Title and supporting line merge for TalkBack",
+      "why": "A card is one thought, not six nodes"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Either the whole card is the tap or one AppButton sits under the copy \u2014 never both",
+      "why": "Two actions on one card is a guess",
+      "signature": true
+    },
+    {
+      "moment": "reach",
+      "behaviour": "A clickable card scales while pressed and fires a click haptic",
+      "why": "The surface should feel held",
+      "reducedMotion": "No scale; haptic only"
+    }
+  ],
+  "states": [
+    "default",
+    "clickable",
+    "with-action",
+    "long-text",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppCard.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppCardPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppCardTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation",
+    "button"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Pick the clickable overload or the action overload, not both",
+    "Do not nest interactive content inside a clickable card"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/card"
+  ]
+}

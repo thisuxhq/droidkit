@@ -1,0 +1,71 @@
+{
+  "name": "segmented-control",
+  "type": "component",
+  "description": "Two to five exclusive peers in one row. Not tabs \u2014 nothing pages.",
+  "avoidWhen": "Do not use for peer panes with different screens; use tabs. Do not use for filters that stack; use chip.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "Equal-width segments; the selected one is filled",
+      "why": "You can see the choice in one glance"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Changing selection fires a tick haptic",
+      "why": "A new range should feel landed",
+      "signature": true
+    }
+  ],
+  "states": [
+    "default",
+    "selected-end",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppSegmentedControl.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppSegmentedControlPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppSegmentedControlTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [
+    "androidx.compose.material3.ExperimentalMaterial3Api"
+  ],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Keep two to five options; more belongs in tabs or a picker",
+    "Own selectedIndex in the caller"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/segmented-button"
+  ]
+}

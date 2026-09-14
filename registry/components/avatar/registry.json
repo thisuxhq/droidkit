@@ -1,0 +1,68 @@
+{
+  "name": "avatar",
+  "type": "component",
+  "description": "A person, never an empty circle. Initials come from the name; a photo overlays them when ready.",
+  "avoidWhen": "Do not use for a brand mark or a generic icon; pass a person's name.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "A name always becomes one or two initials; TalkBack reads the name",
+      "why": "An empty circle is a missing person",
+      "signature": true
+    },
+    {
+      "moment": "act",
+      "behaviour": "An image slot overlays the initials when the photo is ready; the name stays the description",
+      "why": "The photo can arrive late without the circle going blank first"
+    }
+  ],
+  "states": [
+    "default",
+    "single-name",
+    "long-name",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppAvatar.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppAvatarPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppAvatarTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Pass the person's name, not initials; the item derives them",
+    "The image slot is optional; do not hide the avatar while Coil loads"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "search-field",
+  "type": "component",
+  "description": "Search field that shows a clear button as soon as you type and submits on ImeAction.Search.",
+  "avoidWhen": "Do not use for general text; use text-field. Do not put Cancel on the field; that is the screen.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "A decorative magnifier and a Search placeholder; no label",
+      "why": "You know it is search before you tap it"
+    },
+    {
+      "moment": "act",
+      "behaviour": "A clear button appears the moment there is text; tapping it empties the field and keeps focus",
+      "why": "Starting a new search should not mean holding backspace",
+      "signature": true
+    },
+    {
+      "moment": "leave",
+      "behaviour": "ImeAction.Search calls onSearch with the current value",
+      "why": "The key that says Search should search"
+    }
+  ],
+  "states": [
+    "default",
+    "filled",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    {
+      "path": "AppSearchField.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppSearchFieldPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppSearchFieldTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation",
+    "text-field"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Wire onSearch; ImeAction.Search does nothing unless you do",
+    "Do not pass a label; the placeholder is the name"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/text/user-input",
+    "kb://android/develop/ui/views/touch-and-input/keyboard-input/style"
+  ]
+}
