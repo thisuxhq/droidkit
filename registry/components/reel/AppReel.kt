@@ -3,7 +3,6 @@ package com.droidkit.registry.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.Orientation
@@ -11,8 +10,8 @@ import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,15 +30,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -51,7 +49,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -76,8 +73,7 @@ private val MarkerHit = 48.dp
 private val MarkerIconSize = 24.dp
 private val MarkerPitch = 64.dp
 private val PlayheadWidth = 2.dp
-private val PlayheadHeight = 20.dp
-private val PlayheadCap = 8.dp
+private val PlayheadHeight = 32.dp
 private val PaneMinHeight = 120.dp
 private const val RecedeAlpha = 0.38f
 private const val TrackLineAlpha = 0.24f
@@ -233,7 +229,6 @@ private fun ReelTrack(
 ) {
     val density = LocalDensity.current
     val pitchPx = with(density) { MarkerPitch.toPx() }
-    val markerHitPx = with(density) { MarkerHit.toPx() }
     val last = moments.lastIndex
     val rtl = layoutDirection == LayoutDirection.Rtl
 
@@ -253,8 +248,8 @@ private fun ReelTrack(
     )
 
     val colors = MaterialTheme.colorScheme
-    val lineColor = colors.onInverseSurface.copy(alpha = TrackLineAlpha)
-    val playheadColor = colors.onInverseSurface
+    val lineColor = colors.inverseOnSurface.copy(alpha = TrackLineAlpha)
+    val playheadColor = colors.inverseOnSurface
 
     fun liveIndex(drag: Float): Int {
         val visualDelta = if (rtl) drag else -drag
@@ -319,7 +314,6 @@ private fun ReelTrack(
                     val lineHeight = TrackLineHeight.toPx()
                     val playheadW = PlayheadWidth.toPx()
                     val playheadH = PlayheadHeight.toPx()
-                    val cap = PlayheadCap.toPx()
                     val centerX = size.width / 2f
                     val centerY = size.height / 2f
                     drawRoundRect(
@@ -334,40 +328,35 @@ private fun ReelTrack(
                         size = Size(playheadW, playheadH),
                         cornerRadius = CornerRadius(playheadW / 2f),
                     )
-                    drawCircle(
-                        color = playheadColor,
-                        radius = cap / 2f,
-                        center = Offset(centerX, centerY),
-                    )
                 },
-        contentAlignment = Alignment.Center,
     ) {
-        var viewportWidthPx by remember { mutableIntStateOf(0) }
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(TrackHitHeight)
-                    .clipToBounds()
-                    .onSizeChanged { viewportWidthPx = it.width },
-        ) {
-            val displayOrder = if (rtl) moments.indices.reversed() else moments.indices
-            Row(
+        val displayOrder = if (rtl) moments.indices.reversed() else moments.indices
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            BoxWithConstraints(
                 modifier =
                     Modifier
-                        .align(Alignment.CenterStart)
-                        .offset {
-                            val x = viewportWidthPx / 2f - markerHitPx / 2f - settledShift + dragPx
-                            IntOffset(x.roundToInt(), 0)
-                        },
-                verticalAlignment = Alignment.CenterVertically,
+                        .fillMaxWidth()
+                        .height(TrackHitHeight),
             ) {
-                displayOrder.forEach { logical ->
+                val viewportWidthPx = constraints.maxWidth.toFloat()
+                displayOrder.forEachIndexed { visual, logical ->
                     ReelMarker(
                         moment = moments[logical],
                         selected = logical == selectedIndex,
                         enabled = enabled,
                         onSelect = { onSelect(logical) },
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterStart)
+                                .offset {
+                                    val x =
+                                        viewportWidthPx / 2f -
+                                            pitchPx / 2f +
+                                            (visual * pitchPx) -
+                                            settledShift +
+                                            dragPx
+                                    IntOffset(x.roundToInt(), 0)
+                                },
                     )
                 }
             }
@@ -381,17 +370,18 @@ private fun ReelMarker(
     selected: Boolean,
     enabled: Boolean,
     onSelect: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier =
-            Modifier
-                .size(MarkerHit)
+            modifier
+                .size(width = MarkerPitch, height = MarkerHit)
                 .pressScale(interactionSource = interactionSource, enabled = enabled)
                 .selectable(
                     selected = selected,
                     interactionSource = interactionSource,
-                    indication = LocalIndication.current,
+                    indication = null,
                     enabled = enabled,
                     role = Role.Tab,
                     onClick = onSelect,
@@ -403,7 +393,7 @@ private fun ReelMarker(
             contentDescription = moment.label,
             modifier = Modifier.size(MarkerIconSize),
             tint =
-                MaterialTheme.colorScheme.onInverseSurface.copy(
+                MaterialTheme.colorScheme.inverseOnSurface.copy(
                     alpha = if (selected) 1f else RecedeAlpha,
                 ),
         )
