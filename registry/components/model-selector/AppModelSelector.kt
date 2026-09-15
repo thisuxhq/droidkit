@@ -101,6 +101,7 @@ private sealed interface ModelSelectorPresentation {
 internal data class ModelGroup(
     val provider: AppModelProvider,
     val models: List<AppModelOption>,
+    val showHeader: Boolean,
 )
 
 private val PresentationSaver =
@@ -245,7 +246,7 @@ internal fun AppModelSelectorSheetPreview(
                         .selectableGroup(),
             ) {
                 groups.forEach { group ->
-                    if (group.provider.name.isNotEmpty()) {
+                    if (group.showHeader) {
                         item(key = "header-${group.provider.id}") {
                             ProviderHeader(provider = group.provider)
                         }
@@ -429,8 +430,9 @@ internal fun groupedModels(
     return groups.map { (id, groupModels) ->
         val provider = providers.getValue(id)
         ModelGroup(
-            provider = if (usesHeaders) provider else provider.copy(name = "", mark = null),
+            provider = provider,
             models = groupModels,
+            showHeader = usesHeaders,
         )
     }
 }

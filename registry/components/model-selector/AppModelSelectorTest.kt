@@ -142,7 +142,7 @@ class AppModelSelectorTest {
 
         val flat = groupedModels(shortCatalog.filter { it.provider.id == "openai" }, "")
         assertEquals(1, flat.size)
-        assertEquals("", flat[0].provider.name)
+        assertFalse(flat[0].showHeader)
     }
 
     @Test
