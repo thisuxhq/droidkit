@@ -8,19 +8,19 @@
     {
       "moment": "see",
       "behaviour": "The first source's hostname sits in the sentence as a quiet pill; extra sources collapse to +N on that pill, never as a list",
-      "why": "You can keep reading the claim and still see that it is sourced",
-      "signature": true
+      "why": "You can keep reading the claim and still see that it is sourced"
     },
     {
       "moment": "reach",
-      "behaviour": "The pill scales while pressed with a click haptic; the visual stays line-sized and the tap target is 48 dp",
+      "behaviour": "The pill scales while pressed with a click haptic; the visual stays line-sized and a 48 dp hit target sits on top of the line so the placeholder cannot clip it",
       "why": "A footnote-sized chip is unmissable to the eye and still hittable with a thumb",
       "reducedMotion": "No scale; ripple and haptic only"
     },
     {
       "moment": "act",
       "behaviour": "Tap opens the current source under the paragraph, with title, url, and an Open source action; TalkBack reads Showing plus the title",
-      "why": "On a phone there is no hover, and covering the claim with a card makes you lose the sentence you just read"
+      "why": "On a phone there is no hover, and covering the claim with a card makes you lose the sentence you just read",
+      "signature": true
     },
     {
       "moment": "act",
@@ -67,7 +67,9 @@
     "Pass a list of AppCitation for one claim; extra items become +N, not extra pills",
     "For two claims in one paragraph use [1] and [2] with the citations map overload, not two AppInlineCitation calls",
     "Do not wrap this in a chip or a button; the pill is already the control",
-    "Pass onOpenUrl in tests or when you do not want LocalUriHandler; the Open source action is how the reader leaves to the page"
+    "Pass onOpenUrl in tests or when you do not want LocalUriHandler; the Open source action is how the reader leaves to the page",
+    "expanded and expandedCitation seed rememberSaveable once for previews and tests; they are not a two-way binding",
+    "A [n] with no matching citations[n] stays as the characters [n]; it does not vanish"
   ],
   "examples": [
     {
@@ -87,6 +89,7 @@
     "kb://android/develop/ui/compose/touch-input/user-interactions/handling-interactions",
     "kb://android/develop/ui/compose/touch-input/pointer-input/understand-gestures",
     "kb://android/develop/ui/compose/testing/semantics",
-    "kb://android/develop/ui/compose/components/icon-button"
+    "kb://android/develop/ui/compose/components/icon-button",
+    "kb://android/develop/ui/compose/touch-input/focus"
   ]
 }

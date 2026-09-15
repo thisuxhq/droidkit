@@ -106,7 +106,22 @@ internal fun AppInlineCitationQuotePreview() {
 internal fun AppInlineCitationRtlPreview() {
     InlineCitationPreviewSurface {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            AppInlineCitation(text = SampleParagraph, sources = SampleSources, expanded = true)
+            AppInlineCitation(
+                text =
+                    "تطور تطوير الويب الحديث كثيرا خلال السنوات القليلة الماضية. " +
+                        "أطر عمل مثل Svelte تقدم أداء أفضل {cite} مقارنة بالأساليب التقليدية.",
+                sources =
+                    listOf(
+                        AppCitation(
+                            url = "https://example.com",
+                            title = "تطوير الويب الحديث",
+                            description = "مسح لتغير أطر عمل الواجهة منذ ٢٠٢٠.",
+                        ),
+                        SampleSources[1],
+                        SampleSources[2],
+                    ),
+                expanded = true,
+            )
         }
     }
 }

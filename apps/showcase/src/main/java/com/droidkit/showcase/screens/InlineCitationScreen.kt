@@ -73,6 +73,24 @@ fun InlineCitationScreen(onBack: () -> Unit) {
                     ),
                 onOpenUrl = { lastOpened = it },
             )
+            AppInlineCitation(
+                text = "Compose owns the UI [1] and Kotlin owns the language [2].",
+                citations =
+                    mapOf(
+                        1 to
+                            listOf(
+                                AppCitation(
+                                    url = "https://developer.android.com/develop/ui/compose",
+                                    title = "Jetpack Compose",
+                                ),
+                            ),
+                        2 to
+                            listOf(
+                                AppCitation(url = "https://kotlinlang.org", title = "Kotlin"),
+                            ),
+                    ),
+                onOpenUrl = { lastOpened = it },
+            )
             if (lastOpened.isNotEmpty()) {
                 Text(
                     text = "Opened $lastOpened",

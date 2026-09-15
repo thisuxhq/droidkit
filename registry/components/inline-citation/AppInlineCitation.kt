@@ -11,16 +11,21 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -29,10 +34,10 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -44,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
@@ -58,10 +64,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -70,15 +78,19 @@ import com.droidkit.registry.foundation.pressScale
 import com.droidkit.registry.foundation.rememberAppHaptics
 import com.droidkit.registry.foundation.rememberReducedMotion
 import com.droidkit.registry.theme.AppTheme
+import kotlin.math.roundToInt
 
 private val PillHorizontalPadding = 8.dp
 private val PillVerticalPadding = 2.dp
 private val PillCorner = 8.dp
+private val PillMaxWidth = 220.dp
+private val PillTouchTarget = 48.dp
+private val PillTouchOverflow = 12.dp
 private val QuoteBarWidth = 2.dp
 private val SourceHairline = 1.dp
 private val SourceCardCorner = 12.dp
-private val QuoteBarHeight = 24.dp
 private val DefaultLineHeight = 24.sp
+private const val DisabledChevronAlpha = 0.45f
 
 private val MarkerRegex = Regex("""\[(\d+)\]""")
 
@@ -93,6 +105,11 @@ data class AppCitation(
     val quote: String? = null,
 )
 
+private data class CitationAnchor(
+    val id: Int,
+    val offset: Int,
+)
+
 /**
  * A paragraph that can name its sources without becoming a footnote.
  *
@@ -100,8 +117,12 @@ data class AppCitation(
  * line. Extra sources collapse to +N. Tap the pill and the source opens under the paragraph;
  * tap again to close. Multiple groups use `[1]`, `[2]` with the map overload.
  *
+ * [expanded] / [expandedCitation] seed [rememberSaveable] once for previews and tests; later
+ * parent changes are ignored. Open id and page survive rotation.
+ *
  * see:      the pill is a hostname, plus +N when more sources wait behind it.
- * reach:    pressScale + click; the visual stays line-sized, the tap target is 48 dp.
+ * reach:    pressScale + click; the visual stays line-sized, the tap target is 48 dp
+ *           overlaid on the line so the placeholder cannot clip it.
  * act:      tap opens the source card under the text; extra sources page one at a time.
  * leave:    a second tap on the pill closes the card; open id and page survive rotation.
  *
@@ -149,6 +170,13 @@ fun AppInlineCitation(
     val reducedMotion = rememberReducedMotion()
     var openId by rememberSaveable { mutableStateOf(expandedCitation) }
     var sourceIndex by rememberSaveable { mutableIntStateOf(0) }
+    var textLayout by remember { mutableStateOf<TextLayoutResult?>(null) }
+
+    val citationIds = remember(citations) { citations.keys.filter { citations[it].orEmpty().isNotEmpty() } }
+    val pillInteractions =
+        remember(citationIds) {
+            citationIds.associateWith { MutableInteractionSource() }
+        }
 
     val spans = remember(text) { splitCitedText(normalizeCitationText(text)) }
     val inlineContent =
@@ -156,29 +184,28 @@ fun AppInlineCitation(
             citations = citations,
             openId = openId,
             style = style,
-            onToggle = { id ->
-                if (openId == id) {
-                    openId = null
-                } else {
-                    openId = id
-                    sourceIndex = 0
-                }
-            },
+            interactions = pillInteractions,
         )
 
-    val annotated =
+    val (annotated, anchors) =
         remember(spans, inlineContent.keys) {
-            buildAnnotatedString {
-                spans.forEach { span ->
-                    when (span) {
-                        is CitedSpan.Words -> append(span.value)
-                        is CitedSpan.Mark ->
-                            if (inlineContent.containsKey(span.key)) {
-                                appendInlineContent(span.key, "[${span.id}]")
-                            }
+            val found = mutableListOf<CitationAnchor>()
+            val built =
+                buildAnnotatedString {
+                    spans.forEach { span ->
+                        when (span) {
+                            is CitedSpan.Words -> append(span.value)
+                            is CitedSpan.Mark ->
+                                if (inlineContent.containsKey(span.key)) {
+                                    found += CitationAnchor(id = span.id, offset = length)
+                                    appendInlineContent(span.key)
+                                } else {
+                                    append("[${span.id}]")
+                                }
+                        }
                     }
                 }
-            }
+            built to found.toList()
         }
 
     val rootModifier =
@@ -189,13 +216,46 @@ fun AppInlineCitation(
         }
 
     Column(modifier = rootModifier.fillMaxWidth()) {
-        Text(
-            text = annotated,
-            modifier = Modifier.fillMaxWidth(),
-            style = style,
-            color = MaterialTheme.colorScheme.onSurface,
-            inlineContent = inlineContent,
-        )
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = PillTouchOverflow),
+        ) {
+            Text(
+                text = annotated,
+                modifier = Modifier.fillMaxWidth(),
+                style = style,
+                color = MaterialTheme.colorScheme.onSurface,
+                inlineContent = inlineContent,
+                onTextLayout = { textLayout = it },
+            )
+            val layout = textLayout
+            if (layout != null) {
+                val length = layout.layoutInput.text.length
+                anchors.forEach { anchor ->
+                    val sourcesForMark = citations[anchor.id].orEmpty()
+                    val interaction = pillInteractions[anchor.id]
+                    if (sourcesForMark.isNotEmpty() && interaction != null && anchor.offset in 0 until length) {
+                        CitationHitTarget(
+                            box = layout.getBoundingBox(anchor.offset),
+                            sources = sourcesForMark,
+                            expanded = openId == anchor.id,
+                            pageIndex = if (openId == anchor.id) sourceIndex else 0,
+                            interactionSource = interaction,
+                            onClick = {
+                                if (openId == anchor.id) {
+                                    openId = null
+                                } else {
+                                    openId = anchor.id
+                                    sourceIndex = 0
+                                }
+                            },
+                        )
+                    }
+                }
+            }
+        }
         val openSources = openId?.let { citations[it] }.orEmpty()
         if (openSources.isNotEmpty()) {
             val index = sourceIndex.coerceIn(0, openSources.lastIndex)
@@ -210,54 +270,43 @@ fun AppInlineCitation(
     }
 }
 
-/**
- * The pill on its own, for a custom layout that already owns the sentence.
- */
-@Composable
-fun AppInlineCitation(
-    sources: List<AppCitation>,
-    modifier: Modifier = Modifier,
-    expanded: Boolean = false,
-    onOpenUrl: ((String) -> Unit)? = null,
-) {
-    AppInlineCitation(
-        text = "[1]",
-        sources = sources,
-        modifier = modifier,
-        expanded = expanded,
-        onOpenUrl = onOpenUrl,
-    )
-}
-
 @Composable
 private fun citationInlineContent(
     citations: Map<Int, List<AppCitation>>,
     openId: Int?,
     style: TextStyle,
-    onToggle: (Int) -> Unit,
+    interactions: Map<Int, MutableInteractionSource>,
 ): Map<String, InlineTextContent> {
     val density = LocalDensity.current
     val measurer = rememberTextMeasurer()
     val pillStyle = MaterialTheme.typography.labelSmall
     val placeholderHeight =
         if (style.lineHeight != TextUnit.Unspecified) style.lineHeight else DefaultLineHeight
+    val maxHostPx = with(density) { PillMaxWidth.toPx() }
 
     return citations.mapNotNull { (id, sources) ->
         if (sources.isEmpty()) return@mapNotNull null
         val host = citationHostname(sources.first().url)
         val extra = sources.size - 1
         val extraLabel = if (extra > 0) " +$extra" else ""
-        val hostWidth = measurer.measure(text = host, style = pillStyle).size.width
         val extraWidth =
             if (extra > 0) {
                 measurer.measure(text = extraLabel, style = pillStyle).size.width
             } else {
                 0
             }
-        val widthSp =
-            with(density) {
-                (hostWidth + extraWidth + PillHorizontalPadding.toPx() * 2).toSp()
-            }
+        val paddingPx = with(density) { PillHorizontalPadding.toPx() * 2 }
+        val hostBudget = (maxHostPx - extraWidth - paddingPx).toInt().coerceAtLeast(0)
+        val hostWidth =
+            measurer.measure(
+                text = host,
+                style = pillStyle,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                constraints = Constraints(maxWidth = hostBudget),
+            ).size.width
+        val widthSp = with(density) { (hostWidth + extraWidth + paddingPx).toSp() }
+        val interaction = interactions[id] ?: return@mapNotNull null
         val key = "cite-$id"
         key to
             InlineTextContent(
@@ -271,40 +320,45 @@ private fun citationInlineContent(
                 CitationPill(
                     sources = sources,
                     expanded = openId == id,
-                    onClick = { onToggle(id) },
+                    interactionSource = interaction,
                 )
             }
     }.toMap()
 }
 
 @Composable
-private fun CitationPill(
+private fun CitationHitTarget(
+    box: Rect,
     sources: List<AppCitation>,
     expanded: Boolean,
+    pageIndex: Int,
+    interactionSource: MutableInteractionSource,
     onClick: () -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
+    val density = LocalDensity.current
     val haptics = rememberAppHaptics()
+    val sizePx = with(density) { PillTouchTarget.roundToPx() }
+    val left = ((box.left + box.right) / 2f - sizePx / 2f).roundToInt()
+    val top = ((box.top + box.bottom) / 2f - sizePx / 2f).roundToInt()
     val host = citationHostname(sources.first().url)
     val extra = sources.size - 1
     val spoken =
         when {
-            extra <= 0 -> "Citation, $host"
-            extra == 1 -> "Citation, $host and 1 more source"
-            else -> "Citation, $host and $extra more sources"
+            extra <= 0 -> host
+            extra == 1 -> "$host and 1 more source"
+            else -> "$host and $extra more sources"
         }
+    val showing = sources.getOrNull(pageIndex)?.displayTitle() ?: sources.first().displayTitle()
     val clickLabel = if (expanded) "Hide sources" else "Show sources"
-    val showing = sources.first().displayTitle()
 
     Box(
         modifier =
             Modifier
-                .wrapContentSize(unbounded = true, align = Alignment.Center)
-                .minimumInteractiveComponentSize()
-                .pressScale(interactionSource = interactionSource)
+                .offset { IntOffset(left, top) }
+                .size(PillTouchTarget)
                 .clickable(
                     interactionSource = interactionSource,
-                    indication = LocalIndication.current,
+                    indication = null,
                     role = Role.Button,
                     onClickLabel = clickLabel,
                     onClick = {
@@ -312,11 +366,46 @@ private fun CitationPill(
                         onClick()
                     },
                 )
-                .semantics(mergeDescendants = true) {
+                .semantics {
                     contentDescription = spoken
                     role = Role.Button
                     if (expanded) stateDescription = "Showing $showing"
                 },
+    )
+}
+
+@Composable
+private fun CitationPill(
+    sources: List<AppCitation>,
+    expanded: Boolean,
+    interactionSource: MutableInteractionSource,
+) {
+    val host = citationHostname(sources.first().url)
+    val extra = sources.size - 1
+    val container =
+        if (expanded) {
+            MaterialTheme.colorScheme.secondaryContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceVariant
+        }
+    val hostColor =
+        if (expanded) {
+            MaterialTheme.colorScheme.onSecondaryContainer
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
+    val extraColor =
+        if (expanded) {
+            MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+        } else {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        }
+
+    Box(
+        modifier =
+            Modifier
+                .pressScale(interactionSource = interactionSource)
+                .clearAndSetSemantics { },
         contentAlignment = Alignment.Center,
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -324,24 +413,24 @@ private fun CitationPill(
                 modifier =
                     Modifier
                         .clip(RoundedCornerShape(PillCorner))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(container)
+                        .indication(interactionSource, LocalIndication.current)
                         .padding(horizontal = PillHorizontalPadding, vertical = PillVerticalPadding),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = host,
-                    modifier = Modifier.clearAndSetSemantics { },
+                    modifier = Modifier.weight(1f, fill = false),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = hostColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 if (extra > 0) {
                     Text(
                         text = " +$extra",
-                        modifier = Modifier.clearAndSetSemantics { },
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = extraColor,
                         maxLines = 1,
                     )
                 }
@@ -361,6 +450,7 @@ private fun CitationSourceCard(
     val haptics = rememberAppHaptics()
     val reducedMotion = rememberReducedMotion()
     val motionQuick = AppTheme.motion.quick
+    val disabledChevron = MaterialTheme.colorScheme.onSurface.copy(alpha = DisabledChevronAlpha)
 
     Column(
         modifier =
@@ -383,6 +473,7 @@ private fun CitationSourceCard(
                         onIndexChange((index - 1).coerceAtLeast(0))
                     },
                     enabled = index > 0,
+                    colors = IconButtonDefaults.iconButtonColors(disabledContentColor = disabledChevron),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
@@ -406,6 +497,7 @@ private fun CitationSourceCard(
                         onIndexChange((index + 1).coerceAtMost(sources.lastIndex))
                     },
                     enabled = index < sources.lastIndex,
+                    colors = IconButtonDefaults.iconButtonColors(disabledContentColor = disabledChevron),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -449,6 +541,7 @@ private fun CitationSourceBody(
                 .fillMaxWidth()
                 .padding(
                     start = AppTheme.spacing.md,
+                    top = AppTheme.spacing.md,
                     end = AppTheme.spacing.md,
                     bottom = AppTheme.spacing.sm,
                 ),
@@ -462,13 +555,15 @@ private fun CitationSourceBody(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
-        Text(
-            text = source.url.ifBlank { host },
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Text(
+                text = source.url.ifBlank { host },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
         if (source.description.isNotBlank()) {
             Text(
                 text = source.description,
@@ -481,14 +576,17 @@ private fun CitationSourceBody(
         val quote = source.quote
         if (!quote.isNullOrBlank()) {
             Row(
-                modifier = Modifier.padding(top = AppTheme.spacing.xs),
+                modifier =
+                    Modifier
+                        .padding(top = AppTheme.spacing.xs)
+                        .height(IntrinsicSize.Min),
                 horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.sm),
             ) {
                 Box(
                     modifier =
                         Modifier
                             .width(QuoteBarWidth)
-                            .height(QuoteBarHeight)
+                            .fillMaxHeight()
                             .clip(RoundedCornerShape(QuoteBarWidth))
                             .background(MaterialTheme.colorScheme.outline),
                 )
