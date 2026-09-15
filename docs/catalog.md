@@ -298,6 +298,7 @@ The first 25 of the launch set, plus theme, foundation, and the settings block a
 | ErrorState | `error-state` | pattern | yes |
 | SettingRow | `setting-row` | component | yes |
 | PreferencePicker | `preference-picker` | component | yes |
+| ModelSelector | `model-selector` | component | yes |
 | ExpandableCard | — | — | later |
 | SwipeAction | — | — | later |
 | SearchScreen | — | block | later |
