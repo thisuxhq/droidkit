@@ -19,6 +19,7 @@ import com.droidkit.showcase.screens.EmptyStateScreen
 import com.droidkit.showcase.screens.ErrorStateScreen
 import com.droidkit.showcase.screens.HomeScreen
 import com.droidkit.showcase.screens.IconButtonScreen
+import com.droidkit.showcase.screens.InlineCitationScreen
 import com.droidkit.showcase.screens.OtpInputScreen
 import com.droidkit.showcase.screens.PasswordFieldScreen
 import com.droidkit.showcase.screens.PreferencePickerScreen
@@ -68,6 +69,7 @@ fun ShowcaseApp(initialDestination: String? = null) {
             ShowcaseDestination.ErrorState.title -> ShowcaseDestination.ErrorState
             ShowcaseDestination.SettingRow.title -> ShowcaseDestination.SettingRow
             ShowcaseDestination.PreferencePicker.title -> ShowcaseDestination.PreferencePicker
+            ShowcaseDestination.InlineCitation.title -> ShowcaseDestination.InlineCitation
             else -> ShowcaseDestination.Home
         }
 
@@ -132,5 +134,7 @@ fun ShowcaseApp(initialDestination: String? = null) {
             SettingRowScreen(onBack = { destination = ShowcaseDestination.Home.title })
         ShowcaseDestination.PreferencePicker ->
             PreferencePickerScreen(onBack = { destination = ShowcaseDestination.Home.title })
+        ShowcaseDestination.InlineCitation ->
+            InlineCitationScreen(onBack = { destination = ShowcaseDestination.Home.title })
     }
 }

@@ -58,6 +58,8 @@ sealed class ShowcaseDestination(
     data object SettingRow : ShowcaseDestination("setting-row")
 
     data object PreferencePicker : ShowcaseDestination("preference-picker")
+
+    data object InlineCitation : ShowcaseDestination("inline-citation")
 }
 
 val showcaseCatalog =
@@ -89,4 +91,5 @@ val showcaseCatalog =
         ShowcaseDestination.SettingRow,
         ShowcaseDestination.PreferencePicker,
         ShowcaseDestination.Settings,
+        ShowcaseDestination.InlineCitation,
     )

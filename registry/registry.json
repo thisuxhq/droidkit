@@ -30,6 +30,7 @@
     { "name": "error-state", "type": "pattern", "path": "patterns/error-state" },
     { "name": "setting-row", "type": "component", "path": "components/setting-row" },
     { "name": "preference-picker", "type": "component", "path": "components/preference-picker" },
-    { "name": "settings", "type": "block", "path": "blocks/settings" }
+    { "name": "settings", "type": "block", "path": "blocks/settings" },
+    { "name": "inline-citation", "type": "component", "path": "components/inline-citation" }
   ]
 }
