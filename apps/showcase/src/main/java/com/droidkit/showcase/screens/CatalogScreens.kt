@@ -26,6 +26,9 @@ import com.droidkit.registry.components.AppAvatar
 import com.droidkit.registry.components.AppBadge
 import com.droidkit.registry.components.AppBottomSheet
 import com.droidkit.registry.components.AppButton
+import com.droidkit.registry.components.AppSheetChrome
+import com.droidkit.registry.components.AppSheetDetent
+import com.droidkit.registry.components.LocalAppSheetDetent
 import com.droidkit.registry.components.AppCard
 import com.droidkit.registry.components.AppCheckbox
 import com.droidkit.registry.components.AppChip
@@ -285,20 +288,79 @@ fun ConfirmDialogScreen(onBack: () -> Unit) {
 @Composable
 fun BottomSheetScreen(onBack: () -> Unit) {
     var open by rememberSaveable { mutableStateOf(false) }
+    var openFloat by rememberSaveable { mutableStateOf(false) }
+    var openExpandable by rememberSaveable { mutableStateOf(false) }
+    var openFooter by rememberSaveable { mutableStateOf(false) }
     var theme by rememberSaveable { mutableStateOf("system") }
+    val appearanceOptions =
+        listOf(
+            AppRadioOption("system", "System"),
+            AppRadioOption("light", "Light"),
+            AppRadioOption("dark", "Dark"),
+        )
     ShowcaseScaffold(title = "bottom-sheet", onBack = onBack) { padding ->
         CatalogColumn(padding) {
             AppButton(text = "Appearance", onClick = { open = true })
+            AppButton(text = "Floating", onClick = { openFloat = true })
+            AppButton(text = "Expandable", onClick = { openExpandable = true })
+            AppButton(text = "With footer", onClick = { openFooter = true })
             Text(text = theme, style = MaterialTheme.typography.bodyMedium)
             if (open) {
                 AppBottomSheet(title = "Appearance", onDismiss = { open = false }) {
                     AppRadioGroup(
-                        options =
-                            listOf(
-                                AppRadioOption("system", "System"),
-                                AppRadioOption("light", "Light"),
-                                AppRadioOption("dark", "Dark"),
-                            ),
+                        options = appearanceOptions,
+                        selectedId = theme,
+                        onSelect = { theme = it },
+                    )
+                }
+            }
+            if (openFloat) {
+                AppBottomSheet(
+                    title = "Appearance",
+                    onDismiss = { openFloat = false },
+                    chrome = AppSheetChrome.Float,
+                ) {
+                    AppRadioGroup(
+                        options = appearanceOptions,
+                        selectedId = theme,
+                        onSelect = { theme = it },
+                    )
+                }
+            }
+            if (openExpandable) {
+                AppBottomSheet(
+                    title = "Appearance",
+                    onDismiss = { openExpandable = false },
+                    expandable = true,
+                ) {
+                    val detent = LocalAppSheetDetent.current
+                    if (detent == AppSheetDetent.Partial) {
+                        Text(
+                            text = theme.replaceFirstChar { it.uppercase() },
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    } else {
+                        AppRadioGroup(
+                            options = appearanceOptions,
+                            selectedId = theme,
+                            onSelect = { theme = it },
+                        )
+                    }
+                }
+            }
+            if (openFooter) {
+                AppBottomSheet(
+                    title = "Appearance",
+                    onDismiss = { openFooter = false },
+                    footer = {
+                        AppButton(
+                            text = "Save",
+                            onClick = { openFooter = false },
+                        )
+                    },
+                ) {
+                    AppRadioGroup(
+                        options = appearanceOptions,
                         selectedId = theme,
                         onSelect = { theme = it },
                     )
