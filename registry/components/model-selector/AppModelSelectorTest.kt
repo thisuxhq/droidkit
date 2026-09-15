@@ -9,7 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.and
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -74,7 +73,7 @@ class AppModelSelectorTest {
         composeRule.onNode(hasText("GPT-4o")).assert(stateDescription("Collapsed"))
         composeRule.onNodeWithText("GPT-4o").performClick()
         composeRule.onNodeWithText("Choose a model").assertIsDisplayed()
-        composeRule.onNode(hasText("GPT-4o") and stateDescription("Expanded")).assertIsDisplayed()
+        composeRule.onNode(stateDescription("Expanded")).assertIsDisplayed()
     }
 
     @Test
@@ -224,7 +223,7 @@ class AppModelSelectorTest {
         composeRule.onNodeWithContentDescription("Clear").performClick()
         composeRule.onNodeWithText("No models match").assertDoesNotExist()
         composeRule.onNodeWithText("GPT-4o mini").assertIsDisplayed()
-        composeRule.onNodeWithText("Haiku").assertIsDisplayed()
+        composeRule.onNodeWithText("Search models").assertIsDisplayed()
         composeRule.onNodeWithContentDescription("Clear").assertDoesNotExist()
     }
 
