@@ -12,7 +12,7 @@
     },
     {
       "moment": "reach",
-      "behaviour": "The pill scales while pressed with a click haptic; the visual stays line-sized and a 48 dp hit target sits on top of the line so the placeholder cannot clip it",
+      "behaviour": "The pill scales while pressed with a click haptic; the visual stays line-sized and the hit target is a min 48 dp box around that pill so hostname and +N are inside it",
       "why": "A footnote-sized chip is unmissable to the eye and still hittable with a thumb",
       "reducedMotion": "No scale; ripple and haptic only"
     },
@@ -39,6 +39,7 @@
     "open",
     "single",
     "quote",
+    "two-claims",
     "rtl",
     "dark",
     "large-font"
@@ -78,7 +79,7 @@
     }
   ],
   "sources": [
-    "kb://android/develop/ui/compose/text",
+    "kb://android/develop/ui/compose/text/index",
     "kb://android/develop/ui/compose/text/style-text",
     "kb://android/develop/ui/compose/accessibility/semantics",
     "kb://android/develop/ui/compose/accessibility/api-defaults",

@@ -9,6 +9,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.StateRestorationTester
@@ -16,6 +17,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
@@ -101,8 +103,42 @@ class AppInlineCitationTest {
         val unclipped = node.getUnclippedBoundsInRoot()
         assertTrue("clipped width ${clipped.width}", clipped.width >= 48.dp)
         assertTrue("clipped height ${clipped.height}", clipped.height >= 48.dp)
+        assertTrue(
+            "overlay should cover example.com +2, not a 48 dp square; width was ${clipped.width}",
+            clipped.width > 48.dp,
+        )
         assertTrue("unclipped width ${unclipped.width}", unclipped.width >= 48.dp)
         assertTrue("unclipped height ${unclipped.height}", unclipped.height >= 48.dp)
+    }
+
+    @Test
+    fun tappingTheVisibleHostOpensTheCard() {
+        composeRule.setContent {
+            AppTheme {
+                AppInlineCitation(
+                    text = "Svelte is fast {cite} on the web.",
+                    sources = sources,
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("example.com", useUnmergedTree = true).performTouchInput { click() }
+        composeRule.onNodeWithText("Modern web development").assertExists()
+    }
+
+    @Test
+    fun tappingTheExtraCountOpensTheCard() {
+        composeRule.setContent {
+            AppTheme {
+                AppInlineCitation(
+                    text = "Svelte is fast {cite} on the web.",
+                    sources = sources,
+                )
+            }
+        }
+
+        composeRule.onNodeWithText(" +2", useUnmergedTree = true).performTouchInput { click() }
+        composeRule.onNodeWithText("Modern web development").assertExists()
     }
 
     @Test

@@ -101,6 +101,21 @@ internal fun AppInlineCitationQuotePreview() {
     }
 }
 
+@Preview(showBackground = true, name = "inline-citation two-claims")
+@Composable
+internal fun AppInlineCitationTwoClaimsPreview() {
+    InlineCitationPreviewSurface {
+        AppInlineCitation(
+            text = "Compose owns the UI [1] and Kotlin owns the language [2].",
+            citations =
+                mapOf(
+                    1 to listOf(AppCitation(url = "https://developer.android.com", title = "Compose")),
+                    2 to listOf(AppCitation(url = "https://kotlinlang.org", title = "Kotlin")),
+                ),
+        )
+    }
+}
+
 @Preview(showBackground = true, name = "inline-citation rtl")
 @Composable
 internal fun AppInlineCitationRtlPreview() {

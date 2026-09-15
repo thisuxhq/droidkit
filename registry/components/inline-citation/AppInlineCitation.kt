@@ -2,7 +2,6 @@ package com.droidkit.registry.components
 
 import android.net.Uri
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,7 +24,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -59,7 +57,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.Placeholder
@@ -69,6 +66,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
@@ -78,6 +76,7 @@ import com.droidkit.registry.foundation.pressScale
 import com.droidkit.registry.foundation.rememberAppHaptics
 import com.droidkit.registry.foundation.rememberReducedMotion
 import com.droidkit.registry.theme.AppTheme
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 private val PillHorizontalPadding = 8.dp
@@ -85,7 +84,7 @@ private val PillVerticalPadding = 2.dp
 private val PillCorner = 8.dp
 private val PillMaxWidth = 220.dp
 private val PillTouchTarget = 48.dp
-private val PillTouchOverflow = 12.dp
+private val NoTouchOverflow = 0.dp
 private val QuoteBarWidth = 2.dp
 private val SourceHairline = 1.dp
 private val SourceCardCorner = 12.dp
@@ -108,6 +107,8 @@ data class AppCitation(
 private data class CitationAnchor(
     val id: Int,
     val offset: Int,
+    val widthPx: Int,
+    val heightPx: Int,
 )
 
 /**
@@ -121,8 +122,8 @@ private data class CitationAnchor(
  * parent changes are ignored. Open id and page survive rotation.
  *
  * see:      the pill is a hostname, plus +N when more sources wait behind it.
- * reach:    pressScale + click; the visual stays line-sized, the tap target is 48 dp
- *           overlaid on the line so the placeholder cannot clip it.
+ * reach:    pressScale + click; the visual stays line-sized; the hit target is a
+ *           min-48 dp box around that pill, not a square parked on its centre.
  * act:      tap opens the source card under the text; extra sources page one at a time.
  * leave:    a second tap on the pill closes the card; open id and page survive rotation.
  *
@@ -167,7 +168,6 @@ fun AppInlineCitation(
 ) {
     val uriHandler = LocalUriHandler.current
     val openUrl = onOpenUrl ?: { url -> uriHandler.openUri(url) }
-    val reducedMotion = rememberReducedMotion()
     var openId by rememberSaveable { mutableStateOf(expandedCitation) }
     var sourceIndex by rememberSaveable { mutableIntStateOf(0) }
     var textLayout by remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -187,71 +187,79 @@ fun AppInlineCitation(
             interactions = pillInteractions,
         )
 
+    val density = LocalDensity.current
     val (annotated, anchors) =
-        remember(spans, inlineContent.keys) {
+        remember(spans, inlineContent.keys, density) {
             val found = mutableListOf<CitationAnchor>()
             val built =
                 buildAnnotatedString {
                     spans.forEach { span ->
                         when (span) {
                             is CitedSpan.Words -> append(span.value)
-                            is CitedSpan.Mark ->
-                                if (inlineContent.containsKey(span.key)) {
-                                    found += CitationAnchor(id = span.id, offset = length)
+                            is CitedSpan.Mark -> {
+                                val slot = inlineContent[span.key]
+                                if (slot != null) {
+                                    found +=
+                                        CitationAnchor(
+                                            id = span.id,
+                                            offset = length,
+                                            widthPx = with(density) { slot.placeholder.width.toPx() }.roundToInt(),
+                                            heightPx = with(density) { slot.placeholder.height.toPx() }.roundToInt(),
+                                        )
                                     appendInlineContent(span.key)
                                 } else {
                                     append("[${span.id}]")
                                 }
+                            }
                         }
                     }
                 }
             built to found.toList()
         }
+    val lineHeight = if (style.lineHeight != TextUnit.Unspecified) style.lineHeight else DefaultLineHeight
+    val touchOverflow = with(density) { ((PillTouchTarget - lineHeight.toDp()) / 2).coerceAtLeast(NoTouchOverflow) }
 
-    val rootModifier =
-        if (reducedMotion) {
-            modifier
-        } else {
-            modifier.animateContentSize(animationSpec = tween(durationMillis = AppTheme.motion.normal))
-        }
-
-    Column(modifier = rootModifier.fillMaxWidth()) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = PillTouchOverflow),
-        ) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = annotated,
-                modifier = Modifier.fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = touchOverflow),
                 style = style,
                 color = MaterialTheme.colorScheme.onSurface,
                 inlineContent = inlineContent,
                 onTextLayout = { textLayout = it },
             )
-            val layout = textLayout
-            if (layout != null) {
-                val length = layout.layoutInput.text.length
-                anchors.forEach { anchor ->
-                    val sourcesForMark = citations[anchor.id].orEmpty()
-                    val interaction = pillInteractions[anchor.id]
-                    if (sourcesForMark.isNotEmpty() && interaction != null && anchor.offset in 0 until length) {
-                        CitationHitTarget(
-                            box = layout.getBoundingBox(anchor.offset),
-                            sources = sourcesForMark,
-                            expanded = openId == anchor.id,
-                            pageIndex = if (openId == anchor.id) sourceIndex else 0,
-                            interactionSource = interaction,
-                            onClick = {
-                                if (openId == anchor.id) {
-                                    openId = null
-                                } else {
-                                    openId = anchor.id
-                                    sourceIndex = 0
-                                }
-                            },
-                        )
+            val overflowPx = with(density) { touchOverflow.toPx() }
+            Box(modifier = Modifier.matchParentSize()) {
+                val layout = textLayout
+                if (layout != null) {
+                    val length = layout.layoutInput.text.length
+                    anchors.forEach { anchor ->
+                        val sourcesForMark = citations[anchor.id].orEmpty()
+                        val interaction = pillInteractions[anchor.id]
+                        if (sourcesForMark.isNotEmpty() && interaction != null && anchor.offset in 0 until length) {
+                            CitationHitTarget(
+                                box = layout.getBoundingBox(anchor.offset),
+                                widthPx = anchor.widthPx,
+                                heightPx = anchor.heightPx,
+                                yShift = overflowPx,
+                                sources = sourcesForMark,
+                                expanded = openId == anchor.id,
+                                pageIndex = if (openId == anchor.id) sourceIndex else 0,
+                                interactionSource = interaction,
+                                onClick = {
+                                    if (openId == anchor.id) {
+                                        openId = null
+                                    } else {
+                                        openId = anchor.id
+                                        sourceIndex = 0
+                                    }
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -329,6 +337,9 @@ private fun citationInlineContent(
 @Composable
 private fun CitationHitTarget(
     box: Rect,
+    widthPx: Int,
+    heightPx: Int,
+    yShift: Float,
     sources: List<AppCitation>,
     expanded: Boolean,
     pageIndex: Int,
@@ -337,9 +348,11 @@ private fun CitationHitTarget(
 ) {
     val density = LocalDensity.current
     val haptics = rememberAppHaptics()
-    val sizePx = with(density) { PillTouchTarget.roundToPx() }
-    val left = ((box.left + box.right) / 2f - sizePx / 2f).roundToInt()
-    val top = ((box.top + box.bottom) / 2f - sizePx / 2f).roundToInt()
+    val minPx = with(density) { PillTouchTarget.roundToPx() }
+    val targetWidth = max(minPx, max(box.width.roundToInt(), widthPx))
+    val targetHeight = max(minPx, max(box.height.roundToInt(), heightPx))
+    val left = box.left.roundToInt()
+    val top = (box.center.y - targetHeight / 2f + yShift).roundToInt()
     val host = citationHostname(sources.first().url)
     val extra = sources.size - 1
     val spoken =
@@ -355,7 +368,10 @@ private fun CitationHitTarget(
         modifier =
             Modifier
                 .offset { IntOffset(left, top) }
-                .size(PillTouchTarget)
+                .size(
+                    width = with(density) { targetWidth.toDp() },
+                    height = with(density) { targetHeight.toDp() },
+                )
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
@@ -368,7 +384,6 @@ private fun CitationHitTarget(
                 )
                 .semantics {
                     contentDescription = spoken
-                    role = Role.Button
                     if (expanded) stateDescription = "Showing $showing"
                 },
     )
