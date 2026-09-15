@@ -41,6 +41,9 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: android-actions/setup-android@v3
+        with:
+          # `tools` is gone from the SDK repo; the action still defaults to it.
+          packages: platform-tools
       - uses: gradle/actions/setup-gradle@v4
       - name: check
         run: ./gradlew :registry:check :apps:showcase:assembleDebug --console=plain
