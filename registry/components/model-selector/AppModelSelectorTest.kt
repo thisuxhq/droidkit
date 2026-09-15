@@ -137,6 +137,7 @@ class AppModelSelectorTest {
     fun headersAppearOnlyForMultipleProviders() {
         val headed = groupedModels(shortCatalog, "")
         assertEquals(2, headed.size)
+        assertTrue(headed[0].showHeader)
         assertEquals("OpenAI", headed[0].provider.name)
         assertEquals("Anthropic", headed[1].provider.name)
 

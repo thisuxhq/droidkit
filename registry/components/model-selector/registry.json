@@ -3,7 +3,7 @@
   "type": "component",
   "description": "Compact current-model control that opens an adaptive searchable, provider-grouped sheet and commits one model.",
   "avoidWhen": "Do not use for settings preferences, multi-select filters, or loading a remote catalog; use preference-picker or chip and keep data fetching in the app.",
-  "status": "draft",
+  "status": "review",
   "ux": [
     {
       "moment": "see",

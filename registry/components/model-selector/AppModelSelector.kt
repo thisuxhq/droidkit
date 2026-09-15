@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -55,7 +56,8 @@ private val TriggerCorner = 14.dp
 private val TriggerMarkSize = 20.dp
 private val RowMinHeight = 48.dp
 private val HeaderMarkSize = 18.dp
-private val SheetListMaxHeight = 420.dp
+private val SheetListMaxHeight = 640.dp
+private const val DisabledContentAlpha = 0.38f
 private const val SearchThreshold = 8
 private const val DefaultTitle = "Choose a model"
 private const val DefaultSearchPlaceholder = "Search models"
@@ -286,6 +288,7 @@ private fun ModelTrigger(
         modifier =
             modifier
                 .heightIn(min = TriggerMinHeight)
+                .graphicsLayer { alpha = if (enabled) 1f else DisabledContentAlpha }
                 .clip(RoundedCornerShape(TriggerCorner))
                 .background(MaterialTheme.colorScheme.surfaceVariant)
                 .pressScale(interactionSource = interactionSource, enabled = enabled)
