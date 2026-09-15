@@ -1,25 +1,34 @@
 {
   "name": "bottom-sheet",
   "type": "component",
-  "description": "A titled sheet. Drag, back, or scrim dismisses \u2014 there is no close X.",
-  "avoidWhen": "Do not use for a yes/no decision; use confirm-dialog. Do not add a close icon in the title.",
+  "description": "A modal sheet. The handle grows it through detents; drag, back, or scrim leaves. Bleed docks; Float insets.",
+  "avoidWhen": "Do not use for a yes/no decision; use confirm-dialog. Do not add a close icon. Do not use for a sheet that stays up over a map or player.",
   "status": "draft",
   "ux": [
     {
       "moment": "see",
-      "behaviour": "A handle and a title sit above the content",
-      "why": "You know it is a sheet and what it is for"
+      "behaviour": "A handle and a title sit above the body; a footer, when present, stays at the bottom",
+      "why": "You know it is a sheet, what it is for, and the action will not jump away"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Crossing a detent ticks and the body is the only slot that grows — peek keeps a one-line summary, expanded reveals the rest",
+      "why": "You grow the sheet without losing the title or the action under your thumb",
+      "signature": true,
+      "reducedMotion": "Sheet sits at the detent; body content swaps with no motion"
     },
     {
       "moment": "leave",
       "behaviour": "Drag, back, or scrim calls onDismiss; there is no close X",
-      "why": "Leaving a sheet should be the same gesture every time",
-      "signature": true
+      "why": "Leaving a sheet should be the same gesture every time"
     }
   ],
   "states": [
     "default",
-    "long-title",
+    "floating",
+    "partial",
+    "expanded",
+    "with-footer",
     "rtl",
     "dark",
     "large-font"
@@ -59,7 +68,11 @@
   },
   "aiHints": [
     "Do not add a close IconButton; onDismiss is the way out",
-    "Previews render AppBottomSheetChrome; call AppBottomSheet at runtime"
+    "Previews render AppBottomSheetChrome; call AppBottomSheet at runtime",
+    "Read LocalAppSheetDetent in content to swap peek vs expanded",
+    "chrome = AppSheetChrome.Float insets the card; default Bleed docks to the edges",
+    "expandable = true for half-to-full; default fits content and skips the half stop",
+    "Put actions in footer so they stay put while the body grows"
   ],
   "sources": [
     "kb://android/develop/ui/compose/accessibility/semantics",

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -30,30 +31,94 @@ private fun BottomSheetPreviewSurface(
     }
 }
 
+private val AppearanceOptions =
+    listOf(
+        AppRadioOption("system", "System"),
+        AppRadioOption("light", "Light"),
+        AppRadioOption("dark", "Dark"),
+    )
+
+@Composable
+private fun AppearanceChoices() {
+    AppRadioGroup(
+        options = AppearanceOptions,
+        selectedId = "system",
+        onSelect = {},
+    )
+}
+
+@Composable
+private fun AppearancePeekOrFull() {
+    val detent = LocalAppSheetDetent.current
+    if (detent == AppSheetDetent.Partial) {
+        Text(
+            text = "System",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    } else {
+        AppearanceChoices()
+    }
+}
+
 @Preview(showBackground = true, name = "bottom-sheet default")
 @Composable
 internal fun BottomSheetDefaultPreview() {
     BottomSheetPreviewSurface {
         AppBottomSheetChrome(title = "Appearance") {
-            AppRadioGroup(
-                options = listOf(
-                    AppRadioOption("system", "System"),
-                    AppRadioOption("light", "Light"),
-                    AppRadioOption("dark", "Dark"),
-                ),
-                selectedId = "system",
-                onSelect = {},
-            )
+            AppearanceChoices()
         }
     }
 }
 
-@Preview(showBackground = true, name = "bottom-sheet long-title")
+@Preview(showBackground = true, name = "bottom-sheet floating")
 @Composable
-internal fun BottomSheetLongTitlePreview() {
+internal fun BottomSheetFloatingPreview() {
     BottomSheetPreviewSurface {
-        AppBottomSheetChrome(title = "Choose how this project should look on a large screen") {
-            androidx.compose.material3.Text(text = "System, light, or dark.")
+        AppBottomSheetChrome(
+            title = "Appearance",
+            chrome = AppSheetChrome.Float,
+        ) {
+            AppearanceChoices()
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "bottom-sheet partial")
+@Composable
+internal fun BottomSheetPartialPreview() {
+    BottomSheetPreviewSurface {
+        AppBottomSheetChrome(
+            title = "Appearance",
+            detent = AppSheetDetent.Partial,
+        ) {
+            AppearancePeekOrFull()
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "bottom-sheet expanded")
+@Composable
+internal fun BottomSheetExpandedPreview() {
+    BottomSheetPreviewSurface {
+        AppBottomSheetChrome(
+            title = "Appearance",
+            detent = AppSheetDetent.Expanded,
+        ) {
+            AppearancePeekOrFull()
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "bottom-sheet with-footer")
+@Composable
+internal fun BottomSheetWithFooterPreview() {
+    BottomSheetPreviewSurface {
+        AppBottomSheetChrome(
+            title = "Appearance",
+            footer = { AppButton(text = "Save", onClick = {}) },
+        ) {
+            AppearanceChoices()
         }
     }
 }
@@ -63,17 +128,9 @@ internal fun BottomSheetLongTitlePreview() {
 internal fun BottomSheetRtlPreview() {
     BottomSheetPreviewSurface {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppBottomSheetChrome(title = "Appearance") {
-            AppRadioGroup(
-                options = listOf(
-                    AppRadioOption("system", "System"),
-                    AppRadioOption("light", "Light"),
-                    AppRadioOption("dark", "Dark"),
-                ),
-                selectedId = "system",
-                onSelect = {},
-            )
-        }
+            AppBottomSheetChrome(title = "Appearance") {
+                AppearanceChoices()
+            }
         }
     }
 }
@@ -83,15 +140,7 @@ internal fun BottomSheetRtlPreview() {
 internal fun BottomSheetDarkPreview() {
     BottomSheetPreviewSurface(darkTheme = true) {
         AppBottomSheetChrome(title = "Appearance") {
-            AppRadioGroup(
-                options = listOf(
-                    AppRadioOption("system", "System"),
-                    AppRadioOption("light", "Light"),
-                    AppRadioOption("dark", "Dark"),
-                ),
-                selectedId = "system",
-                onSelect = {},
-            )
+            AppearanceChoices()
         }
     }
 }
@@ -101,15 +150,7 @@ internal fun BottomSheetDarkPreview() {
 internal fun BottomSheetLargeFontPreview() {
     BottomSheetPreviewSurface {
         AppBottomSheetChrome(title = "Appearance") {
-            AppRadioGroup(
-                options = listOf(
-                    AppRadioOption("system", "System"),
-                    AppRadioOption("light", "Light"),
-                    AppRadioOption("dark", "Dark"),
-                ),
-                selectedId = "system",
-                onSelect = {},
-            )
+            AppearanceChoices()
         }
     }
 }
