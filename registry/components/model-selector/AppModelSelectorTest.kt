@@ -1,15 +1,25 @@
 package com.droidkit.registry.components
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.and
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.droidkit.registry.theme.AppTheme
 import org.junit.Assert.assertEquals
@@ -55,6 +65,19 @@ class AppModelSelectorTest {
     }
 
     @Test
+    fun triggerExposesCollapsedAndExpandedState() {
+        composeRule.setContent {
+            InspectionTheme {
+                AppModelSelector(models = shortCatalog, selectedId = "gpt-4o", onSelect = {})
+            }
+        }
+        composeRule.onNode(hasText("GPT-4o")).assert(stateDescription("Collapsed"))
+        composeRule.onNodeWithText("GPT-4o").performClick()
+        composeRule.onNodeWithText("Choose a model").assertIsDisplayed()
+        composeRule.onNode(hasText("GPT-4o") and stateDescription("Expanded")).assertIsDisplayed()
+    }
+
+    @Test
     fun disabledTriggerDoesNotOpenSheet() {
         composeRule.setContent {
             AppTheme {
@@ -72,26 +95,74 @@ class AppModelSelectorTest {
     }
 
     @Test
-    fun pickingADifferentRowEmitsThatId() {
-        var selected = "gpt-4o"
+    fun pickingADifferentRowEmitsOnceAndDismisses() {
+        var selected by mutableStateOf("gpt-4o")
+        var emissions = 0
         composeRule.setContent {
-            AppTheme {
-                AppModelSelectorSheetPreview(
+            InspectionTheme {
+                AppModelSelector(
                     models = shortCatalog,
                     selectedId = selected,
-                    query = "",
-                    onSelect = { selected = it },
+                    onSelect = {
+                        selected = it
+                        emissions++
+                    },
                 )
             }
         }
+        composeRule.onNodeWithText("GPT-4o").performClick()
+        composeRule.onNodeWithText("Choose a model").assertIsDisplayed()
         composeRule.onNodeWithText("Sonnet 4").performClick()
+        composeRule.waitForIdle()
         assertEquals("sonnet", selected)
+        assertEquals(1, emissions)
+        composeRule.onNodeWithText("Choose a model").assertDoesNotExist()
+        composeRule.onNodeWithText("Sonnet 4").assertIsDisplayed()
     }
 
     @Test
-    fun pickingTheCurrentRowDoesNotEmit() {
-        assertEquals(null, emitIfChanged("gpt-4o", "gpt-4o"))
-        assertEquals("sonnet", emitIfChanged("gpt-4o", "sonnet"))
+    fun pickingTheCurrentRowClosesWithoutEmitting() {
+        var selected by mutableStateOf("gpt-4o")
+        var emissions = 0
+        composeRule.setContent {
+            InspectionTheme {
+                AppModelSelector(
+                    models = shortCatalog,
+                    selectedId = selected,
+                    onSelect = {
+                        selected = it
+                        emissions++
+                    },
+                )
+            }
+        }
+        composeRule.onNodeWithText("GPT-4o").performClick()
+        composeRule.onNodeWithText("Choose a model").assertIsDisplayed()
+        composeRule.onNodeWithText("Answers fast").performClick()
+        composeRule.waitForIdle()
+        assertEquals("gpt-4o", selected)
+        assertEquals(0, emissions)
+        composeRule.onNodeWithText("Choose a model").assertDoesNotExist()
+    }
+
+    @Test
+    fun disablingWhileOpenDismissesTheSheet() {
+        val enabled = mutableStateOf(true)
+        composeRule.setContent {
+            InspectionTheme {
+                AppModelSelector(
+                    models = shortCatalog,
+                    selectedId = "gpt-4o",
+                    onSelect = {},
+                    enabled = enabled.value,
+                )
+            }
+        }
+        composeRule.onNodeWithText("GPT-4o").performClick()
+        composeRule.onNodeWithText("Choose a model").assertIsDisplayed()
+        enabled.value = false
+        composeRule.waitForIdle()
+        composeRule.onNodeWithText("Choose a model").assertDoesNotExist()
     }
 
     @Test
@@ -111,6 +182,50 @@ class AppModelSelectorTest {
         composeRule.onNodeWithText("Sonnet 4").assertIsDisplayed()
         composeRule.onNodeWithText("Haiku").assertIsDisplayed()
         composeRule.onNodeWithText("GPT-4o mini").assertDoesNotExist()
+    }
+
+    @Test
+    fun typingAfterNoResultsRestoresMatches() {
+        composeRule.setContent {
+            AppTheme {
+                var query by remember { mutableStateOf("") }
+                AppModelSelectorSheetPreview(
+                    models = longCatalog,
+                    selectedId = "gpt-4o",
+                    query = query,
+                    onQueryChange = { query = it },
+                )
+            }
+        }
+        composeRule.onNodeWithText("Search models").performTextInput("llama")
+        composeRule.onNodeWithText("No models match").assertIsDisplayed()
+        composeRule.onNodeWithText("llama").performTextReplacement("sonnet")
+        composeRule.onNodeWithText("No models match").assertDoesNotExist()
+        composeRule.onNodeWithText("Sonnet 4").assertIsDisplayed()
+        composeRule.onNodeWithText("Search models").assertDoesNotExist()
+        composeRule.onNodeWithText("sonnet").assertIsDisplayed()
+    }
+
+    @Test
+    fun clearAfterNoResultsRestoresTheCatalog() {
+        composeRule.setContent {
+            AppTheme {
+                var query by remember { mutableStateOf("") }
+                AppModelSelectorSheetPreview(
+                    models = longCatalog,
+                    selectedId = "gpt-4o",
+                    query = query,
+                    onQueryChange = { query = it },
+                )
+            }
+        }
+        composeRule.onNodeWithText("Search models").performTextInput("llama")
+        composeRule.onNodeWithText("No models match").assertIsDisplayed()
+        composeRule.onNodeWithContentDescription("Clear").performClick()
+        composeRule.onNodeWithText("No models match").assertDoesNotExist()
+        composeRule.onNodeWithText("GPT-4o mini").assertIsDisplayed()
+        composeRule.onNodeWithText("Haiku").assertIsDisplayed()
+        composeRule.onNodeWithContentDescription("Clear").assertDoesNotExist()
     }
 
     @Test
@@ -164,5 +279,15 @@ class AppModelSelectorTest {
         assertEquals("gpt4o", foldForSearch("GPT-4o"))
         assertEquals("openai", foldForSearch("OpenAI"))
         assertEquals("claude", foldForSearch("Claudé"))
+    }
+
+    private fun stateDescription(value: String): SemanticsMatcher =
+        SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, value)
+}
+
+@Composable
+private fun InspectionTheme(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalInspectionMode provides true) {
+        AppTheme(content = content)
     }
 }

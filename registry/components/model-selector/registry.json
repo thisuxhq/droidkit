@@ -12,7 +12,7 @@
     },
     {
       "moment": "reach",
-      "behaviour": "The whole trigger scales under press and fires a click haptic",
+      "behaviour": "The whole trigger scales under press, shows a ripple, and fires a click haptic",
       "why": "The compact control still feels like a full touch target",
       "reducedMotion": "No scale; ripple, state description, and haptic remain"
     },
@@ -26,6 +26,11 @@
       "moment": "mistake",
       "behaviour": "A query with no matches keeps Search, shows one polite live-region message, and leaves Clear available",
       "why": "A miss is easy to revise and never masquerades as an empty catalog"
+    },
+    {
+      "moment": "recover",
+      "behaviour": "Typing or Clear restores matching models and keeps Search so the next letter continues the hunt",
+      "why": "A miss is a filter, not a dead end"
     },
     {
       "moment": "succeed",
@@ -47,7 +52,8 @@
     "disabled",
     "rtl",
     "dark",
-    "large-font"
+    "large-font",
+    "single-provider"
   ],
   "files": [
     {
@@ -98,6 +104,10 @@
     "kb://android/develop/ui/compose/components/radio-button",
     "kb://android/develop/ui/compose/components/bottom-sheet",
     "kb://android/develop/ui/compose/text/user-input",
-    "kb://android/develop/ui/views/touch-and-input/keyboard-input/style"
+    "kb://android/develop/ui/views/touch-and-input/keyboard-input/style",
+    "kb://android/develop/ui/compose/touch-input/user-interactions/handling-interactions",
+    "kb://android/develop/ui/compose/system/insets-ui",
+    "kb://android/develop/ui/compose/lists",
+    "kb://android/develop/ui/compose/state-saving"
   ]
 }

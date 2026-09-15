@@ -2,8 +2,8 @@ package com.droidkit.registry.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.MaterialTheme
@@ -14,10 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import com.droidkit.registry.theme.AppTheme
-
-private val LongNamePreviewWidth = 220.dp
 
 private val OpenAi =
     AppModelProvider(id = "openai", name = "OpenAI", mark = Icons.Filled.Star)
@@ -41,6 +38,8 @@ private val LongCatalog =
             AppModelOption("haiku", "Haiku", Anthropic, "Quick drafts"),
             AppModelOption("nano", "Gemini Nano", Google, "On device"),
         )
+
+private val SingleProviderCatalog = ShortCatalog.filter { it.provider.id == "openai" }
 
 @Composable
 private fun ModelSelectorPreviewSurface(
@@ -142,11 +141,13 @@ internal fun ModelSelectorDisabledPreview() {
 internal fun ModelSelectorRtlPreview() {
     ModelSelectorPreviewSurface {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            AppModelSelector(
-                models = ShortCatalog,
-                selectedId = "gpt-4o",
-                onSelect = {},
-            )
+            AppBottomSheetChrome(title = "Choose a model") {
+                AppModelSelectorSheetPreview(
+                    models = LongCatalog,
+                    selectedId = "gpt-4o",
+                    query = "",
+                )
+            }
         }
     }
 }
@@ -155,11 +156,13 @@ internal fun ModelSelectorRtlPreview() {
 @Composable
 internal fun ModelSelectorDarkPreview() {
     ModelSelectorPreviewSurface(darkTheme = true) {
-        AppModelSelector(
-            models = ShortCatalog,
-            selectedId = "gpt-4o",
-            onSelect = {},
-        )
+        AppBottomSheetChrome(title = "Choose a model") {
+            AppModelSelectorSheetPreview(
+                models = LongCatalog,
+                selectedId = "gpt-4o",
+                query = "gpt4",
+            )
+        }
     }
 }
 
@@ -167,19 +170,32 @@ internal fun ModelSelectorDarkPreview() {
 @Composable
 internal fun ModelSelectorLargeFontPreview() {
     ModelSelectorPreviewSurface {
-        Box(modifier = Modifier.width(LongNamePreviewWidth)) {
-            AppModelSelector(
-                models =
-                    listOf(
-                        AppModelOption(
-                            id = "long",
-                            name = "GPT-4o mini high reasoning",
-                            provider = OpenAi,
-                            capability = "Answers fast",
-                        ),
+        AppModelSelector(
+            models =
+                listOf(
+                    AppModelOption(
+                        id = "long",
+                        name = "GPT-4o mini high reasoning",
+                        provider = OpenAi,
+                        capability = "Answers fast",
                     ),
-                selectedId = "long",
-                onSelect = {},
+                ),
+            selectedId = "long",
+            onSelect = {},
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "model-selector single-provider")
+@Composable
+internal fun ModelSelectorSingleProviderPreview() {
+    ModelSelectorPreviewSurface {
+        AppBottomSheetChrome(title = "Choose a model") {
+            AppModelSelectorSheetPreview(
+                models = SingleProviderCatalog,
+                selectedId = "gpt-4o",
+                query = "",
             )
         }
     }

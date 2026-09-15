@@ -24,8 +24,10 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +60,7 @@ private val RowMinHeight = 48.dp
 private val HeaderMarkSize = 18.dp
 private val SheetListMaxHeight = 640.dp
 private const val DisabledContentAlpha = 0.38f
+private const val TriggerNameMaxLines = 2
 private const val SearchThreshold = 8
 private const val DefaultTitle = "Choose a model"
 private const val DefaultSearchPlaceholder = "Search models"
@@ -127,9 +130,10 @@ private val PresentationSaver =
  * A compact current-model control backed by one provider-grouped Android sheet.
  *
  * see:      the trigger always names the selected model.
- * reach:    48 dp, pressScale, click haptic.
+ * reach:    48 dp, pressScale and ripple share one press, click haptic.
  * act:      catalogs through seven stay thumb-first; eight or more show Search and filter live.
  * mistake:  no matches keep Search and show one polite live-region line.
+ * recover:  typing or Clear brings matching models back and keeps Search.
  * succeed:  a new row ticks, emits its id, and closes; the current row only closes.
  * leave:    pick, back, drag, and scrim all discard the query.
  */
@@ -159,6 +163,12 @@ fun AppModelSelector(
     fun dismiss() {
         keyboard?.hide()
         presentation = ModelSelectorPresentation.Closed
+    }
+
+    LaunchedEffect(enabled) {
+        if (!enabled && presentation is ModelSelectorPresentation.Open) {
+            dismiss()
+        }
     }
 
     ModelTrigger(
@@ -192,9 +202,6 @@ fun AppModelSelector(
     }
 }
 
-/**
- * Screenshot seam and windowless tests. Runtime callers use [AppModelSelector].
- */
 @Composable
 internal fun AppModelSelectorSheetPreview(
     models: List<AppModelOption>,
@@ -296,7 +303,7 @@ private fun ModelTrigger(
                     enabled = enabled,
                     role = Role.Button,
                     interactionSource = interactionSource,
-                    indication = null,
+                    indication = ripple(),
                     onClick = {
                         haptics.click()
                         onClick()
@@ -320,7 +327,7 @@ private fun ModelTrigger(
         Text(
             text = model.name,
             style = MaterialTheme.typography.labelLarge,
-            maxLines = 1,
+            maxLines = TriggerNameMaxLines,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),
         )
