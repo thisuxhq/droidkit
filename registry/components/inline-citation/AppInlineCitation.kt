@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
@@ -60,6 +62,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -316,30 +319,32 @@ private fun CitationPill(
                 },
         contentAlignment = Alignment.Center,
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .clip(RoundedCornerShape(PillCorner))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .padding(horizontal = PillHorizontalPadding, vertical = PillVerticalPadding),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = host,
-                modifier = Modifier.clearAndSetSemantics { },
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            if (extra > 0) {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Row(
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(PillCorner))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .padding(horizontal = PillHorizontalPadding, vertical = PillVerticalPadding),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
-                    text = " +$extra",
+                    text = host,
                     modifier = Modifier.clearAndSetSemantics { },
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
+                if (extra > 0) {
+                    Text(
+                        text = " +$extra",
+                        modifier = Modifier.clearAndSetSemantics { },
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                    )
+                }
             }
         }
     }
@@ -355,6 +360,7 @@ private fun CitationSourceCard(
 ) {
     val haptics = rememberAppHaptics()
     val reducedMotion = rememberReducedMotion()
+    val motionQuick = AppTheme.motion.quick
 
     Column(
         modifier =
@@ -383,11 +389,17 @@ private fun CitationSourceCard(
                         contentDescription = "Previous source",
                     )
                 }
-                Text(
-                    text = "${index + 1} of ${sources.size}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Text(
+                        text = "${index + 1} of ${sources.size}",
+                        modifier =
+                            Modifier.semantics {
+                                contentDescription = "Source ${index + 1} of ${sources.size}"
+                            },
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
                 IconButton(
                     onClick = {
                         haptics.tick()
@@ -406,11 +418,8 @@ private fun CitationSourceCard(
         AnimatedContent(
             targetState = index,
             transitionSpec = {
-                if (reducedMotion) {
-                    fadeIn(tween(0)) togetherWith fadeOut(tween(0))
-                } else {
-                    fadeIn(tween(AppTheme.motion.quick)) togetherWith fadeOut(tween(AppTheme.motion.quick))
-                }
+                val duration = if (reducedMotion) 0 else motionQuick
+                fadeIn(tween(duration)) togetherWith fadeOut(tween(duration))
             },
             label = "citation-source",
         ) { page ->

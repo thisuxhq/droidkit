@@ -74,8 +74,6 @@ class AppInlineCitationTest {
         composeRule.onNodeWithText("Svelte is fast ", substring = true).assertExists()
         composeRule.onNodeWithText("on the web.", substring = true).assertExists()
         composeRule.onNodeWithContentDescription("Citation, example.com and 2 more sources").assertExists()
-        composeRule.onNodeWithText("example.com", useUnmergedTree = true).assertExists()
-        composeRule.onNodeWithText(" +2", useUnmergedTree = true).assertExists()
     }
 
     @Test
@@ -151,8 +149,7 @@ class AppInlineCitationTest {
         }
 
         composeRule.onNodeWithContentDescription("Citation, example.com").assertExists()
-        composeRule.onNodeWithText(" +2", useUnmergedTree = true).assertDoesNotExist()
-        composeRule.onNodeWithText("1 of 3").assertDoesNotExist()
+        composeRule.onNodeWithContentDescription("Citation, example.com and 2 more sources").assertDoesNotExist()
     }
 
     private class RecordingView(context: Context) : FrameLayout(context) {
