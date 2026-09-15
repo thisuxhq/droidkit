@@ -2,12 +2,14 @@ package com.droidkit.registry.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,8 +25,18 @@ private fun BottomSheetPreviewSurface(
     content: @Composable () -> Unit,
 ) {
     AppTheme(darkTheme = darkTheme) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            Box(modifier = Modifier.padding(AppTheme.spacing.lg)) {
+        Surface(color = MaterialTheme.colorScheme.surfaceVariant) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = AppTheme.spacing.lg,
+                            top = AppTheme.spacing.lg,
+                            end = AppTheme.spacing.lg,
+                        ),
+                contentAlignment = Alignment.BottomCenter,
+            ) {
                 content()
             }
         }
@@ -116,7 +128,13 @@ internal fun BottomSheetWithFooterPreview() {
     BottomSheetPreviewSurface {
         AppBottomSheetChrome(
             title = "Appearance",
-            footer = { AppButton(text = "Save", onClick = {}) },
+            footer = {
+                AppButton(
+                    text = "Save",
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
         ) {
             AppearanceChoices()
         }

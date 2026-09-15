@@ -3,6 +3,7 @@
 package com.droidkit.registry.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,7 @@ private val HandleWidth = 32.dp
 private val HandleHeight = 4.dp
 private val HandleTarget = 48.dp
 private val SheetPartialMax = 220.dp
+private val SheetHairline = 1.dp
 
 private const val HandleDescription = "Drag handle"
 private const val PartialStateDescription = "Half expanded"
@@ -193,6 +195,17 @@ internal fun AppBottomSheetChrome(
                 )
                 .clip(shape)
                 .background(MaterialTheme.colorScheme.surface)
+                .then(
+                    if (chrome == AppSheetChrome.Float) {
+                        Modifier.border(
+                            width = SheetHairline,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            shape = shape,
+                        )
+                    } else {
+                        Modifier
+                    },
+                )
                 .padding(bottom = AppTheme.spacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
