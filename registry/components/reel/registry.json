@@ -1,0 +1,89 @@
+{
+  "name": "reel",
+  "type": "component",
+  "description": "A horizontal reel of discrete moments. Scrub the track or swipe the pane; the playhead stays put and the pane lands on that moment.",
+  "avoidWhen": "Do not use for peer panes (tabs), a short exclusive label list (bead, segmented-control), or continuous media time — this is moments, not a video seek bar.",
+  "status": "draft",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The playhead sits on the current moment; that icon is bright and the neighbors recede; the pane already shows it",
+      "why": "You know where you are without reading a caption"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The bar is a 48 dp hit target; a tapped marker uses pressScale",
+      "why": "You grab the track, not a 2 dp line",
+      "reducedMotion": "The marker does not scale; the tap still selects"
+    },
+    {
+      "moment": "act",
+      "behaviour": "The playhead stays; the reel snaps; the pane slides to the moment; each index change fires a tick haptic",
+      "why": "The place you landed should be felt before it is read",
+      "signature": true,
+      "reducedMotion": "The reel and pane jump to the moment; haptics unchanged"
+    },
+    {
+      "moment": "mistake",
+      "behaviour": "Flinging past the ends meets a wall; there is no reject haptic",
+      "why": "The end of the reel is a stop, not a scolding"
+    },
+    {
+      "moment": "recover",
+      "behaviour": "Reversing mid-scrub retargets to the new nearest moment and the pane follows",
+      "why": "You are steering, not committing a form"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "selectedIndex is caller-owned",
+      "why": "Rotation and the back stack keep the moment"
+    }
+  ],
+  "states": [
+    "default",
+    "first",
+    "last",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    { "path": "AppReel.kt", "kind": "source" },
+    { "path": "AppReelPreview.kt", "kind": "preview" },
+    { "path": "AppReelTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme", "foundation"],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Own selectedIndex; do not store it inside AppReel",
+    "Keep 2–7 moments; more is a list or tabs plus a pager",
+    "Pass an icon and a label on every moment — the label is TalkBack and the pane announcement",
+    "This is discrete moments, not a duration or thumbnail filmstrip",
+    "Do not use for peer panes; those are tabs"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/layouts/pager",
+    "kb://android/develop/ui/compose/animation/composables-modifiers",
+    "kb://android/develop/ui/compose/animation/value-based",
+    "kb://android/develop/ui/compose/lists",
+    "kb://android/develop/ui/compose/side-effects",
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/touch-input/user-interactions/handling-interactions",
+    "kb://android/develop/ui/compose/touch-input/keyboard-input/commands"
+  ]
+}

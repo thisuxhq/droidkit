@@ -19,6 +19,8 @@ sealed class ShowcaseDestination(
 
     data object Bead : ShowcaseDestination("bead")
 
+    data object Reel : ShowcaseDestination("reel")
+
     data object IconButton : ShowcaseDestination("icon-button")
 
     data object SearchField : ShowcaseDestination("search-field")
@@ -69,6 +71,7 @@ val showcaseCatalog =
         ShowcaseDestination.TextArea,
         ShowcaseDestination.OtpInput,
         ShowcaseDestination.Bead,
+        ShowcaseDestination.Reel,
         ShowcaseDestination.IconButton,
         ShowcaseDestination.Switch,
         ShowcaseDestination.Checkbox,

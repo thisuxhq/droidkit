@@ -24,6 +24,7 @@ import com.droidkit.showcase.screens.PasswordFieldScreen
 import com.droidkit.showcase.screens.PreferencePickerScreen
 import com.droidkit.showcase.screens.ProgressScreen
 import com.droidkit.showcase.screens.RadioScreen
+import com.droidkit.showcase.screens.ReelScreen
 import com.droidkit.showcase.screens.SearchFieldScreen
 import com.droidkit.showcase.screens.SegmentedControlScreen
 import com.droidkit.showcase.screens.SettingRowScreen
@@ -48,6 +49,7 @@ fun ShowcaseApp(initialDestination: String? = null) {
             ShowcaseDestination.Settings.title -> ShowcaseDestination.Settings
             ShowcaseDestination.OtpInput.title -> ShowcaseDestination.OtpInput
             ShowcaseDestination.Bead.title -> ShowcaseDestination.Bead
+            ShowcaseDestination.Reel.title -> ShowcaseDestination.Reel
             ShowcaseDestination.IconButton.title -> ShowcaseDestination.IconButton
             ShowcaseDestination.SearchField.title -> ShowcaseDestination.SearchField
             ShowcaseDestination.TextArea.title -> ShowcaseDestination.TextArea
@@ -92,6 +94,8 @@ fun ShowcaseApp(initialDestination: String? = null) {
             OtpInputScreen(onBack = { destination = ShowcaseDestination.Home.title })
         ShowcaseDestination.Bead ->
             BeadScreen(onBack = { destination = ShowcaseDestination.Home.title })
+        ShowcaseDestination.Reel ->
+            ReelScreen(onBack = { destination = ShowcaseDestination.Home.title })
         ShowcaseDestination.IconButton ->
             IconButtonScreen(onBack = { destination = ShowcaseDestination.Home.title })
         ShowcaseDestination.SearchField ->

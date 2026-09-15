@@ -10,7 +10,7 @@ These are the design-system pieces. They must be excellent, but they are not why
 
 ## 2. Components
 
-OTP input, search bar, setting row, preference selector, rating, stepper, quantity selector, segmented control, expandable card, avatar stack, swipe actions, pull to refresh.
+OTP input, search bar, setting row, preference selector, rating, stepper, quantity selector, segmented control, reel, expandable card, avatar stack, swipe actions, pull to refresh.
 
 These already encode behaviour. Keyboards, focus, validation, and motion live here.
 
