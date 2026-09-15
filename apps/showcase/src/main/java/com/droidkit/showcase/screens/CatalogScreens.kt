@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,6 +31,9 @@ import com.droidkit.registry.components.AppCard
 import com.droidkit.registry.components.AppCheckbox
 import com.droidkit.registry.components.AppChip
 import com.droidkit.registry.components.AppIconButton
+import com.droidkit.registry.components.AppModelOption
+import com.droidkit.registry.components.AppModelProvider
+import com.droidkit.registry.components.AppModelSelector
 import com.droidkit.registry.components.AppPreferenceOption
 import com.droidkit.registry.components.AppPreferencePicker
 import com.droidkit.registry.components.AppProgress
@@ -354,6 +358,41 @@ fun PreferencePickerScreen(onBack: () -> Unit) {
                     ),
                 selectedId = selected,
                 onSelect = { selected = it },
+            )
+        }
+    }
+}
+
+@Composable
+fun ModelSelectorScreen(onBack: () -> Unit) {
+    val openAi = AppModelProvider(id = "openai", name = "OpenAI")
+    val anthropic = AppModelProvider(id = "anthropic", name = "Anthropic")
+    val google = AppModelProvider(id = "google", name = "Google")
+    val models =
+        remember {
+            listOf(
+                AppModelOption("gpt-4o", "GPT-4o", openAi, "Answers fast"),
+                AppModelOption("gpt-4o-mini", "GPT-4o mini", openAi, "Cheaper and faster"),
+                AppModelOption("o3", "o3", openAi, "Thinks first"),
+                AppModelOption("sonnet", "Sonnet 4", anthropic, "Balanced"),
+                AppModelOption("opus", "Opus 4", anthropic, "Deep reasoning"),
+                AppModelOption("haiku", "Haiku", anthropic, "Quick drafts"),
+                AppModelOption("flash", "Gemini Flash", google, "Everyday"),
+                AppModelOption("pro", "Gemini Pro", google, "Long documents"),
+                AppModelOption("nano", "Gemini Nano", google, "On device"),
+            )
+        }
+    var selectedId by rememberSaveable { mutableStateOf("gpt-4o") }
+    ShowcaseScaffold(title = "model-selector", onBack = onBack) { padding ->
+        CatalogColumn(padding) {
+            Text(
+                text = "The chip names the model that will answer. Tap it, type to filter, pick one.",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            AppModelSelector(
+                models = models,
+                selectedId = selectedId,
+                onSelect = { selectedId = it },
             )
         }
     }

@@ -1,0 +1,113 @@
+{
+  "name": "model-selector",
+  "type": "component",
+  "description": "Compact current-model control that opens an adaptive searchable, provider-grouped sheet and commits one model.",
+  "avoidWhen": "Do not use for settings preferences, multi-select filters, or loading a remote catalog; use preference-picker or chip and keep data fetching in the app.",
+  "status": "review",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The 48 dp trigger always names the selected model and exposes expanded or collapsed state to TalkBack",
+      "why": "The model answering next never feels hidden"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The whole trigger scales under press, shows a ripple, and fires a click haptic",
+      "why": "The compact control still feels like a full touch target",
+      "reducedMotion": "No scale; ripple, state description, and haptic remain"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Catalogs through seven models open thumb-first without search; catalogs from eight show Search and filter model and provider names live",
+      "why": "A short choice should not pay a keyboard tax, while a long choice should be ready for the first letter",
+      "signature": true
+    },
+    {
+      "moment": "mistake",
+      "behaviour": "A query with no matches keeps Search, shows one polite live-region message, and leaves Clear available",
+      "why": "A miss is easy to revise and never masquerades as an empty catalog"
+    },
+    {
+      "moment": "recover",
+      "behaviour": "Typing or Clear restores matching models and keeps Search so the next letter continues the hunt",
+      "why": "A miss is a filter, not a dead end"
+    },
+    {
+      "moment": "succeed",
+      "behaviour": "A changed row ticks, emits its stable id once, and closes; the current row closes without emitting",
+      "why": "One tap finishes the choice without producing duplicate state work"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "Selection, back, drag, and scrim all clear the query and hide the IME before the sheet leaves",
+      "why": "The next visit starts with the complete catalog"
+    }
+  ],
+  "states": [
+    "default",
+    "short-list",
+    "sheet-open",
+    "search-results",
+    "no-results",
+    "disabled",
+    "rtl",
+    "dark",
+    "large-font",
+    "single-provider"
+  ],
+  "files": [
+    {
+      "path": "AppModelSelector.kt",
+      "kind": "source"
+    },
+    {
+      "path": "AppModelSelectorPreview.kt",
+      "kind": "preview"
+    },
+    {
+      "path": "AppModelSelectorTest.kt",
+      "kind": "test"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "theme",
+    "foundation",
+    "bottom-sheet",
+    "search-field"
+  ],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Keep selectedId in caller-owned saveable state and ensure it matches exactly one supplied model",
+    "Use stable model and provider ids; never use a changeable display name as an id",
+    "Write a short behavioral capability for every model instead of marketing copy",
+    "Pass models in product-priority order; the component groups without alphabetizing",
+    "Filter unavailable models before calling this component and keep loading, networking, and entitlement policy outside it",
+    "Use only local ImageVector provider marks and do not fetch logos",
+    "Do not add external expanded or query state, another dialog, or a dropdown around this component"
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/radio-button",
+    "kb://android/develop/ui/compose/components/bottom-sheet",
+    "kb://android/develop/ui/compose/text/user-input",
+    "kb://android/develop/ui/views/touch-and-input/keyboard-input/style",
+    "kb://android/develop/ui/compose/touch-input/user-interactions/handling-interactions",
+    "kb://android/develop/ui/compose/system/insets-ui",
+    "kb://android/develop/ui/compose/lists",
+    "kb://android/develop/ui/compose/state-saving"
+  ]
+}
