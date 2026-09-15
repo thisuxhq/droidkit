@@ -1,0 +1,96 @@
+{
+  "name": "inline-citation",
+  "type": "component",
+  "description": "A paragraph that names its sources in the sentence: a hostname pill with +N sits where the claim is. Tap opens the source under the text; extra sources page one at a time. Never a footnote dump.",
+  "avoidWhen": "Do not use for filters or actions; use chip or button. Do not use for a bibliography or a sources list under a message; this is for a claim inside running text.",
+  "status": "review",
+  "ux": [
+    {
+      "moment": "see",
+      "behaviour": "The first source's hostname sits in the sentence as a quiet pill; extra sources collapse to +N on that pill, never as a list",
+      "why": "You can keep reading the claim and still see that it is sourced"
+    },
+    {
+      "moment": "reach",
+      "behaviour": "The pill scales while pressed with a click haptic; the visual stays line-sized and the hit target is a min 48 dp box around that pill so hostname and +N are inside it",
+      "why": "A footnote-sized chip is unmissable to the eye and still hittable with a thumb",
+      "reducedMotion": "No scale; ripple and haptic only"
+    },
+    {
+      "moment": "act",
+      "behaviour": "Tap opens the current source under the paragraph, with title, url, and an Open source action; TalkBack reads Showing plus the title",
+      "why": "On a phone there is no hover, and covering the claim with a card makes you lose the sentence you just read",
+      "signature": true
+    },
+    {
+      "moment": "act",
+      "behaviour": "When more than one source is attached, Next and Previous page one source at a time with a tick haptic and a live 1 of N index",
+      "why": "Three sources should not become a wall of cards; you asked about this claim, not the whole bibliography",
+      "reducedMotion": "The next source appears without the fade"
+    },
+    {
+      "moment": "leave",
+      "behaviour": "A second tap on the pill closes the card; the open source and page index survive rotation",
+      "why": "You are still in the paragraph; leaving the source should not throw you out of the text"
+    }
+  ],
+  "states": [
+    "default",
+    "open",
+    "single",
+    "quote",
+    "two-claims",
+    "rtl",
+    "dark",
+    "large-font"
+  ],
+  "files": [
+    { "path": "AppInlineCitation.kt", "kind": "source" },
+    { "path": "AppInlineCitationPreview.kt", "kind": "preview" },
+    { "path": "AppInlineCitationTest.kt", "kind": "test" }
+  ],
+  "dependencies": [],
+  "registryDependencies": ["theme", "foundation"],
+  "platform": "android",
+  "minSdk": 24,
+  "composeBom": "2026.03.01",
+  "themeVersion": 1,
+  "experimentalApis": [],
+  "accessibility": {
+    "talkback": true,
+    "dynamicType": true,
+    "rtl": true,
+    "keyboard": true,
+    "touchTarget": true
+  },
+  "aiHints": [
+    "Put {cite} or [1] in the string where the pill should sit; if you omit a marker the pill is appended",
+    "Pass a list of AppCitation for one claim; extra items become +N, not extra pills",
+    "For two claims in one paragraph use [1] and [2] with the citations map overload, not two AppInlineCitation calls",
+    "Do not wrap this in a chip or a button; the pill is already the control",
+    "Pass onOpenUrl in tests or when you do not want LocalUriHandler; the Open source action is how the reader leaves to the page",
+    "expanded and expandedCitation seed rememberSaveable once for previews and tests; they are not a two-way binding",
+    "A [n] with no matching citations[n] stays as the characters [n]; it does not vanish"
+  ],
+  "examples": [
+    {
+      "title": "Cite a claim in a sentence",
+      "code": "AppInlineCitation(\n    text = \"Svelte offers better performance {cite} than older tools.\",\n    sources = listOf(\n        AppCitation(url = \"https://svelte.dev\", title = \"Svelte\"),\n        AppCitation(url = \"https://kit.svelte.dev\", title = \"SvelteKit\"),\n    ),\n)"
+    }
+  ],
+  "sources": [
+    "kb://android/develop/ui/compose/text/index",
+    "kb://android/develop/ui/compose/text/style-text",
+    "kb://android/develop/ui/compose/accessibility/semantics",
+    "kb://android/develop/ui/compose/accessibility/api-defaults",
+    "kb://android/develop/ui/compose/accessibility/merging-clearing",
+    "kb://android/develop/ui/compose/components/tooltip",
+    "kb://android/develop/ui/compose/state-saving",
+    "kb://android/develop/ui/compose/animation/composables-modifiers",
+    "kb://android/develop/ui/compose/touch-input/user-interactions/handling-interactions",
+    "kb://android/develop/ui/compose/touch-input/pointer-input/understand-gestures",
+    "kb://android/develop/ui/compose/testing/semantics",
+    "kb://android/develop/ui/compose/components/icon-button",
+    "kb://android/develop/ui/compose/touch-input/focus"
+  ]
+}
